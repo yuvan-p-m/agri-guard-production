@@ -218,4 +218,23 @@ export interface CropAlertResponse {
   recommendation: string;
 }
 
+export interface UrgencyBreakdown {
+  progression_score: number;
+  weather_score: number;
+  sensor_score: number;
+  delay_score: number;
+}
+
+export interface UrgencyInfo {
+  urgency_score: number;
+  urgency_level: 'low' | 'moderate' | 'high' | 'critical' | string;
+  color: 'green' | 'yellow' | 'orange' | 'red' | string;
+  instruction: string;
+  reason: string;
+  days_since_detection?: number | null;
+  hours_until_rain?: number | null;
+  breakdown?: UrgencyBreakdown | null;
+}
+
+
 

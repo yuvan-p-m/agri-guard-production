@@ -943,7 +943,7 @@ export const App: React.FC = () => {
                   </div>
                 )}
 
-                {/* While Gemini is loading, show skeleton loader on both sections simultaneously */}
+                {/* While AI is loading, show skeleton loader on both sections simultaneously */}
                 {isAnalyzing && (
                   <div className="space-y-5 animate-fade-in">
                     <DiseaseProgressionRiskCard
@@ -980,7 +980,7 @@ export const App: React.FC = () => {
                         onOpenPrescription={() => setIsPrescriptionOpen(true)}
                       />
 
-                      {/* Disease Progression Risk via Gemini AI Reasoning & Live Sensors + Weather */}
+                      {/* Disease Progression Risk via AI Reasoning & Live Sensors + Weather */}
                       {progressionRisk && (
                         <DiseaseProgressionRiskCard
                           progressionRisk={progressionRisk}
@@ -991,7 +991,7 @@ export const App: React.FC = () => {
                       )}
                     </div>
 
-                    {/* 3. Precision Treatment & Dosage Recommendations via Live Gemini API */}
+                    {/* 3. Precision Treatment & Dosage Recommendations via Live AI API */}
                     {(progressionRisk?.pesticide_recommendation || progressionRisk?.treatment) && (
                       <TreatmentDosageCard
                         treatment={progressionRisk?.pesticide_recommendation || progressionRisk?.treatment}

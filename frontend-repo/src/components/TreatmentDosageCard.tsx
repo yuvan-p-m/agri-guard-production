@@ -36,7 +36,7 @@ export const TreatmentDosageCard: React.FC<TreatmentDosageCardProps> = ({
 }) => {
   const { t } = useAppTranslation();
 
-  // 1. SKELETON LOADER while Gemini is loading
+  // 1. SKELETON LOADER while AI is loading
   if (isLoading) {
     return (
       <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-7 shadow-xl border border-slate-200 space-y-5 animate-pulse">
@@ -155,7 +155,7 @@ export const TreatmentDosageCard: React.FC<TreatmentDosageCardProps> = ({
   return (
     <div className="bg-white/95 backdrop-blur-md rounded-3xl p-5 sm:p-7 shadow-xl border border-agri-200/80 space-y-5 animate-slide-up">
       
-      {/* Title & Powered By Gemini Badge */}
+      {/* Title & Live AI Badge */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
         <div>
           <div className="flex items-center gap-2">

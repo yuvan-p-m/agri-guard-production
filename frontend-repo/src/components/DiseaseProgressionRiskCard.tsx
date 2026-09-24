@@ -34,7 +34,7 @@ export const DiseaseProgressionRiskCard: React.FC<DiseaseProgressionRiskCardProp
 }) => {
   const { t } = useAppTranslation();
 
-  // Skeleton loader while Gemini reasoning is in flight
+  // Skeleton loader while AI reasoning is in flight
   if (isLoading) {
     return (
       <div className="backdrop-blur-md rounded-3xl p-5 sm:p-7 shadow-xl border border-slate-200 bg-white/95 space-y-4 animate-pulse">
@@ -138,9 +138,6 @@ export const DiseaseProgressionRiskCard: React.FC<DiseaseProgressionRiskCardProp
               <span className="text-[11px] font-black uppercase tracking-wider text-slate-500">
                 {t('progressionRisk.aiModelReasoning')}
               </span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-agri-50 text-agri-800 text-[10px] font-bold border border-agri-200">
-                <Sparkles className="w-3 h-3 text-agri-600" /> {t('progressionRisk.poweredByGemini')}
-              </span>
             </div>
             <h3 className={`text-lg sm:text-xl font-black ${theme.heading} tracking-tight`}>
               {t('progressionRisk.title')}
@@ -184,7 +181,7 @@ export const DiseaseProgressionRiskCard: React.FC<DiseaseProgressionRiskCardProp
         </div>
       )}
 
-      {/* Gemini Reasoning Message */}
+      {/* AI Reasoning Message */}
       <div className="p-4 rounded-2xl bg-white/90 border border-slate-200/90 shadow-2xs space-y-2">
         <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-semibold">
           {progressionRisk.message || t('progressionRisk.riskReasoning')}
