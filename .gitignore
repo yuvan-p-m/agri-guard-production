@@ -1,3 +1,7 @@
+backend/venv/
+backend/uploads/
+ai/disease_model/
+backend/uploads/
 # Python
 __pycache__/
 *.py[cod]
