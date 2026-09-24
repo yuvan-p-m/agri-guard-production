@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Farmer Dashboard — FarmAlert SMS</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<header>
+<div class="container header_wrap">
+<div class="brand_title">🌾 FarmAlert Dashboard</div>
+<div style="display:flex;align-items:center;gap:12px">
+<span id="header_farmer_name" style="font-weight:700">Loading...</span>
+<button type="button" class="logout_btn" onclick="handle_logout()">Sign Out</button>
+</div>
+</div>
+</header>
+<main class="container">
+<div class="dashboard_grid">
+<div class="card demo_box">
+<div class="card_title">
+<span>📲 Live SMS Dispatch Test</span>
+<span class="badge">Feature 3 Demo</span>
+</div>
+<p style="font-size:0.9rem;color:var(--muted);margin-bottom:16px">Trigger an instant live weather & irrigation SMS advisory to your registered mobile number using Fast2SMS.</p>
+<button type="button" class="test_sms_btn" id="send_test_btn" onclick="send_test_sms()">
+<span>Send Test SMS to My Mobile</span>
+</button>
+</div>
+<div class="card">
+<div class="card_title">
+<span>🚜 Farmer Profile & Location</span>
+<span class="badge">Firestore</span>
+</div>
+<div class="info_row">
+<span class="info_label">Farmer Name:</span>
+<span class="info_val" id="profile_name">-</span>
+</div>
+<div class="info_row">
+<span class="info_label">Mobile Number:</span>
+<span class="info_val" id="profile_mobile">-</span>
+</div>
+<div class="info_row">
+<span class="info_label">Primary Crop:</span>
+<span class="info_val" id="profile_crop">-</span>
+</div>
+<div class="info_row">
+<span class="info_label">Farm Location:</span>
+<span class="info_val" id="profile_location">-</span>
+</div>
+</div>
+<div class="card">
+<div class="card_title">
+<span>🌤️ Live Weather Telemetry</span>
+<span class="badge">OpenWeatherMap</span>
+</div>
+<div class="info_row">
+<span class="info_label">Temperature:</span>
+<span class="info_val" id="weather_temp">--°C</span>
+</div>
+<div class="info_row">
+<span class="info_label">Relative Humidity:</span>
+<span class="info_val" id="weather_humidity">--%</span>
+</div>
+<div class="info_row">
+<span class="info_label">Rainfall Detected:</span>
+<span class="info_val" id="weather_rain">--</span>
+</div>
+<div class="info_row">
+<span class="info_label">Suggested Irrigation:</span>
+<span class="info_val" id="weather_irrigation">--</span>
+</div>
+</div>
+<div class="card">
+<div class="card_title">
+<span>🌱 Soil & Sensor Telemetry</span>
+<span class="badge">IoT Nodes</span>
+</div>
+<div class="info_row">
+<span class="info_label">Soil Moisture:</span>
+<span class="info_val" id="sensor_moisture">--%</span>
+</div>
+<div class="info_row">
+<span class="info_label">Soil pH:</span>
+<span class="info_val" id="sensor_ph">--</span>
+</div>
+<div class="info_row">
+<span class="info_label">Nitrogen (N):</span>
+<span class="info_val" id="sensor_nitrogen">-- ppm</span>
+</div>
+<div class="info_row">
+<span class="info_label">Soil Temperature:</span>
+<span class="info_val" id="sensor_temp">--°C</span>
+</div>
+</div>
+<div class="card" style="grid-column:1/-1">
+<div class="card_title">
+<span>⏰ 4 Scheduled Daily SMS Alerts (APScheduler Cron)</span>
+<span class="badge">Active</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:10px">
+<div class="schedule_item">
+<div class="schedule_time">07:00 AM — Morning Weather</div>
+<div class="schedule_desc">Temperature, Humidity, Rain status and Morning/Evening irrigation advisory.</div>
+</div>
+<div class="schedule_item">
+<div class="schedule_time">10:00 AM — Soil & Sensors</div>
+<div class="schedule_desc">Moisture, pH, Nitrogen telemetry with automated action suggestions.</div>
+</div>
+<div class="schedule_item">
+<div class="schedule_time">01:00 PM — Midday Advisory</div>
+<div class="schedule_desc">Heat and wind speed warnings for safe field work planning.</div>
+</div>
+<div class="schedule_item">
+<div class="schedule_time">06:00 PM — Evening Tip</div>
+<div class="schedule_desc">Daily rotating farming best practices and tomorrow's forecast.</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<div id="toast_msg" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

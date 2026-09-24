@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FarmAlert — Farmer SMS Alert System</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<header>
+<div class="container header_wrap">
+<div class="brand_title">🌾 FarmAlert SMS</div>
+<span class="badge">Farmer Portal</span>
+</div>
+</header>
+<main class="container">
+<div class="auth_box">
+<div class="tab_bar">
+<button type="button" class="tab_btn active" id="tab_login_btn" onclick="switch_auth_tab('login')">Sign In</button>
+<button type="button" class="tab_btn" id="tab_register_btn" onclick="switch_auth_tab('register')">Register Farm</button>
+</div>
+<form id="login_form" onsubmit="handle_login(event)">
+<div class="form_group">
+<label for="login_email">Email Address</label>
+<input type="email" id="login_email" required placeholder="farmer@farm.com">
+</div>
+<div class="form_group">
+<label for="login_password">Password</label>
+<input type="password" id="login_password" required placeholder="Enter password">
+</div>
+<button type="submit" class="submit_btn" id="login_submit_btn">Sign In to Dashboard</button>
+</form>
+<form id="register_form" style="display:none" onsubmit="handle_register(event)">
+<div class="form_group">
+<label for="reg_name">Farmer Name</label>
+<input type="text" id="reg_name" required placeholder="e.g. Ramesh Patel">
+</div>
+<div class="form_group">
+<label for="reg_mobile">Mobile Number (10 digits)</label>
+<input type="tel" id="reg_mobile" required pattern="[0-9]{10}" maxlength="10" placeholder="9876543210">
+</div>
+<div class="form_group">
+<label for="reg_crop">Primary Crop</label>
+<input type="text" id="reg_crop" required placeholder="e.g. Citrus / Wheat / Paddy">
+</div>
+<div class="form_group">
+<label for="reg_location">Farm Location (City or Lat,Lon)</label>
+<input type="text" id="reg_location" required placeholder="e.g. Nagpur">
+</div>
+<div class="form_group">
+<label for="reg_email">Email Address</label>
+<input type="email" id="reg_email" required placeholder="farmer@farm.com">
+</div>
+<div class="form_group">
+<label for="reg_password">Password (Min 6 chars)</label>
+<input type="password" id="reg_password" required minlength="6" placeholder="Create secure password">
+</div>
+<button type="submit" class="submit_btn" id="register_submit_btn">Register & Connect SMS</button>
+</form>
+</div>
+</main>
+<div id="toast_msg" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
