@@ -11,7 +11,7 @@ from services.gemini_service import get_crop_recommendations
 logger = get_logger(__name__)
 router = APIRouter(prefix="/crop", tags=["Crop Recommendation"])
 
-WEATHER_API_KEY = os.getenv("WEATHER_API_KEY", "REMOVED_OPENWEATHER_SECRET")
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 
 
 def fetch_live_weather(location: str) -> Tuple[Optional[dict], Optional[str]]:

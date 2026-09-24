@@ -28,7 +28,7 @@ def _resolve_language(request: Optional[Request], query_lang: Optional[str]) -> 
 
 router = APIRouter(prefix="/weather", tags=["Weather Integration"])
 
-WEATHER_API_KEY = os.getenv("WEATHER_API_KEY", "REMOVED_OPENWEATHER_SECRET")
+WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 
 CITY_COORDINATES = {
     "getting location": {"lat": 21.1458, "lng": 79.0882, "state": "Maharashtra"},

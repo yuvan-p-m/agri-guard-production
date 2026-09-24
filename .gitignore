@@ -1,10 +1,11 @@
 backend/venv/
 backend/uploads/
+uploads/
 ai/disease_model/
-backend/uploads/
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
 *$py.class
 *.so
 .Python
@@ -37,6 +38,8 @@ wheels/
 
 # Environment
 .env
+.env.*
+!.env.example
 .env.local
 .env.*.local
 serviceAccountKey.json
