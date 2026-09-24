@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriGuard — Marketplace & Mandi Prices</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+  <div class="max-w-6xl mx-auto p-4 sm:p-6 space-y-6">
+    
+    <!-- Top Header -->
+    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span className="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black rounded-full">
+            data.gov.in Live Agmarknet Network
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-black mt-2">Marketplace & Mandi Intelligence</h1>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            Real-time APMC mandi price comparison and 3-week predictive demand forecasting.
+          </p>
+        </div>
+        <button id="refresh-btn" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm rounded-2xl shadow transition">
+          Refresh Prices 🔄
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-5 border-t border-slate-100">
+        <div>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 block mb-1">State</label>
+          <select id="state-select" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-bold">
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Gujarat">Gujarat</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-black uppercase tracking-wider text-slate-400 block mb-1">Commodity / Crop</label>
+          <select id="crop-select" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-bold">
+            <option value="rice">Rice (Paddy)</option>
+            <option value="wheat">Wheat</option>
+            <option value="maize">Maize</option>
+            <option value="tomato">Tomato</option>
+            <option value="onion">Onion</option>
+            <option value="potato">Potato</option>
+            <option value="cotton">Cotton</option>
+            <option value="sugarcane">Sugarcane</option>
+            <option value="groundnut">Groundnut</option>
+            <option value="mustard">Mustard</option>
+            <option value="soybean">Soybean</option>
+            <option value="chilli">Chilli</option>
+            <option value="turmeric">Turmeric</option>
+            <option value="banana">Banana</option>
+            <option value="coffee">Coffee</option>
+          </select>
+        </div>
+
+        <div class="flex items-end">
+          <div class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-500 font-semibold flex justify-between items-center">
+            <span>Last Updated:</span>
+            <span id="last-updated-text" class="font-bold text-slate-800">Live</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crop Calendar Alert -->
+    <div id="crop-alert-box" class="hidden p-5 bg-amber-50 border-2 border-amber-200 rounded-3xl text-amber-950">
+      <h3 id="alert-title" class="font-black text-sm sm:text-base">Crop Calendar Advisory</h3>
+      <p id="alert-message" class="text-xs sm:text-sm font-bold mt-1"></p>
+      <p id="alert-rec" class="text-xs text-amber-800 mt-1"></p>
+    </div>
+
+    <!-- Section 1: Live Mandi Price Comparison -->
+    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200 space-y-4">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+        <div>
+          <h2 class="text-lg sm:text-xl font-black">Live Mandi Price Comparison</h2>
+          <p class="text-xs text-slate-500">Real-time state APMC arrivals</p>
+        </div>
+        <button id="toggle-mandi-btn" class="text-xs font-bold text-slate-500 hover:text-slate-900">Collapse ▲</button>
+      </div>
+
+      <div id="mandi-section-body" class="space-y-4">
+        <div id="best-market-banner" class="hidden p-4 bg-emerald-600 text-white rounded-2xl font-bold flex justify-between items-center">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider block text-emerald-100">Best Market Today</span>
+            <span id="best-market-text" class="text-base sm:text-lg"></span>
+          </div>
+          <span id="best-market-badge" class="px-3 py-1 bg-white text-emerald-950 rounded-full text-xs font-black"></span>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-slate-200">
+          <table class="w-full text-left text-xs font-semibold">
+            <thead class="bg-slate-100 text-slate-600 text-[11px] uppercase font-black">
+              <tr>
+                <th class="py-3 px-4">Market</th>
+                <th class="py-3 px-4">District</th>
+                <th class="py-3 px-4 text-center">Min Price</th>
+                <th class="py-3 px-4 text-center">Max Price</th>
+                <th class="py-3 px-4 text-right">Modal Price (₹/Q)</th>
+                <th class="py-3 px-4 text-right">Date</th>
+              </tr>
+            </thead>
+            <tbody id="mandi-table-body" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="6" class="py-6 text-center text-slate-400">Loading live mandi rates...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Demand Forecasting -->
+    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200 space-y-4">
+      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+        <div>
+          <h2 class="text-lg sm:text-xl font-black">Demand Forecasting (Price Trend)</h2>
+          <p class="text-xs text-slate-500">8-week rolling average & 3-week forecast</p>
+        </div>
+        <button id="toggle-forecast-btn" class="text-xs font-bold text-slate-500 hover:text-slate-900">Collapse ▲</button>
+      </div>
+
+      <div id="forecast-section-body" class="space-y-6">
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <canvas id="priceTrendChart" height="90"></canvas>
+        </div>
+
+        <div id="verdict-box" class="p-5 rounded-2xl border-2 bg-slate-50 border-slate-200">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="text-[10px] uppercase font-black tracking-wider text-slate-400">Verdict</span>
+              <h3 id="verdict-title" class="text-lg font-black mt-0.5">Calculating...</h3>
+            </div>
+            <span id="verdict-badge" class="px-3 py-1 rounded-full text-xs font-black"></span>
+          </div>
+          <p id="verdict-rec" class="text-xs font-bold mt-2"></p>
+          <p id="verdict-count" class="text-[11px] text-slate-400 mt-1"></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="marketplace.js"></script>
+</body>
+</html>

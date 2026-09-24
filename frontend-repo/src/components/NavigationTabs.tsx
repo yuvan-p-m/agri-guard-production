@@ -1,0 +1,220 @@
+import React from 'react';
+import { 
+  Sprout, 
+  Activity, 
+  UserRound, 
+  Sparkles, 
+  Landmark,
+  Store,
+  MessageSquareText
+} from 'lucide-react';
+import { useAppTranslation } from '../i18n';
+
+export type DashboardTab = 'diagnosis' | 'recommendations' | 'marketplace' | 'schemes' | 'fieldData' | 'smsDemo' | 'profile';
+
+interface NavigationTabsProps {
+  activeTab: DashboardTab;
+  onTabChange: (tab: DashboardTab) => void;
+  unreadSmsCount: number;
+  isMobileOpen: boolean;
+  onCloseMobileNav: () => void;
+}
+
+export const NavigationTabs: React.FC<NavigationTabsProps> = ({
+  activeTab,
+  onTabChange,
+  unreadSmsCount,
+  isMobileOpen,
+  onCloseMobileNav,
+}) => {
+  const { t } = useAppTranslation();
+
+  const tabs: { id: DashboardTab; label: string; shortLabel: string; icon: React.ReactNode; badge?: number }[] = [
+    {
+      id: 'diagnosis',
+      label: t('nav.cropDiagnosis'),
+      shortLabel: t('nav.cropDiagnosis').split(' ')[0],
+      icon: <Sprout className="w-4 h-4 sm:w-5 sm:h-5 text-[#4ADE80]" />,
+    },
+    {
+      id: 'recommendations',
+      label: t('nav.cropRecommendation'),
+      shortLabel: t('nav.aiCropsShort'),
+      icon: <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />,
+    },
+    {
+      id: 'marketplace',
+      label: t('nav.marketplace'),
+      shortLabel: t('nav.mandiShort'),
+      icon: <Store className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />,
+    },
+    {
+      id: 'schemes',
+      label: t('nav.govtSchemes'),
+      shortLabel: t('nav.schemesShort'),
+      icon: <Landmark className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />,
+    },
+    {
+      id: 'fieldData',
+      label: t('nav.fieldData'),
+      shortLabel: t('nav.fieldDataShort'),
+      icon: <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />,
+    },
+    {
+      id: 'smsDemo',
+      label: t('nav.smsDemo'),
+      shortLabel: t('nav.smsDemoShort'),
+      icon: <MessageSquareText className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400" />,
+    },
+    {
+      id: 'profile',
+      label: t('nav.profile'),
+      shortLabel: t('nav.profile'),
+      icon: <UserRound className="w-4 h-4 sm:w-5 sm:h-5 text-[#475569]" />,
+    },
+  ];
+
+  return (
+    <>
+      {/* Desktop: Connected Left Side Navigation sharing continuous dashboard background */}
+      <aside className="hidden md:flex w-64 shrink-0 flex-col ltr:border-r rtl:border-l border-white/20 px-4 py-6 sticky top-16 h-[calc(100vh-4rem)] self-start overflow-y-auto z-40">
+        <div className="mb-5 px-2">
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/70">{t('nav.commandCenter')}</p>
+          <p className="mt-1 text-sm font-extrabold text-white">{t('nav.dashboardNav')}</p>
+        </div>
+        <nav className="flex flex-col gap-2" aria-label={t('nav.dashboardNav')}>
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => onTabChange(tab.id)}
+                  className={`flex min-h-12 items-center justify-between gap-3 overflow-hidden rounded-2xl border px-4 py-3 text-start text-sm font-extrabold transition-all whitespace-nowrap relative ${
+                    isActive
+                      ? 'border-agri-600 bg-[#2D6A4F] text-white shadow-lg shadow-agri-950/20'
+                      : 'border-white/40 bg-white/50 text-[#1B4332] shadow-md shadow-agri-950/10 backdrop-blur-[10px] hover:bg-white/70'
+                  }`}
+                >
+                  <span className="flex min-w-0 items-center gap-3">
+                    {tab.icon}
+                    <span className="truncate">{tab.label}</span>
+                  </span>
+                  {tab.badge !== undefined && (
+                    <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-black ${
+                      isActive ? 'bg-white text-[#1B4332]' : 'bg-rose-500 text-white'
+                    }`}>
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+        </nav>
+        <div className="mt-auto rounded-2xl border border-white/30 bg-white/20 p-3 text-[11px] font-semibold leading-relaxed text-white/80 backdrop-blur-[10px]">
+          {t('nav.fieldIntelligenceQuote')}
+        </div>
+      </aside>
+
+      {/* Mobile nav drawer */}
+      <div className={`md:hidden fixed inset-0 z-[120] transition-all duration-300 ${isMobileOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        <button
+          type="button"
+          aria-label={t('nav.closeNav')}
+          className={`absolute inset-0 bg-slate-950/45 transition-opacity duration-300 ${isMobileOpen ? 'opacity-100' : 'opacity-0'}`}
+          onClick={onCloseMobileNav}
+        />
+
+        <div className={`absolute ltr:left-0 rtl:right-0 top-0 h-full w-[82%] max-w-xs ltr:border-r rtl:border-l border-white/20 bg-white/85 p-4 shadow-2xl backdrop-blur-xl transition-transform duration-300 ${isMobileOpen ? 'translate-x-0' : 'ltr:-translate-x-full rtl:translate-x-full'}`}>
+          <div className="mb-5 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-agri-600 to-agri-800 text-white shadow-md">
+                <Sprout className="h-4 w-4 text-citrus-300" />
+              </div>
+              <div>
+                <p className="text-lg font-black text-agri-950">Agri<span className="text-agri-600">Guard</span></p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={onCloseMobileNav}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white font-black text-slate-700"
+              aria-label={t('nav.closeNav')}
+            >
+              ✕
+            </button>
+          </div>
+
+          <nav className="space-y-2" aria-label={t('nav.dashboardNav')}>
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => onTabChange(tab.id)}
+                  className={`flex w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-start text-sm font-extrabold transition-all ${
+                    isActive
+                      ? 'border-agri-600 bg-agri-700 text-white shadow-lg shadow-agri-900/20'
+                      : 'border-white/50 bg-white/80 text-slate-800 shadow-sm hover:bg-slate-50'
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    {tab.icon}
+                    <span>{tab.label}</span>
+                  </span>
+                  {tab.badge !== undefined && (
+                    <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-black ${
+                      isActive ? 'bg-white text-agri-800' : 'bg-rose-500 text-white'
+                    }`}>
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="mt-6 rounded-2xl border border-agri-200 bg-agri-50/80 p-3 text-[11px] font-semibold leading-relaxed text-agri-900">
+            {t('nav.fieldIntelligenceQuote')}
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile: Bottom Fixed Navigation Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-2xl py-1.5 px-0.5 sm:px-2">
+        <div className="grid grid-cols-7 gap-0.5">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => onTabChange(tab.id)}
+                className={`flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all relative ${
+                  isActive
+                    ? 'text-agri-900 font-black bg-agri-100/80'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <div className="relative">
+                  <span className={isActive ? 'text-agri-700' : 'text-slate-500'}>
+                    {tab.icon}
+                  </span>
+                  {tab.badge !== undefined && (
+                    <span className="absolute -top-1 -right-2 w-3.5 h-3.5 bg-rose-500 text-white rounded-full text-[9px] font-black flex items-center justify-center">
+                      {tab.badge}
+                    </span>
+                  )}
+                </div>
+                <span className="text-[8px] mt-1 truncate max-w-full font-bold leading-tight">
+                  {tab.shortLabel}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+};
