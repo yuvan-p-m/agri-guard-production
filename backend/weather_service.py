@@ -1,9 +1,16 @@
-import os,requests,logging
-logger=logging.getLogger(__name__)
+import os, requests, logging
+from pathlib import Path
+from dotenv import load_dotenv
+
+BACKEND_DIR = Path(__file__).resolve().parent
+load_dotenv(BACKEND_DIR / ".env")
+
+logger = logging.getLogger(__name__)
+
 def get_weather(location):
-    default_weather={"temp":28,"humidity":45,"rain":"No","wind_speed":12,"description":"Clear","irrigation":"Morning","tomorrow_forecast":"Sunny with light breeze"}
+    default_weather = {"temp": 28, "humidity": 45, "rain": "No", "wind_speed": 12, "description": "Clear", "irrigation": "Morning", "tomorrow_forecast": "Sunny with light breeze"}
     try:
-        api_key = os.getenv("OPENWEATHER_API_KEY")
+        api_key = os.getenv("OPENWEATHER_API_KEY") or os.getenv("WEATHER_API_KEY")
         if not api_key:
             raise ValueError("OPENWEATHER_API_KEY is not configured")
         loc_str = str(location).strip() if location else "Nagpur"

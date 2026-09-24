@@ -3,7 +3,11 @@ import requests
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from datetime import datetime, timedelta
+from pathlib import Path
 from dotenv import load_dotenv
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BACKEND_DIR / ".env")
 
 from db.firestore_db import get_weather_cache, set_weather_cache, get_user_by_id, get_latest_sensor_reading
 from core.security import get_current_user
@@ -15,7 +19,6 @@ from services.ai_localization import (
     SUPPORTED_LANGUAGES
 )
 
-load_dotenv()
 logger = get_logger(__name__)
 
 def _resolve_language(request: Optional[Request], query_lang: Optional[str]) -> str:
@@ -28,7 +31,7 @@ def _resolve_language(request: Optional[Request], query_lang: Optional[str]) -> 
 
 router = APIRouter(prefix="/weather", tags=["Weather Integration"])
 
-WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+WEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY") or os.getenv("WEATHER_API_KEY")
 
 CITY_COORDINATES = {
     "getting location": {"lat": 21.1458, "lng": 79.0882, "state": "Maharashtra"},
@@ -100,7 +103,7 @@ class WeatherService:
 
         location_name = city.split("(")[0].strip() if city else "getting location"
         state_name = "India"
-        api_key = os.getenv("WEATHER_API_KEY", WEATHER_API_KEY)
+        api_key = os.getenv("OPENWEATHER_API_KEY") or os.getenv("WEATHER_API_KEY") or WEATHER_API_KEY
 
         # 1. Reverse Geocode via OpenStreetMap (Nominatim) for hyper-precise village / suburb / city name
         osm_loc, osm_state = WeatherService.reverse_geocode_osm(lat, lon)

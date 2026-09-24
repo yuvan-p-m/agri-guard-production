@@ -11,7 +11,7 @@ from services.gemini_service import get_crop_recommendations
 logger = get_logger(__name__)
 router = APIRouter(prefix="/crop", tags=["Crop Recommendation"])
 
-WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+WEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY") or os.getenv("WEATHER_API_KEY")
 
 
 def fetch_live_weather(location: str) -> Tuple[Optional[dict], Optional[str]]:
@@ -20,7 +20,7 @@ def fetch_live_weather(location: str) -> Tuple[Optional[dict], Optional[str]]:
     Location can be a city/district name (e.g. 'Nagpur') or coordinates ('21.1458,79.0882').
     Returns (weather_dict, error_string).
     """
-    api_key = os.getenv("WEATHER_API_KEY", WEATHER_API_KEY)
+    api_key = os.getenv("OPENWEATHER_API_KEY") or os.getenv("WEATHER_API_KEY") or WEATHER_API_KEY
     if not api_key:
         return None, "OpenWeatherMap API key is not configured."
 

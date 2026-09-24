@@ -7,9 +7,13 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, status, Request, Q
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
+# Resolve backend directory and load backend/.env reliably regardless of CWD
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BACKEND_DIR / ".env")
+
 # Add app directory and backend root to path for imports
 sys.path.insert(0, str(Path(__file__).parent))
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(BACKEND_DIR))
 
 from core.logger import setup_logging
 from core.config import settings
@@ -20,7 +24,6 @@ from api import auth, alerts, disease, crop, sensors, weather, risk, feedback, p
 from services.model_service import DiseaseModelService
 from db.firestore_db import save_prediction_to_firestore
 
-load_dotenv()
 setup_logging()
 logger = logging.getLogger(__name__)
 
