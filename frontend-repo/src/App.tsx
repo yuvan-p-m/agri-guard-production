@@ -1062,6 +1062,8 @@ export const App: React.FC = () => {
               <IoTSensorsTab
                 hardwareState={hardwareState}
                 onPairHardware={handlePairHardware}
+                user={user}
+                weather={weather}
                 onNavigateToDiagnosis={() => {
                   setActiveTab('diagnosis');
                   window.scrollTo({ top: 0, behavior: 'smooth' });

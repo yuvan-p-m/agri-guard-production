@@ -32,6 +32,7 @@ export const SmsDemoTab: React.FC<SmsDemoTabProps> = ({
     type: 'success' | 'error';
     code: 'SMS_SEND_SUCCESS' | 'SMS_SEND_FAILED' | 'MOBILE_NUMBER_REQUIRED';
     dispatchedMessage?: string;
+    errorMessage?: string;
   } | null>(null);
 
   const rawPhone = user?.phone?.trim() || '';
@@ -50,6 +51,8 @@ export const SmsDemoTab: React.FC<SmsDemoTabProps> = ({
   }, [rawPhone]);
 
   const handleSendDemoSms = async () => {
+    if (isSending) return;
+
     if (!hasPhone) {
       setStatusState({
         type: 'error',
@@ -79,13 +82,16 @@ export const SmsDemoTab: React.FC<SmsDemoTabProps> = ({
         setStatusState({
           type: 'error',
           code: 'SMS_SEND_FAILED',
+          errorMessage: res?.detail || res?.message || 'Failed to dispatch SMS alert.',
         });
       }
     } catch (err: any) {
       console.warn('SMS Demo send error:', err);
+      const detailMsg = err?.response?.data?.detail || err?.message || t('smsDemo.smsError');
       setStatusState({
         type: 'error',
         code: 'SMS_SEND_FAILED',
+        errorMessage: detailMsg,
       });
     } finally {
       setIsSending(false);
@@ -204,9 +210,14 @@ export const SmsDemoTab: React.FC<SmsDemoTabProps> = ({
                         {statusState.code === 'SMS_SEND_FAILED' && t('smsDemo.smsError')}
                         {statusState.code === 'MOBILE_NUMBER_REQUIRED' && t('smsDemo.noNumber')}
                       </p>
-                      {statusState.dispatchedMessage && (
+                      {statusState.type === 'success' && statusState.dispatchedMessage && (
                         <p className="text-[11px] font-mono text-emerald-800 opacity-90 leading-tight">
                           {t('smsDemo.dispatchedPrefix', 'Dispatched:')} "{statusState.dispatchedMessage}"
+                        </p>
+                      )}
+                      {statusState.type === 'error' && statusState.errorMessage && (
+                        <p className="text-[11px] font-medium text-rose-800 leading-tight">
+                          {statusState.errorMessage}
                         </p>
                       )}
                     </div>

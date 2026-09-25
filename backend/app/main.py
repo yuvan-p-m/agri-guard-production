@@ -20,7 +20,7 @@ from core.config import settings
 from core.firebase import init_firebase, is_firebase_initialized
 
 # Import API routes and services
-from api import auth, alerts, disease, crop, sensors, weather, risk, feedback, pesticides, history, marketplace
+from api import auth, alerts, disease, crop, sensors, weather, risk, feedback, pesticides, history, marketplace, predictive
 from services.model_service import DiseaseModelService
 from db.firestore_db import save_prediction_to_firestore
 
@@ -55,7 +55,8 @@ api_routers = [
     feedback.router,
     pesticides.router,
     history.router,
-    marketplace.router
+    marketplace.router,
+    predictive.router
 ]
 
 for r in api_routers:

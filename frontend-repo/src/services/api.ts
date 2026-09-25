@@ -1,6 +1,6 @@
 // API service for backend integration using native fetch
 import { Capacitor } from '@capacitor/core';
-import type { UserProfile } from '../types';
+import type { UserProfile, PredictiveRiskRequest, PredictiveRiskResponse } from '../types';
 import { getCurrentLanguage } from '../i18n';
 
 /**
@@ -372,6 +372,15 @@ export const marketplaceAPI = {
     }),
   getCropAlert: (crop: string, lang?: string) =>
     request(`/crop-alert?crop=${encodeURIComponent(crop)}&language=${encodeURIComponent(lang || getCurrentLanguage())}`),
+};
+
+// Predictive Intelligence APIs
+export const predictiveAPI = {
+  getOutbreakRisk: (data: PredictiveRiskRequest) =>
+    request<PredictiveRiskResponse>('/predictive/outbreak-risk', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
 };
 
 export default { request };

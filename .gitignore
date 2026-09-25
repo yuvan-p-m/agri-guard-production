@@ -47,6 +47,8 @@ serviceAccountKey.json
 !package.json
 !tsconfig.json
 !capacitor.config.json
+!frontend-repo/src/i18n/locales/*.json
+!backend/app/services/crop_metadata.json
 
 
 # Logs

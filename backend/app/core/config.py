@@ -28,8 +28,9 @@ class Settings(BaseSettings):
     WEATHER_API_BASE_URL: str = os.getenv("WEATHER_API_BASE_URL", "https://api.openweathermap.org")
 
     # SMS Service
-    SMS_API_KEY: str = os.getenv("SMS_API_KEY", "")
-    SMS_PROVIDER: str = os.getenv("SMS_PROVIDER", "twilio")
+    FAST2SMS_API_KEY: str = os.getenv("FAST2SMS_API_KEY") or os.getenv("SMS_API_KEY", "")
+    SMS_API_KEY: str = os.getenv("FAST2SMS_API_KEY") or os.getenv("SMS_API_KEY", "")
+    SMS_PROVIDER: str = os.getenv("SMS_PROVIDER", "fast2sms")
 
     # AI Models
     MODEL_PATH: str = os.getenv("MODEL_PATH", "ai/disease_model/model.pt")

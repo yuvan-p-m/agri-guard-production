@@ -15,7 +15,9 @@ import {
   TrendingUp,
   Cpu,
   BarChart3,
-  Layers
+  Layers,
+  Sprout,
+  FlaskConical
 } from 'lucide-react';
 import type { UserProfile } from '../types';
 import { cropAPI } from '../services/api';
@@ -380,14 +382,26 @@ export const CropRecommendationTab: React.FC<CropRecommendationTabProps> = ({
           </div>
 
           {/* Top 3 Crop Recommendation Cards */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-black text-slate-900 tracking-tight">
-                {t('cropRecommendation.topRecommended')}
-              </h3>
-              <span className="text-xs font-bold text-slate-500">
-                {t('cropRecommendation.sortedByScore')}
-              </span>
+          <div className="space-y-4 pt-1">
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-sm border-2 border-emerald-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3.5">
+                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-emerald-600 to-agri-800 text-white shadow-md shrink-0">
+                  <Sprout className="w-6 h-6 text-citrus-300" />
+                </div>
+                <div>
+                  <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex flex-wrap items-center gap-2">
+                    <span>{t('cropRecommendation.topRecommended')}</span>
+                  </h3>
+                  <p className="text-xs sm:text-sm font-bold text-emerald-800/90 mt-0.5">
+                    {t('cropRecommendation.sortedByScore')}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-emerald-100/80 border border-emerald-300 text-xs font-black text-emerald-950 shadow-2xs">
+                <Sparkles className="w-4 h-4 text-emerald-700 shrink-0" />
+                <span>{t('cropRecommendation.sortedByScore')}</span>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -483,20 +497,32 @@ export const CropRecommendationTab: React.FC<CropRecommendationTabProps> = ({
             </div>
           </div>
 
-          <div className="space-y-4 pt-2">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-black border border-emerald-200">
-                  <Activity className="w-3 h-3 text-emerald-700"/>
-                  <span>{t('cropRecommendation.soilReplenishment')}</span>
+          <div className="space-y-4 pt-4">
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-sm border-2 border-amber-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3.5">
+                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-amber-600 to-agri-900 text-white shadow-md shrink-0">
+                  <FlaskConical className="w-6 h-6 text-citrus-300" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 tracking-tight">
-                  {t('cropRecommendation.fertilizerTitle')}
-                </h3>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                      {t('cropRecommendation.fertilizerTitle')}
+                    </h3>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-black border border-emerald-300">
+                      <Activity className="w-3 h-3 text-emerald-700" />
+                      <span>{t('cropRecommendation.soilReplenishment')}</span>
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm font-bold text-amber-900/90 mt-0.5">
+                    {t('cropRecommendation.dosagePerHectare')}
+                  </p>
+                </div>
               </div>
-              <span className="text-xs font-bold text-slate-500">
-                {t('cropRecommendation.dosagePerHectare')}
-              </span>
+
+              <div className="flex items-center gap-1.5 self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-amber-100/90 border border-amber-300 text-xs font-black text-amber-950 shadow-2xs">
+                <FlaskConical className="w-4 h-4 text-amber-700 shrink-0" />
+                <span>{t('cropRecommendation.dosagePerHectare')}</span>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

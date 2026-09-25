@@ -236,5 +236,53 @@ export interface UrgencyInfo {
   breakdown?: UrgencyBreakdown | null;
 }
 
+export interface PredictiveSensorData {
+  N?: number;
+  P?: number;
+  K?: number;
+  moisture?: number;
+  temperature?: number;
+  humidity?: number;
+  pH?: number;
+}
+
+export interface PredictiveRiskRequest {
+  farmer_id?: string;
+  lat: number;
+  lon: number;
+  crop: string;
+  sensor_data: PredictiveSensorData;
+}
+
+export interface PredictedOutbreakItem {
+  disease: string;
+  probability: number;
+  days_until_window: number;
+}
+
+export interface FiveDayRiskItem {
+  date: string;
+  risk_score: number;
+  risk_level: string;
+}
+
+export interface CommunityThreatsData {
+  report_count: number;
+  diseases_reported: string[];
+  nearest_outbreak_km: number;
+}
+
+export interface PredictiveRiskResponse {
+  overall_risk_score: number;
+  risk_level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | string;
+  soil_health_index: number;
+  weather_risk_score: number;
+  seasonal_risk_level: 'LOW' | 'MEDIUM' | 'HIGH' | string;
+  community_threats: CommunityThreatsData;
+  predicted_outbreaks: PredictedOutbreakItem[];
+  five_day_forecast: FiveDayRiskItem[];
+  recommended_actions: string[];
+}
+
 
 

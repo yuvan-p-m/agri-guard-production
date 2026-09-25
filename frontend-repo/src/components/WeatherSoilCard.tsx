@@ -71,7 +71,7 @@ export const WeatherSoilCard: React.FC<WeatherSoilCardProps> = ({
                 {t('fieldData.weatherHeading')}
               </h3>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
-                Live API
+                {t('fieldData.liveApi', 'Live API')}
               </span>
             </div>
             <p className="text-[11px] text-slate-500 font-medium">
