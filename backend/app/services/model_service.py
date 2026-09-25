@@ -3,9 +3,6 @@ import logging
 
 from PIL import Image, ImageOps
 import numpy as np
-import torch
-from torchvision import transforms
-from transformers import AutoModelForImageClassification
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +30,9 @@ class DiseaseModelService:
         if cls.is_loaded:
             return
         try:
+            from transformers import AutoModelForImageClassification
+            from torchvision import transforms
+
             logger.info(f"Loading model: {MODEL_ID}")
             cls.model = AutoModelForImageClassification.from_pretrained(MODEL_ID)
             cls.model.eval()
@@ -113,6 +113,7 @@ class DiseaseModelService:
             logger.info(f"Analyzed leaf foliage ratio: {foliage_ratio:.4f}")
 
             tensor = cls.transform(img).unsqueeze(0)
+            import torch
             with torch.no_grad():
                 outputs = cls.model(tensor)
                 probs = torch.softmax(outputs.logits, dim=-1)
