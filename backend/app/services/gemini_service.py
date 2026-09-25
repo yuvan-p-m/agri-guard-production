@@ -1,10 +1,11 @@
 """
 Gemini AI service — handles all Gemini API calls for:
+  Part 1: Crop disease diagnosis (uploaded leaf image → Gemini multimodal reasoning)
   Part 2: Crop recommendation (sensor + weather data → Gemini reasoning)
   Part 3: Disease progression risk (disease + sensor data → Gemini reasoning)
 
-All answers come from live Gemini API calls with real data — no hardcoded
-recommendation logic, lookup tables, or if/else rules in this codebase.
+All answers come strictly from live Gemini API calls with real data — no hardcoded
+recommendation logic, fallback diagnosis, or local model inferences.
 """
 
 import os
@@ -14,7 +15,6 @@ import requests
 import base64
 import io
 from PIL import Image, ImageOps
-import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -23,71 +23,42 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 
 
-def validate_leaf_foliage(image_bytes: bytes) -> tuple[bool, float, str]:
+class GeminiError(Exception):
+    """Base exception for Gemini service errors."""
+    pass
+
+
+class GeminiConfigError(GeminiError):
+    """Raised when GEMINI_API_KEY is not configured."""
+    pass
+
+
+class GeminiAPIError(GeminiError):
+    """Raised when Gemini API returns an upstream HTTP error."""
+    pass
+
+
+class GeminiTimeoutError(GeminiError):
+    """Raised when Gemini API request times out."""
+    pass
+
+
+class GeminiParseError(GeminiError):
+    """Raised when Gemini response cannot be parsed into expected JSON."""
+    pass
+
+
+def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "image/jpeg") -> dict:
     """
-    Validates whether the uploaded image has sufficient plant leaf foliage / color characteristics
-    using HSV color space analysis (identifying green foliage, chlorosis/yellowing, and necrotic/brown lesions).
-    Returns (is_valid, foliage_ratio, message).
+    Call Gemini Multimodal API with an image and text prompt, and return parsed JSON response.
+    Raises explicit GeminiError on any configuration, network, upstream API, or parsing failure.
     """
-    try:
-        raw_img = Image.open(io.BytesIO(image_bytes))
-        img = ImageOps.exif_transpose(raw_img)
-        
-        # Handle alpha channel
-        if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
-            bg = Image.new('RGB', img.size, (255, 255, 255))
-            if img.mode == 'P':
-                img = img.convert('RGBA')
-            bg.paste(img, mask=img.split()[3] if len(img.split()) > 3 else None)
-            img = bg
-        else:
-            img = img.convert('RGB')
-
-        arr = np.array(img, dtype=np.float32) / 255.0
-        r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
-        maxc = np.maximum(np.maximum(r, g), b)
-        minc = np.minimum(np.minimum(r, g), b)
-        delt = maxc - minc + 1e-6
-
-        h = np.zeros_like(maxc)
-        mask_r = (maxc == r)
-        mask_g = (maxc == g) & ~mask_r
-        mask_b = (maxc == b) & ~mask_r & ~mask_g
-
-        h[mask_r] = ((g[mask_r] - b[mask_r]) / delt[mask_r]) % 6
-        h[mask_g] = ((b[mask_g] - r[mask_g]) / delt[mask_g]) + 2
-        h[mask_b] = ((r[mask_b] - g[mask_b]) / delt[mask_b]) + 4
-        h = h / 6.0
-        s = delt / (maxc + 1e-6)
-        v = maxc
-
-        green_foliage = (h >= 0.18) & (h <= 0.45) & (s >= 0.10) & (v >= 0.10)
-        yellow_foliage = (h >= 0.10) & (h < 0.18) & (s >= 0.12) & (v >= 0.12)
-        brown_spots = (h >= 0.04) & (h < 0.10) & (s >= 0.12) & (v >= 0.08) & (v <= 0.80)
-
-        leaf_pixels = green_foliage | yellow_foliage | brown_spots
-        foliage_ratio = float(np.mean(leaf_pixels))
-
-        if foliage_ratio < 0.03:
-            return False, foliage_ratio, "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf."
-
-        return True, foliage_ratio, "Valid plant leaf detected."
-    except Exception as e:
-        logger.warning(f"Error validating leaf foliage: {e}")
-        return True, 1.0, "Validation bypassed due to image parsing error."
-
-
-def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "image/jpeg") -> dict | None:
-    """
-    Call Gemini API with an image and text prompt, and return parsed JSON response.
-    Returns None if the call fails or cannot be parsed.
-    """
-    api_key = os.getenv("GEMINI_API_KEY", GEMINI_API_KEY)
+    api_key = os.getenv("GEMINI_API_KEY", GEMINI_API_KEY).strip()
     if not api_key:
-        logger.error("GEMINI_API_KEY is not set — cannot call Gemini Multimodal API.")
-        return None
+        logger.error("GEMINI_API_KEY is not configured.")
+        raise GeminiConfigError("Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable.")
 
-    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = os.getenv("GEMINI_MODEL", GEMINI_MODEL).strip() or "gemini-2.5-flash"
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
 
     b64_data = base64.b64encode(image_bytes).decode("utf-8")
@@ -116,20 +87,29 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
 
     try:
         response = requests.post(url, json=payload, timeout=35)
-        if response.status_code != 200:
-            logger.error(f"Gemini Multimodal API returned status {response.status_code}: {response.text[:500]}")
-            return None
+    except requests.exceptions.Timeout as te:
+        logger.error(f"Gemini Multimodal API request timed out: {te}")
+        raise GeminiTimeoutError("AI diagnosis service timed out while analyzing image. Please try again.") from te
+    except requests.exceptions.RequestException as re:
+        logger.error(f"Gemini Multimodal API network request failed: {re}")
+        raise GeminiAPIError(f"Failed to communicate with AI diagnosis service: {re}") from re
 
+    if response.status_code != 200:
+        error_snippet = response.text[:400] if response.text else "No response body"
+        logger.error(f"Gemini Multimodal API returned HTTP {response.status_code}: {error_snippet}")
+        raise GeminiAPIError(f"AI diagnosis service returned HTTP {response.status_code}.")
+
+    try:
         result = response.json()
         candidates = result.get("candidates", [])
         if not candidates:
-            logger.error("Gemini Multimodal API returned no candidates.")
-            return None
+            logger.error("Gemini Multimodal API returned no candidate responses.")
+            raise GeminiParseError("AI diagnosis service returned no candidate responses.")
 
         text = candidates[0].get("content", {}).get("parts", [{}])[0].get("text", "")
         if not text:
-            logger.error("Gemini Multimodal API returned empty text.")
-            return None
+            logger.error("Gemini Multimodal API returned empty text in candidate content.")
+            raise GeminiParseError("AI diagnosis service returned empty content.")
 
         cleaned = text.strip()
         if cleaned.startswith("```"):
@@ -140,57 +120,56 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
                 lines = lines[:-1]
             cleaned = "\n".join(lines).strip()
 
-        return json.loads(cleaned)
-    except Exception as e:
-        logger.error(f"Gemini Multimodal API call failed: {e}")
-        return None
+        parsed = json.loads(cleaned)
+        if not isinstance(parsed, dict):
+            raise GeminiParseError("AI diagnosis service returned invalid JSON structure.")
+
+        return parsed
+    except (json.JSONDecodeError, KeyError, IndexError) as je:
+        logger.error(f"Failed to parse Gemini response as JSON: {je}")
+        raise GeminiParseError(f"Failed to parse AI diagnosis response as JSON: {je}") from je
 
 
 def diagnose_crop_disease(image_bytes: bytes, language: str = "en") -> dict:
     """
-    Part 1: Analyze crop leaf image using Google Gemini AI for disease detection.
-    Pre-validates plant foliage before inference. If not a valid plant leaf, early terminates.
+    Analyze crop leaf image using Google Gemini Multimodal Vision AI for disease detection.
+    This is the SOLE AI inference engine for Crop Diagnosis.
+    Raises explicit exceptions on any failure without falling back to local models or mocks.
     """
-    # 1. Pre-validation: check for plant foliage characteristics
-    is_valid_leaf, foliage_ratio, val_message = validate_leaf_foliage(image_bytes)
-    if not is_valid_leaf:
-        logger.warning(f"Leaf pre-validation failed (foliage_ratio={foliage_ratio:.4f})")
-        return {
-            "is_plant_leaf": False,
-            "disease": "No Crop Leaf Detected",
-            "confidence": 0.0,
-            "status": "invalid_leaf",
-            "message": "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf.",
-            "provider": "pre_validation",
-            "foliage_ratio": round(foliage_ratio * 100, 2)
-        }
+    if not image_bytes or len(image_bytes) < 64:
+        raise ValueError("Uploaded image file is empty or too small to be a valid image.")
 
-    # 2. Determine image MIME type
+    # 1. Determine image format and validate image readability
     try:
         raw_img = Image.open(io.BytesIO(image_bytes))
         fmt = (raw_img.format or "JPEG").upper()
         mime_type = "image/png" if fmt == "PNG" else ("image/webp" if fmt == "WEBP" else "image/jpeg")
-    except Exception:
-        mime_type = "image/jpeg"
+    except Exception as img_err:
+        logger.warning(f"Failed to decode image with PIL: {img_err}")
+        raise ValueError("Uploaded file is not a valid or readable image.") from img_err
 
-    # 3. Controlled Gemini Prompt
-    prompt = """You are an expert plant pathologist and agronomist.
-Carefully examine the attached photo of a crop/plant leaf.
+    # 2. Structured Gemini Vision Prompt
+    prompt = """You are an expert plant pathologist and agricultural diagnostician.
+Examine the attached image carefully and provide a rigorous pathology diagnosis.
 
-INSTRUCTIONS:
-1. Verify if this image depicts a plant leaf, crop foliage, or plant tissue:
-   - If NOT a plant or crop leaf (e.g. human face, electronic device, shoe, bottle, vehicle, indoor object, or unclear), set "is_plant_leaf": false.
-2. If it IS a plant leaf:
-   - Identify the crop (e.g. Tomato, Potato, Apple, Citrus, Corn, Grape, Rice, Wheat, Pepper, Strawberry, Cotton, etc.).
-   - Inspect the leaf for disease symptoms: fungal spots/lesions, bacterial blights, viral mosaics, rust pustules, powdery/downy mildew, chlorosis, or healthy tissue.
-   - If the leaf is completely healthy with vibrant green chlorophyll and no disease lesions, set "is_healthy": true, "disease": "Healthy", "disease_id": "<Crop>___healthy".
-   - If diseased, identify the exact disease and provide a standard identifier (e.g., "Tomato___Early_blight", "Potato___Late_blight", "Apple___Black_rot", "Citrus___Black_spot", "Corn___Common_rust", "Grape___Leaf_blight", etc.).
-   - Provide your certainty confidence percentage (between 50.0 and 99.0) based strictly on symptom clarity.
-   - Specify pathogen type: "Fungus", "Bacterium", "Virus", "Pest", or "None".
-   - List the key visual symptoms observed on the leaf.
-   - Summarize the pathology evidence in 1-2 concise sentences.
+DIAGNOSIS INSTRUCTIONS:
+1. Verify if this image depicts a plant leaf, crop foliage, stem, or plant tissue:
+   - If NOT a plant or crop (e.g. human, device, shoe, bottle, vehicle, indoor object, animal, food dish, or completely unidentifiable), set "is_plant_leaf": false.
+2. If it IS a plant / crop:
+   - Identify the crop name (e.g. Tomato, Potato, Apple, Citrus, Corn, Grape, Rice, Wheat, Pepper, Strawberry, Cotton, Soybean, Sugarcane, etc.).
+   - Inspect the plant tissue for disease symptoms: fungal lesions, bacterial spots, viral mosaics, rust pustules, powdery/downy mildew, blight, chlorosis, necrosis, pest damage, or healthy tissue.
+   - If the leaf is completely healthy with vibrant green tissue and no disease lesions, set "is_healthy": true, "disease": "Healthy", "disease_id": "<Crop>___healthy", "severity": "none", "pathogen_type": "None".
+   - If diseased or stressed:
+     * Identify the exact disease or stress condition (e.g. "Early Blight", "Late Blight", "Black Rot", "Citrus Canker", "Common Rust", "Powdery Mildew", "Leaf Blight", "Yellow Leaf Curl Virus", etc.).
+     * Provide a standard machine-readable identifier "disease_id" formatted as "<Crop>___<Disease_Name>" (e.g. "Tomato___Early_blight", "Potato___Late_blight", "Apple___Black_rot", "Citrus___Black_spot").
+     * Provide certainty confidence percentage (between 50.0 and 99.0) based strictly on visible symptom clarity.
+     * Specify pathogen type: "Fungus", "Bacterium", "Virus", "Pest", "Nutrient Deficiency", or "None".
+     * Specify severity: "low", "medium", "high", or "severe".
+     * List 2-4 key visual symptoms observed on the leaf.
+     * Provide a concise 1-2 sentence pathology reasoning explaining the diagnosis.
 
 STRICT JSON ONLY (no markdown code blocks, no text outside JSON):
+For a valid plant leaf:
 {
   "is_plant_leaf": true,
   "is_healthy": false,
@@ -200,10 +179,11 @@ STRICT JSON ONLY (no markdown code blocks, no text outside JSON):
   "confidence": 94.5,
   "severity": "medium",
   "pathogen_type": "Fungus",
-  "symptoms": ["Dark concentric target-spot lesions", "Chlorotic yellowing halos", "Lower leaf necrosis"],
+  "symptoms": ["Concentric dark brown target-spot lesions", "Chlorotic yellow halos surrounding spots", "Lower foliage necrosis"],
   "reasoning": "Clear concentric ring lesions with yellow halos on leaf surface characteristic of Alternaria solani."
 }
-If NOT a plant leaf:
+
+If NOT a plant/crop leaf:
 {
   "is_plant_leaf": false,
   "is_healthy": false,
@@ -214,69 +194,62 @@ If NOT a plant leaf:
   "severity": "none",
   "pathogen_type": "None",
   "symptoms": [],
-  "reasoning": "The uploaded photo does not contain a recognizable plant or crop leaf."
+  "reasoning": "The uploaded photo does not contain recognizable crop foliage or plant leaf tissue."
 }"""
 
     gemini_result = _call_gemini_multimodal(prompt, image_bytes, mime_type=mime_type)
 
-    if gemini_result is not None and isinstance(gemini_result, dict):
-        if not gemini_result.get("is_plant_leaf", True) or gemini_result.get("disease_id") == "invalid_leaf":
-            logger.info("Gemini classified image as non-plant / invalid leaf")
-            return {
-                "is_plant_leaf": False,
-                "disease": "No Crop Leaf Detected",
-                "confidence": 0.0,
-                "status": "invalid_leaf",
-                "message": "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf.",
-                "provider": "gemini",
-                "model_used": os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
-                "reasoning": gemini_result.get("reasoning", "")
-            }
+    if not isinstance(gemini_result, dict):
+        raise GeminiParseError("AI diagnosis service returned unexpected data format.")
 
-        crop = str(gemini_result.get("crop", "Plant")).strip()
-        disease_raw = str(gemini_result.get("disease", "Disease")).strip()
-        disease_id = str(gemini_result.get("disease_id", "")).strip()
-        is_healthy = bool(gemini_result.get("is_healthy", False) or "healthy" in disease_raw.lower())
-
-        if is_healthy:
-            formatted_disease = f"{crop}___healthy" if not disease_id else disease_id
-        elif disease_id and "___" in disease_id:
-            formatted_disease = disease_id
-        else:
-            clean_crop = crop.replace(" ", "_")
-            clean_dis = disease_raw.replace(" ", "_")
-            formatted_disease = f"{clean_crop}___{clean_dis}"
-
-        try:
-            conf = float(gemini_result.get("confidence", 92.0))
-        except (ValueError, TypeError):
-            conf = 92.0
-        conf = max(50.0, min(99.9, conf))
-
+    if not gemini_result.get("is_plant_leaf", True) or gemini_result.get("disease_id") == "invalid_leaf":
+        logger.info("Gemini classified image as non-plant / invalid leaf")
         return {
-            "is_plant_leaf": True,
-            "disease": formatted_disease,
-            "crop": crop,
-            "disease_display": disease_raw,
-            "confidence": round(conf, 2),
-            "status": "success",
-            "is_healthy": is_healthy,
-            "severity": gemini_result.get("severity", "medium"),
-            "pathogen_type": gemini_result.get("pathogen_type", "Fungus" if not is_healthy else "None"),
-            "symptoms": gemini_result.get("symptoms", []),
-            "reasoning": gemini_result.get("reasoning", ""),
+            "is_plant_leaf": False,
+            "disease": "No Crop Leaf Detected",
+            "confidence": 0.0,
+            "status": "invalid_leaf",
+            "message": gemini_result.get("reasoning") or "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf.",
             "provider": "gemini",
-            "model_used": os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
-            "foliage_ratio": round(foliage_ratio * 100, 2)
+            "model_used": os.getenv("GEMINI_MODEL", GEMINI_MODEL).strip() or "gemini-2.5-flash",
+            "reasoning": gemini_result.get("reasoning", "")
         }
 
-    # If Gemini call fails (e.g. no API key configured / network offline / rate limited), use existing local model fallback
-    logger.warning("Gemini AI diagnosis unavailable or failed — falling back to local model service")
-    from services.model_service import DiseaseModelService
-    fallback_res = DiseaseModelService.predict_image(image_bytes)
-    fallback_res["provider"] = "local_fallback"
-    return fallback_res
+    crop = str(gemini_result.get("crop", "Plant")).strip()
+    disease_raw = str(gemini_result.get("disease", "Disease")).strip()
+    disease_id = str(gemini_result.get("disease_id", "")).strip()
+    is_healthy = bool(gemini_result.get("is_healthy", False) or "healthy" in disease_raw.lower())
 
+    if is_healthy:
+        formatted_disease = f"{crop}___healthy" if not disease_id else disease_id
+    elif disease_id and "___" in disease_id:
+        formatted_disease = disease_id
+    else:
+        clean_crop = crop.replace(" ", "_")
+        clean_dis = disease_raw.replace(" ", "_")
+        formatted_disease = f"{clean_crop}___{clean_dis}"
+
+    try:
+        conf = float(gemini_result.get("confidence", 92.0))
+    except (ValueError, TypeError):
+        conf = 92.0
+    conf = max(50.0, min(99.9, conf))
+
+    return {
+        "is_plant_leaf": True,
+        "disease": formatted_disease,
+        "crop": crop,
+        "disease_display": disease_raw,
+        "confidence": round(conf, 2),
+        "status": "success",
+        "is_healthy": is_healthy,
+        "severity": gemini_result.get("severity", "medium"),
+        "pathogen_type": gemini_result.get("pathogen_type", "Fungus" if not is_healthy else "None"),
+        "symptoms": gemini_result.get("symptoms", []),
+        "reasoning": gemini_result.get("reasoning", ""),
+        "provider": "gemini",
+        "model_used": os.getenv("GEMINI_MODEL", GEMINI_MODEL).strip() or "gemini-2.5-flash"
+    }
 
 
 def _call_gemini(prompt: str) -> dict | None:

@@ -32,10 +32,10 @@ class Settings(BaseSettings):
     SMS_API_KEY: str = os.getenv("FAST2SMS_API_KEY") or os.getenv("SMS_API_KEY", "")
     SMS_PROVIDER: str = os.getenv("SMS_PROVIDER", "fast2sms")
 
-    # AI Models
-    MODEL_PATH: str = os.getenv("MODEL_PATH", "ai/disease_model/model.pt")
-    CROP_MODEL_PATH: str = os.getenv("CROP_MODEL_PATH", "ai/crop_model/model.pkl")
+    # AI Models & Gemini Vision Engine
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    CROP_MODEL_PATH: str = os.getenv("CROP_MODEL_PATH", "ai/crop_model/model.pkl")
 
     # Firebase
     FIREBASE_RTDB_SENSOR_URL: str = os.getenv("FIREBASE_RTDB_SENSOR_URL", "")

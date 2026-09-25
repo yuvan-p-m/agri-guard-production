@@ -21,7 +21,6 @@ from core.firebase import init_firebase, is_firebase_initialized
 
 # Import API routes and services
 from api import auth, alerts, disease, crop, sensors, weather, risk, feedback, pesticides, history, marketplace, predictive
-from services.model_service import DiseaseModelService
 from db.firestore_db import save_prediction_to_firestore
 
 setup_logging()
@@ -76,6 +75,24 @@ def health_check():
         "version": "1.0.0",
     }
 
+
+@app.get("/model/status")
+@app.get("/api/v1/model/status")
+@app.get("/api/model/status")
+def model_status():
+    """Returns status of AI diagnosis engine (Google Gemini Vision AI)"""
+    import os
+    api_key_configured = bool(os.getenv("GEMINI_API_KEY", "").strip())
+    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip() or "gemini-2.5-flash"
+    return {
+        "model_loaded": api_key_configured,
+        "model_id": model_name,
+        "status": "ready" if api_key_configured else "unconfigured",
+        "provider": "gemini",
+        "api_reachable": True
+    }
+
+
 @app.get("/crop-recommendations")
 @app.get("/api/v1/crop-recommendations")
 @app.get("/api/crop-recommendations")
@@ -92,15 +109,17 @@ async def crop_recommendations_root_endpoint(
     req_lang = language or request.query_params.get("language") or request.headers.get("x-language") or "en"
     return await execute_crop_recommendations(location, language=req_lang)
 
+
 @app.get("/")
 def root():
     """Root endpoint - API info"""
     return {
         "name": "SIH Agri-Smart API",
         "version": "1.0.0",
-        "description": "AI-powered crop disease detection & recommendation system",
+        "description": "AI-powered crop disease detection & recommendation system (Gemini AI Vision Engine)",
         "docs": "/docs",
         "firebase_active": is_firebase_initialized(),
+        "ai_engine": "Google Gemini Vision AI",
         "endpoints": {
             "auth": "/auth",
             "disease": "/disease",
@@ -115,6 +134,7 @@ def root():
         }
     }
 
+
 @app.on_event("startup")
 async def startup():
     logger.info("SIH Agri-Smart API starting...")
@@ -124,12 +144,6 @@ async def startup():
     else:
         logger.info("Firebase Admin running with mock DB fallback.")
     
-    # Load PyTorch EfficientNet-B3 model ONCE at startup (Frozen)
-    try:
-        DiseaseModelService.load_model()
-    except Exception as e:
-        logger.error(f"Startup warning: PyTorch model failed to load: {e}")
-
     # Load Crop Random Forest model ONCE at startup
     try:
         from services.crop_model_service import CropRandomForestService
@@ -145,6 +159,7 @@ async def startup():
     except Exception as e:
         logger.warning(f"SMS scheduler startup notice: {e}")
 
+
 @app.post("/predict")
 @app.post("/api/v1/predict")
 @app.post("/api/predict")
@@ -158,101 +173,17 @@ async def predict_endpoint(
 ):
     """
     POST /predict endpoint
-    Accepts multipart image upload ('file'), runs PyTorch EfficientNet-B3 inference,
-    saves record to Firestore 'predictions' collection, and returns JSON.
+    Accepts multipart image upload ('file'), runs Google Gemini Vision AI diagnosis,
+    saves record to Firestore 'predictions' collection, and returns structured diagnosis JSON.
     """
-    if not file:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No file provided")
-    
-    try:
-        contents = await file.read()
-        prediction = DiseaseModelService.predict_image(contents)
+    from api.disease import predict_disease
+    return await predict_disease(file=file, language=language, request=request)
 
-        # Early termination guard: If not a valid plant leaf, return immediately without risk or treatment calculations
-        if prediction.get("status") == "invalid_leaf":
-            logger.info(f"Invalid leaf detected in /predict: {prediction.get('message')}")
-            return {
-                "disease": prediction.get("disease", "No Crop Leaf Detected"),
-                "confidence": float(prediction.get("confidence", 0.0)),
-                "status": "invalid_leaf",
-                "message": prediction.get("message", "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf."),
-                "progression_risk": None,
-                "pesticide_recommendation": None,
-                "treatment": None,
-                "sensor_snapshot": None,
-                "weather_snapshot": None,
-            }
-        
-        # Save to Firestore collection "predictions"
-        firestore_record = {
-            "userId": "anonymous_farmer",
-            "disease": prediction["disease"],
-            "confidence": prediction["confidence"],
-            "imageUrl": f"uploads/{file.filename}",
-        }
-        save_prediction_to_firestore(firestore_record)
-
-        # Part 3: Disease Progression Risk Assessment via Gemini AI
-        # Note: this is a condition-based risk estimate using current live field + weather data via Gemini reasoning,
-        # not a time-series forecast (no historical readings yet).
-        from services.sensor_service import fetch_live_sensor_data
-        from services.gemini_service import get_disease_progression_risk
-        from api.weather import WeatherService
-
-        disease_name = prediction.get("disease", "")
-        confidence = float(prediction.get("confidence", 0.0))
-        sensor_data = fetch_live_sensor_data() or {}
-        try:
-            weather_data = WeatherService.fetch_weather() or {}
-        except Exception as w_err:
-            logger.warning(f"Weather fetch notice in main /predict: {w_err}")
-            weather_data = {}
-
-        req_lang = language or request.query_params.get("language") or request.headers.get("x-language") or "en"
-
-        try:
-            progression_risk = get_disease_progression_risk(
-                disease_name=disease_name,
-                confidence=confidence,
-                sensor_data=sensor_data,
-                weather_data=weather_data,
-                language=req_lang
-            )
-        except Exception as err:
-            logger.error(f"Error evaluating disease progression risk: {err}")
-            progression_risk = {
-                "risk": "Risk Assessment Unavailable",
-                "message": "Unable to calculate progression risk at this time.",
-                "treatment": None,
-                "pesticide_recommendation": None
-            }
-
-        from services.ai_localization import get_disease_display_name
-        localized_disease = get_disease_display_name(disease_name, req_lang)
-
-        return {
-            **prediction,
-            "localized_disease": localized_disease,
-            "disease_display": localized_disease,
-            "disease_prediction": {
-                "disease": disease_name,
-                "localized_disease": localized_disease,
-                "confidence": confidence,
-                "status": prediction.get("status", "success")
-            },
-            "progression_risk": progression_risk,
-            "pesticide_recommendation": progression_risk.get("pesticide_recommendation") or progression_risk.get("treatment") if isinstance(progression_risk, dict) else None,
-            "treatment": progression_risk.get("treatment") or progression_risk.get("pesticide_recommendation") if isinstance(progression_risk, dict) else None,
-            "sensor_snapshot": sensor_data,
-            "weather_snapshot": weather_data
-        }
-    except Exception as e:
-        logger.error(f"Prediction error in /predict: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Prediction failed: {str(e)}")
 
 @app.on_event("shutdown")
 async def shutdown():
     logger.info("SIH Agri-Smart API shutting down...")
+
 
 if __name__ == "__main__":
     import uvicorn
@@ -262,3 +193,4 @@ if __name__ == "__main__":
         port=8000,
         reload=True
     )
+

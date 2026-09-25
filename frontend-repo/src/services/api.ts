@@ -4,35 +4,137 @@ import type { UserProfile, PredictiveRiskRequest, PredictiveRiskResponse } from 
 import { getCurrentLanguage } from '../i18n';
 
 /**
+ * Checks if running in production web mode (i.e. built for production, not native Capacitor).
+ */
+export function isProductionWeb(): boolean {
+  const isNative = typeof window !== 'undefined' && Capacitor.isNativePlatform();
+  return Boolean(import.meta.env.PROD && !isNative);
+}
+
+/**
+ * Checks if running on a native mobile platform (Android / iOS via Capacitor).
+ */
+export function isNativePlatform(): boolean {
+  return typeof window !== 'undefined' && Capacitor.isNativePlatform();
+}
+
+/**
  * Dynamically resolves the active API base endpoint:
- * 1. Runtime override via localStorage ('api_endpoint_override')
- * 2. Environment variable VITE_API_BASE_URL (with auto-adjustment for native platforms)
- * 3. Native mobile fallback: LAN IP (192.168.1.6:8000/api/v1) or Android Emulator (10.0.2.2:8000/api/v1)
- * 4. Browser web default: 127.0.0.1:8000/api/v1
+ * 1. Production Web (Vercel deployment):
+ *    - Strictly uses VITE_API_BASE_URL (Render backend: https://agri-guard-production.onrender.com/api/v1).
+ *    - Ignores and clears stale localStorage overrides to prevent localhost locking.
+ *    - Returns empty string if unconfigured (handled with a clear error by callers, never falls back to localhost).
+ * 2. Mobile Native (Android / Capacitor):
+ *    - Uses runtime override from localStorage if set.
+ *    - Uses VITE_API_BASE_URL if configured.
+ *    - Falls back to emulator (http://10.0.2.2:8000/api/v1) or ADB reverse (http://127.0.0.1:8000/api/v1).
+ * 3. Development Web (Vite dev server):
+ *    - Uses runtime override from localStorage if set.
+ *    - Uses VITE_API_BASE_URL if configured.
+ *    - Falls back to local dev server (http://127.0.0.1:8000/api/v1).
  */
 export function getApiBaseUrl(): string {
+  const envUrl = (import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/+$/, '');
+  const isNative = isNativePlatform();
+  const isProdWeb = isProductionWeb();
+
+  // 1. Production Web
+  if (isProdWeb) {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('api_endpoint_override');
+      } catch {
+        // ignore in case storage access is restricted
+      }
+    }
+
+    if (envUrl) {
+      return envUrl;
+    }
+
+    // In production web, never silently fall back to localhost/LAN
+    return '';
+  }
+
+  // 2. Mobile Native & Development Web: check runtime override first
   if (typeof window !== 'undefined') {
-    const runtimeOverride = localStorage.getItem('api_endpoint_override');
-    if (runtimeOverride && runtimeOverride.trim()) {
-      return runtimeOverride.trim().replace(/\/+$/, '');
+    try {
+      const runtimeOverride = localStorage.getItem('api_endpoint_override');
+      if (runtimeOverride && runtimeOverride.trim()) {
+        return runtimeOverride.trim().replace(/\/+$/, '');
+      }
+    } catch {
+      // ignore
     }
   }
 
-  const envUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+  // 3. Use VITE_API_BASE_URL if set in development/native
   if (envUrl) {
-    return envUrl.replace(/\/+$/, '');
+    return envUrl;
   }
 
-  // Both browser and Android with ADB reverse connect to 127.0.0.1:8000/api/v1
+  // 4. Default fallback for development/native only
+  if (isNative) {
+    return 'http://10.0.2.2:8000/api/v1';
+  }
   return 'http://127.0.0.1:8000/api/v1';
 }
 
+/**
+ * Returns candidate base URLs for connection attempts.
+ * In production web: ONLY the configured production API base URL is attempted (no localhost/LAN probing).
+ * In dev / native: primary endpoint plus local/LAN fallback endpoints for development resilience.
+ */
+export function getCandidateBaseUrls(): string[] {
+  const primaryBaseUrl = getApiBaseUrl();
+  const isNative = isNativePlatform();
+  const isProdWeb = isProductionWeb();
+
+  // In production web, strictly use the primary base URL
+  if (isProdWeb) {
+    return primaryBaseUrl ? [primaryBaseUrl] : [];
+  }
+
+  // Development web and native mobile candidate endpoints
+  const candidates = [
+    primaryBaseUrl,
+    ...(isNative
+      ? [
+          'http://10.0.2.2:8000/api/v1',
+          'http://127.0.0.1:8000/api/v1',
+          'http://192.168.1.5:8000/api/v1',
+          'http://192.168.1.6:8000/api/v1',
+          'http://10.200.4.112:8000/api/v1',
+        ]
+      : [
+          'http://127.0.0.1:8000/api/v1',
+          'http://localhost:8000/api/v1',
+          'http://10.200.4.112:8000/api/v1',
+          'http://10.0.2.2:8000/api/v1',
+          'http://192.168.1.5:8000/api/v1',
+          'http://192.168.1.6:8000/api/v1',
+        ]),
+  ].filter((url): url is string => Boolean(url && url.trim()));
+
+  return Array.from(new Set(candidates));
+}
+
 export function setCustomApiEndpoint(url: string): void {
+  // In production web, ignore runtime overrides to prevent overriding Render backend
+  if (isProductionWeb()) {
+    console.warn('Custom API endpoint override is disabled in production web mode.');
+    return;
+  }
+
   if (typeof window !== 'undefined') {
-    if (!url || !url.trim()) {
-      localStorage.removeItem('api_endpoint_override');
-    } else {
-      localStorage.setItem('api_endpoint_override', url.trim().replace(/\/+$/, ''));
+    try {
+      if (!url || !url.trim()) {
+        localStorage.removeItem('api_endpoint_override');
+      } else {
+        localStorage.setItem('api_endpoint_override', url.trim().replace(/\/+$/, ''));
+      }
+    } catch {
+      // ignore
     }
   }
 }
@@ -64,7 +166,7 @@ export interface LoginPayload {
 }
 
 async function request<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const token = localStorage.getItem('access_token');
+  const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
   const currentLang = getCurrentLanguage();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -78,23 +180,23 @@ async function request<T = any>(endpoint: string, options: RequestInit = {}): Pr
   }
 
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  const primaryBaseUrl = getApiBaseUrl();
-  const isNative = typeof window !== 'undefined' && Capacitor.isNativePlatform();
+  const isProdWeb = isProductionWeb();
+  const candidateUrls = getCandidateBaseUrls();
 
-  // Candidates list for resilient mobile connections (primary, ADB reverse 127.0.0.1, emulator 10.0.2.2, physical LAN 192.168.1.5)
-  const candidateUrls = [
-    primaryBaseUrl,
-    ...(isNative 
-      ? ['http://127.0.0.1:8000/api/v1', 'http://10.200.4.112:8000/api/v1', 'http://10.0.2.2:8000/api/v1', 'http://192.168.1.5:8000/api/v1', 'http://192.168.1.6:8000/api/v1'] 
-      : ['http://127.0.0.1:8000/api/v1', 'http://10.200.4.112:8000/api/v1', 'http://10.0.2.2:8000/api/v1', 'http://192.168.1.5:8000/api/v1', 'http://192.168.1.6:8000/api/v1'])
-  ].filter((url, index, self) => self.indexOf(url) === index);
+  if (candidateUrls.length === 0) {
+    throw new Error(
+      'Production API base URL is not configured. Please set the VITE_API_BASE_URL environment variable in Vercel settings (e.g. https://agri-guard-production.onrender.com/api/v1).'
+    );
+  }
 
+  const primaryBaseUrl = candidateUrls[0];
+  const isNative = isNativePlatform();
   let lastError: any = null;
 
   for (const candidateBase of candidateUrls) {
     try {
       const controller = new AbortController();
-      const timeoutMs = isNative ? 3500 : 6000;
+      const timeoutMs = isNative ? 5000 : (isProdWeb ? 30000 : 6000);
       const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
       const response = await fetch(`${candidateBase}${cleanEndpoint}`, {
@@ -112,8 +214,8 @@ async function request<T = any>(endpoint: string, options: RequestInit = {}): Pr
         throw error;
       }
 
-      // If a candidate succeeded and it was different from primary, remember it
-      if (candidateBase !== primaryBaseUrl) {
+      // If a candidate succeeded and it was different from primary (dev/native only), remember it
+      if (!isProdWeb && candidateBase !== primaryBaseUrl) {
         setCustomApiEndpoint(candidateBase);
       }
 
@@ -129,7 +231,9 @@ async function request<T = any>(endpoint: string, options: RequestInit = {}): Pr
   }
 
   const customError: any = new Error(
-    `Unable to connect to backend server (${primaryBaseUrl}). Tap 'Server IP' in the top header to configure or check network connection.`
+    isProdWeb
+      ? `Unable to connect to backend server (${primaryBaseUrl}). Please check your internet connection or verify the Render service status.`
+      : `Unable to connect to backend server (${primaryBaseUrl}). Tap 'Server IP' in the top header to configure or check network connection.`
   );
   customError.original = lastError;
   throw customError;
@@ -142,7 +246,7 @@ export const authAPI = {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    if (resData?.access_token) {
+    if (resData?.access_token && typeof window !== 'undefined') {
       localStorage.setItem('access_token', resData.access_token);
     }
     return resData;
@@ -152,7 +256,7 @@ export const authAPI = {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    if (resData?.access_token) {
+    if (resData?.access_token && typeof window !== 'undefined') {
       localStorage.setItem('access_token', resData.access_token);
     }
     return resData;
@@ -171,7 +275,7 @@ export const diseaseAPI = {
     }
 
     const currentLang = lang || getCurrentLanguage();
-    const token = localStorage.getItem('access_token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('language', currentLang);
@@ -181,13 +285,12 @@ export const diseaseAPI = {
     };
     if (token) headers['Authorization'] = `Bearer ${token}`;
 
-    const bases = [
-      getApiBaseUrl(),
-      'http://127.0.0.1:8000/api/v1',
-      'http://localhost:8000/api/v1',
-      'http://10.200.4.112:8000/api/v1',
-      'http://10.0.2.2:8000/api/v1',
-    ].filter((url, index, self) => self.indexOf(url) === index);
+    const bases = getCandidateBaseUrls();
+    if (bases.length === 0) {
+      throw new Error(
+        'Production API base URL is not configured. Please set the VITE_API_BASE_URL environment variable in Vercel settings (e.g. https://agri-guard-production.onrender.com/api/v1).'
+      );
+    }
 
     const candidateUrls: string[] = [];
     for (const b of bases) {
@@ -204,8 +307,8 @@ export const diseaseAPI = {
 
     for (const targetUrl of candidateUrls) {
       const controller = new AbortController();
-      // 30-second timeout — model inference can be slow on cold start
-      const timeoutId = setTimeout(() => controller.abort(), 30000);
+      // 45-second timeout — model inference + Render cold start can take time
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
 
       try {
         const res = await fetch(targetUrl, {
@@ -233,14 +336,14 @@ export const diseaseAPI = {
           throw err;
         }
 
-        // Network/timeout/CORS error → try next candidate
+        // Network/timeout/CORS error -> try next candidate
         console.warn(`Fetch to ${targetUrl} failed (network):`, err);
         lastNetworkError = err;
       }
     }
 
     throw new Error(
-      `Unable to connect to AI model server. Please ensure the backend is running at ${getApiBaseUrl()}. ` +
+      `Unable to connect to AI model server. Please ensure the backend is reachable at ${getApiBaseUrl() || 'configured endpoint'}. ` +
       (lastNetworkError instanceof Error ? lastNetworkError.message : String(lastNetworkError))
     );
   },
@@ -272,13 +375,10 @@ function isNetworkError(err: Error): boolean {
 export const modelAPI = {
   /** Checks if the backend is reachable and if the AI model is loaded */
   getStatus: async (): Promise<{ model_loaded: boolean; model_id: string; status: string; api_reachable: boolean }> => {
-    const bases = [
-      getApiBaseUrl(),
-      'http://127.0.0.1:8000/api/v1',
-      'http://localhost:8000/api/v1',
-      'http://10.200.4.112:8000/api/v1',
-      'http://10.0.2.2:8000/api/v1',
-    ].filter((url, index, self) => self.indexOf(url) === index);
+    const bases = getCandidateBaseUrls();
+    if (bases.length === 0) {
+      return { model_loaded: false, model_id: 'unconfigured', status: 'offline', api_reachable: false };
+    }
 
     const candidates: string[] = [];
     for (const b of bases) {
@@ -289,7 +389,7 @@ export const modelAPI = {
     for (const url of candidates) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
         const res = await fetch(url, { signal: controller.signal });
         clearTimeout(timeoutId);
         if (res.ok) {
@@ -302,7 +402,7 @@ export const modelAPI = {
           };
         }
       } catch {
-        // try next
+        // try next candidate
       }
     }
 
@@ -384,4 +484,5 @@ export const predictiveAPI = {
 };
 
 export default { request };
+
 

@@ -24,10 +24,7 @@ requests==2.31.0
 # --- Background Task Scheduling ---
 APScheduler==3.11.3
 
-# --- AI / Computer Vision (Plant Disease Detection) ---
-torch==2.14.0
-torchvision==0.29.0
-transformers==5.17.0
+# --- Image Processing (Upload validation) ---
 Pillow==12.3.0
 
 # --- AI / Machine Learning (Crop Recommendation & Analytics) ---
