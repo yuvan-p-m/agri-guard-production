@@ -22,8 +22,15 @@ def _save_disk_farmers():
 _load_disk_farmers()
 def init_firebase():
     global _firebase_initialized,_db_client
-    if _firebase_initialized:
+    if _firebase_initialized and _db_client is not None:
         return _db_client
+    try:
+        firebase_admin.get_app()
+        _db_client = firestore.client()
+        _firebase_initialized = True
+        return _db_client
+    except Exception:
+        pass
     try:
         cred_path=os.getenv("FIREBASE_SERVICE_ACCOUNT_KEY","serviceAccountKey.json")
         if not os.path.isabs(cred_path):
