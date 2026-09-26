@@ -108,7 +108,12 @@
     "symptomTextCurl": "પાંદડાની કિનારીઓ વળી ગઈ છે અને વિકાસ અટકી ગયો છે.",
     "symptomTextRot": "ફળો સડી રહ્યા છે અને અકાળે ખરી રહ્યા છે.",
     "alertUploadRealPhoto": "AI નિદાન માટે અસલ પાંદડાનો ફોટો અપલોડ કરો. સેમ્પલ ફોટો ચાલશે નહીં.",
-    "ttsNotSupported": "આ બ્રાઉઝર પર ટેક્સ્ટ-ટુ-સ્પીચ સપોર્ટેડ નથી."
+    "ttsNotSupported": "આ બ્રાઉઝર પર ટેક્સ્ટ-ટુ-સ્પીચ સપોર્ટેડ નથી.",
+    "alertUploadRealPhotoTitle": "ફોટો જરૂરી છે",
+    "alertUploadPhotoTitle": "ફોટો જરૂરી છે",
+    "alertInvalidLeafTitle": "પાન ઓળખ ચેતવણી",
+    "alertWarningTitle": "ઓળખ ચેતવણી",
+    "alertConnectionErrorTitle": "કનેક્શન ભૂલ"
   },
   "earlyDetection": {
     "diseaseDetected": "રોગ જણાયો",
@@ -261,7 +266,8 @@
     "dryConditions": "શુષ્ક વાતાવરણ",
     "readyToMonitor": "રોગ ફેલાવા પર નજર રાખવા તૈયાર છો?",
     "readyToMonitorDesc": "સ્થાનિક હવામાન મુજબ રોગના જોખમનું મૂલ્યાંકન કરવા માટે પાક નિદાનમાં પાનનો ફોટો અપલોડ કરો.",
-    "goToDiagnosis": "પાક નિદાન પર જાઓ"
+    "goToDiagnosis": "પાક નિદાન પર જાઓ",
+    "acres": "એકર"
   },
   "marketplace": {
     "title": "બજાર અને મંડી ભાવો",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "લણણી પૂર્વેનો તબક્કો",
       "sowing_season": "વાવણીની મોસમ",
       "post_harvest_storage": "લણણી પછીનો સંગ્રહ"
-    }
+    },
+    "noPriceData": "આજે તમારા રાજ્યમાં તમારા પાકના ભાવની વિગતો ઉપલબ્ધ નથી. કૃપા કરીને આવતીકાલે ફરી પ્રયાસ કરો."
   },
   "govtSchemes": {
     "title": "સરકારી કૃષિ યોજનાઓ અને સબસિડી",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "લાઇવ તાપમાન, ભેજ, વરસાદની સ્થિતિ અને સિંચાઈનો સમય મોકલે છે",
     "sendSmsToPhone": "ફોન પર લાઇવ SMS મોકલો",
     "registeredPhone": "નોંધાયેલ ફોન",
-    "liveApi": "લાઇવ API"
+    "liveApi": "લાઇવ API",
+    "liveWeatherSensor": "લાઇવ હવામાન સેન્સર",
+    "locationLabel": "ખેતર / જમીનનું સ્થાન"
   },
   "smsDemo": {
     "title": "Fast2SMS ખેડૂત એલર્ટ પ્રદર્શન",
@@ -530,7 +539,8 @@
     "sampleAlerts": "તાજેતરની ખેતી સલાહ અને હવામાન ચેતવણીઓ",
     "delivered": "વિતરિત",
     "today": "આજે",
-    "subscribeButton": "સબ્સ્ક્રાઇબ કરો"
+    "subscribeButton": "સબ્સ્ક્રાઇબ કરો",
+    "sendTestSms": "ટેસ્ટ એસએમએસ મોકલો"
   },
   "profile": {
     "title": "ખેડૂત પ્રોફાઇલ",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API સર્વર રૂપરેખાંકન",
     "serverEndpointSubtitle": "મોબાઇલ / સ્થાનિક પરીક્ષણ માટે બેકએન્ડ હોસ્ટ સેટ કરો",
     "saveEndpoint": "સાચવો",
-    "resetDefault": "ડિફૉલ્ટ પર રીસેટ કરો"
+    "resetDefault": "ડિફૉલ્ટ પર રીસેટ કરો",
+    "hardwarePairTitle": "હાર્ડવેર જોડો"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "લાગુ નથી",
     "district": "જિલ્લો",
     "state": "રાજ્ય",
-    "category": "કેટેગરી"
+    "category": "કેટેગરી",
+    "dismiss": "રદ કરો",
+    "close": "બંધ કરો"
   },
   "iot": {
     "quote": "યોગ્ય પાકની ભલામણ કરવા અને સમયસર ખેતીની માહિતી પહોંચાડવા માટે ઐતિહાસિક સેન્સર ડેટાનો ઉપયોગ કરે છે",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "ક્લાઉડ API સ્થિતિ અને નિદાન"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "મોબાઇલ નંબર દાખલ કરો (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "આજે",
     "preventiveActions": "AI દ્વારા ભલામણ કરેલ નિવારક પગલાં",
     "connectionError": "પૂર્વાનુમાન સેવા સાથે કનેક્ટ થઈ શક્યું નથી."
+  },
+  "urgency": {
+    "title": "પગલાંની તાકીદ",
+    "scoreLabel": "તાકીદ સ્કોર",
+    "levelLow": "ઓછી તાકીદ",
+    "levelModerate": "મધ્યમ તાકીદ",
+    "levelHigh": "વધુ તાકીદ",
+    "levelCritical": "ગંભીર તાકીદ",
+    "takeActionNow": "આગામી થોડા કલાકોમાં પગલાં લો.",
+    "takeActionSoon": "ટૂંક સમયમાં પગલાં લો.",
+    "takeImmediateAction": "તાત્કાલિક પગલાં લો.",
+    "monitorClosely": "પરિસ્થિતિ પર બારીકાઈથી નજર રાખો.",
+    "rainApproaching": "~{{hours}} કલાકમાં વરસાદ આવવાની શક્યતા છે",
+    "rainImminent": "વરસાદ પડી રહ્યો છે / શરૂ થવાનો છે",
+    "highHumidity": "પાકમાં વધુ ભેજ ({{hum}}%)",
+    "daysDelayed": "{{days}} દિવસ પહેલાં મળેલ",
+    "breakdown": "તાકીદના પરિબળો",
+    "progressionFactor": "રોગકારકનો ફેલાવો",
+    "weatherFactor": "આવનારો વરસાદ / હવામાન",
+    "sensorFactor": "IoT ભેજ સેન્સર",
+    "delayFactor": "શોધ પછીનો સમય"
+  },
+  "feedback": {
+    "title": "શું આ ઉપચાર તમારા ખેતરમાં અસરકારક રહ્યો?",
+    "worked": "ઉપચાર સફળ રહ્યો",
+    "notWorked": "કામ ન કર્યું"
   }
 }

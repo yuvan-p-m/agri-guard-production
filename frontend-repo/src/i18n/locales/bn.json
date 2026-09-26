@@ -108,7 +108,12 @@
     "symptomTextCurl": "পাতার কিনারা কুঁকড়ে গেছে এবং গাছের বৃদ্ধি থেমে গেছে।",
     "symptomTextRot": "ফল পচে গিয়ে অকালে ঝরে পড়ছে।",
     "alertUploadRealPhoto": "AI সনাক্তকরণের জন্য আসল পাতার ছবি আপলোড করুন। নমুনা ছবি প্রক্রিয়া করা যাবে না।",
-    "ttsNotSupported": "এই ব্রাউজারে টেক্সট-টু-স্পিচ সমর্থিত নয়।"
+    "ttsNotSupported": "এই ব্রাউজারে টেক্সট-টু-স্পিচ সমর্থিত নয়।",
+    "alertUploadRealPhotoTitle": "ছবি আবশ্যক",
+    "alertUploadPhotoTitle": "ছবি আবশ্যক",
+    "alertInvalidLeafTitle": "পাতা শনাক্তকরণ সতর্কতা",
+    "alertWarningTitle": "শনাক্তকরণ সতর্কতা",
+    "alertConnectionErrorTitle": "সংযোগ ত্রুটি"
   },
   "earlyDetection": {
     "diseaseDetected": "রোগ শনাক্ত হয়েছে",
@@ -261,7 +266,8 @@
     "dryConditions": "শুষ্ক অবস্থা",
     "readyToMonitor": "রোগের বিস্তার পর্যবেক্ষণ করতে প্রস্তুত?",
     "readyToMonitorDesc": "বর্তমান আবহাওয়ার প্রেক্ষাপটে রোগের ঝুঁকি মূল্যায়নের জন্য ক্রপ ডায়াগনোসিসে পাতার ছবি আপলোড করুন।",
-    "goToDiagnosis": "রোগ নির্ণয়ে যান"
+    "goToDiagnosis": "রোগ নির্ণয়ে যান",
+    "acres": "একর"
   },
   "marketplace": {
     "title": "বাজার ও মান্ডি দর",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "ফসল কাটার পূর্ববর্তী সময়",
       "sowing_season": "বপনের মরশুম",
       "post_harvest_storage": "ফসল তোলার পর সংরক্ষণ"
-    }
+    },
+    "noPriceData": "আজ আপনার রাজ্যে আপনার ফসলের কোনো মূল্যের তথ্য নেই। দয়া করে আগামীকাল আবার চেষ্টা করুন।"
   },
   "govtSchemes": {
     "title": "সরকারি কৃষি প্রকল্প ও ভর্তুকি",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "লাইভ তাপমাত্রা, আর্দ্রতা, বৃষ্টির অবস্থা এবং সেচের সময় পাঠায়",
     "sendSmsToPhone": "ফোনে লাইভ এসএমএস পাঠান",
     "registeredPhone": "নিবন্ধিত ফোন",
-    "liveApi": "লাইভ এপিআই"
+    "liveApi": "লাইভ এপিআই",
+    "liveWeatherSensor": "লাইভ আবহাওয়া সেন্সর",
+    "locationLabel": "খামারের অবস্থান"
   },
   "smsDemo": {
     "title": "Fast2SMS কৃষক সতর্কতা ডেমো",
@@ -530,7 +539,8 @@
     "sampleAlerts": "সাম্প্রতিক ক্ষেত্র পরামর্শ ও আবহাওয়া সতর্কতা",
     "delivered": "বিতরিত",
     "today": "আজ",
-    "subscribeButton": "সাবস্ক্রাইব করুন"
+    "subscribeButton": "সাবস্ক্রাইব করুন",
+    "sendTestSms": "টেস্ট এসএমএস পাঠান"
   },
   "profile": {
     "title": "কৃষক প্রোফাইল",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API সার্ভার কনফিগারেশন",
     "serverEndpointSubtitle": "মোবাইল / স্থানীয় পরীক্ষার জন্য ব্যাকএন্ড হোস্ট সেট করুন",
     "saveEndpoint": "সংরক্ষণ করুন",
-    "resetDefault": "ডিফল্টে রিসেট করুন"
+    "resetDefault": "ডিফল্টে রিসেট করুন",
+    "hardwarePairTitle": "হার্ডওয়্যার সংযুক্ত করুন"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "প্রযোজ্য নয়",
     "district": "জেলা",
     "state": "রাজ্য",
-    "category": "বিভাগ"
+    "category": "বিভাগ",
+    "dismiss": "বাতিল করুন",
+    "close": "বন্ধ করুন"
   },
   "iot": {
     "quote": "উপযুক্ত ফসলের সুপারিশ করতে এবং সময়োপযোগী কৃষি পরামর্শ দিতে ঐতিহাসিক সেন্সর ডেটা ব্যবহার করে",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "প্রোডাকশন ক্লাউড API অবস্থা ও ডায়াগনস্টিকস"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "মোবাইল নম্বর লিখুন (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "আজ",
     "preventiveActions": "এআই প্রস্তাবিত প্রতিরোধমূলক ব্যবস্থা",
     "connectionError": "পূর্বাভাস সেবার সাথে সংযোগ স্থাপন করা যায়নি।"
+  },
+  "urgency": {
+    "title": "পদক্ষেপের জরুরি অবস্থা",
+    "scoreLabel": "জরুরি স্কোর",
+    "levelLow": "স্বল্প জরুরি",
+    "levelModerate": "মাঝারি জরুরি",
+    "levelHigh": "উচ্চ জরুরি",
+    "levelCritical": "মারাত্মক জরুরি",
+    "takeActionNow": "পরবর্তী কয়েক ঘণ্টার মধ্যে ব্যবস্থা নিন।",
+    "takeActionSoon": "শীঘ্রই ব্যবস্থা নিন।",
+    "takeImmediateAction": "অবিলম্বে ব্যবস্থা নিন।",
+    "monitorClosely": "পরিস্থিতি নিবিড়ভাবে পর্যবেক্ষণ করুন।",
+    "rainApproaching": "~{{hours}} ঘণ্টার মধ্যে বৃষ্টির সম্ভাবনা রয়েছে",
+    "rainImminent": "বৃষ্টি হচ্ছে / হতে চলেছে",
+    "highHumidity": "উচ্চ আর্দ্রতা ({{hum}}%)",
+    "daysDelayed": "{{days}} দিন আগে শনাক্ত করা হয়েছে",
+    "breakdown": "জরুরি উপাদানসমূহ",
+    "progressionFactor": "জীবাণুর বিস্তার",
+    "weatherFactor": "আগত বৃষ্টি / আবহাওয়া",
+    "sensorFactor": "IoT আর্দ্রতা সেন্সর",
+    "delayFactor": "শনাক্তের পর অতিক্রান্ত সময়"
+  },
+  "feedback": {
+    "title": "এই চিকিৎসা কি আপনার জমিতে কার্যকর হয়েছে?",
+    "worked": "চিকিৎসা কার্যকর হয়েছে",
+    "notWorked": "কাজ করেনি"
   }
 }

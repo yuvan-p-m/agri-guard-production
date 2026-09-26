@@ -108,7 +108,12 @@
     "symptomTextCurl": "پتوں کے کنارے مڑ گئے ہیں اور پودے کی نشوونما رک گئی ہے۔",
     "symptomTextRot": "پھل سڑ رہے ہیں اور قبل از وقت گر رہے ہیں۔",
     "alertUploadRealPhoto": "AI تشخیص کے لیے حقیقی پتے کی تصویر درکار ہے۔",
-    "ttsNotSupported": "اس براؤزر میں آواز کی سہولت دستیاب نہیں ہے۔"
+    "ttsNotSupported": "اس براؤزر میں آواز کی سہولت دستیاب نہیں ہے۔",
+    "alertUploadRealPhotoTitle": "تصویر درکار ہے",
+    "alertUploadPhotoTitle": "تصویر درکار ہے",
+    "alertInvalidLeafTitle": "پتے کی شناخت کا الرٹ",
+    "alertWarningTitle": "شناخت کی وارننگ",
+    "alertConnectionErrorTitle": "کنکشن کی خرابی"
   },
   "earlyDetection": {
     "diseaseDetected": "بیماری کی شناخت ہو گئی",
@@ -261,7 +266,8 @@
     "dryConditions": "خشک حالات",
     "readyToMonitor": "بیماری کے پھیلاؤ کی نگرانی کے لیے تیار ہیں؟",
     "readyToMonitorDesc": "موسمی حالات کے مطابق بیماری کے خطرے کا اندازہ لگانے کے لیے تشخیصی سیکشن میں پتے کی تصویر اپ لوڈ کریں۔",
-    "goToDiagnosis": "تشخیص پر جائیں"
+    "goToDiagnosis": "تشخیص پر جائیں",
+    "acres": "ایکڑ"
   },
   "marketplace": {
     "title": "مارکیٹ اور منڈی کے نرخ",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "کٹائی سے قبل کا دورانیہ",
       "sowing_season": "بوائی کا سیزن",
       "post_harvest_storage": "کٹائی کے بعد اسٹوریج"
-    }
+    },
+    "noPriceData": "آج آپ کی ریاست میں آپ کی فصل کے لیے قیمت کا کوئی ڈیٹا دستیاب نہیں ہے۔ براہ کرم کل دوبارہ کوشش کریں۔"
   },
   "govtSchemes": {
     "title": "سرکاری زرعی اسکیمیں اور سبسڈیز",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "لائیو درجہ حرارت، نمی، بارش کی صورتحال اور آبپاشی کا وقت بھیجتا ہے",
     "sendSmsToPhone": "فون پر لائیو ایس ایم ایس بھیجیں",
     "registeredPhone": "رجسٹرڈ فون",
-    "liveApi": "لائیو API"
+    "liveApi": "لائیو API",
+    "liveWeatherSensor": "لائیو موسم سینسر",
+    "locationLabel": "کھیت کا مقام"
   },
   "smsDemo": {
     "title": "Fast2SMS کسان الرٹ ڈیمو",
@@ -530,7 +539,8 @@
     "sampleAlerts": "حالیہ زرعی مشورے اور موسمی انتباہات",
     "delivered": "موصول ہوا",
     "today": "آج",
-    "subscribeButton": "سبسکرائب کریں"
+    "subscribeButton": "سبسکرائب کریں",
+    "sendTestSms": "ٹیسٹ ایس ایم ایس بھیجیں"
   },
   "profile": {
     "title": "کسان پروفائل",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API سرور کنفیگریشن",
     "serverEndpointSubtitle": "موبائل / مقامی ٹیسٹنگ کے لیے سرور سیٹ کریں",
     "saveEndpoint": "محفوظ کریں",
-    "resetDefault": "ڈیفالٹ پر ری سیٹ کریں"
+    "resetDefault": "ڈیفالٹ پر ری سیٹ کریں",
+    "hardwarePairTitle": "ہارڈ ویئر جوڑیں"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "لاگو نہیں",
     "district": "ضلع",
     "state": "ریاست",
-    "category": "زمرہ"
+    "category": "زمرہ",
+    "dismiss": "رد کریں",
+    "close": "بند کریں"
   },
   "iot": {
     "quote": "مناسب فصلوں کی سفارش کرنے اور بروقت کاشتکاری کی معلومات فراہم کرنے کے لیے تاریخی سینسر ڈیٹا کا استعمال کرتا ہے",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "پروڈکشن کلاؤڈ API کی حیثیت اور تشخیص"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "موبائل نمبر درج کریں (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "آج",
     "preventiveActions": "AI کے تجویز کردہ حفاظتی اقدامات",
     "connectionError": "پیش گوئی سروس سے رابطہ نہیں ہو سکا۔"
+  },
+  "urgency": {
+    "title": "کارروائی کی فوری ضرورت",
+    "scoreLabel": "فوری اسکور",
+    "levelLow": "کم فوری",
+    "levelModerate": "معتدل فوری",
+    "levelHigh": "زیادہ فوری",
+    "levelCritical": "انتہائی سنگین",
+    "takeActionNow": "اگلے چند گھنٹوں کے اندر کارروائی کریں۔",
+    "takeActionSoon": "جلد کارروائی کریں۔",
+    "takeImmediateAction": "فوری اقدام کریں۔",
+    "monitorClosely": "صورتحال پر گہری نظر رکھیں۔",
+    "rainApproaching": "~{{hours}} گھنٹوں میں بارش کا امکان ہے",
+    "rainImminent": "بارش ہو رہی ہے / متوقع ہے",
+    "highHumidity": "فصل میں زیادہ نمی ({{hum}}%)",
+    "daysDelayed": "{{days}} دن پہلے پتہ چلا",
+    "breakdown": "فوری ضرورت کے عوامل",
+    "progressionFactor": "بیماری کا پھیلاؤ",
+    "weatherFactor": "متوقع بارش / موسم",
+    "sensorFactor": "IoT نمی سینسر",
+    "delayFactor": "تشخیص کے بعد کا وقت"
+  },
+  "feedback": {
+    "title": "کیا یہ علاج آپ کے کھیت میں کارآمد رہا؟",
+    "worked": "علاج کارآمد رہا",
+    "notWorked": "کام نہیں کیا"
   }
 }

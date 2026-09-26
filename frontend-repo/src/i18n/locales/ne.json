@@ -108,7 +108,12 @@
     "symptomTextCurl": "पातको छेउ घुम्रिएको छ र वृद्धि रोकिएको छ।",
     "symptomTextRot": "फलहरू कुहिएर असमयमै झरिरहेका छन्।",
     "alertUploadRealPhoto": "AI जाँचको लागि वास्तविक पातको फोटो अपलोड गर्नुहोस्।",
-    "ttsNotSupported": "यो ब्राउजरमा टेक्स्ट-टु-स्पीच समर्थित छैन।"
+    "ttsNotSupported": "यो ब्राउजरमा टेक्स्ट-टु-स्पीच समर्थित छैन।",
+    "alertUploadRealPhotoTitle": "फोटो आवश्यक छ",
+    "alertUploadPhotoTitle": "फोटो आवश्यक छ",
+    "alertInvalidLeafTitle": "पात पहिचान चेतावनी",
+    "alertWarningTitle": "पहिचान चेतावनी",
+    "alertConnectionErrorTitle": "जडान त्रुटि"
   },
   "earlyDetection": {
     "diseaseDetected": "रोग पहिचान भयो",
@@ -261,7 +266,8 @@
     "dryConditions": "सुक्खा अवस्था",
     "readyToMonitor": "रोगको जोखिम अनुगमन गर्न तयार हुनुहुन्छ?",
     "readyToMonitorDesc": "मौसम अनुसार रोगको जोखिम मूल्याङ्कन गर्न बाली निदानमा पातको तस्बिर अपलोड गर्नुहोस्।",
-    "goToDiagnosis": "रोग निदानमा जानुहोस्"
+    "goToDiagnosis": "रोग निदानमा जानुहोस्",
+    "acres": "एकर"
   },
   "marketplace": {
     "title": "बजार तथा मण्डी भाउ",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "बाली पूर्व अवधि",
       "sowing_season": "रोपाईको मौसम",
       "post_harvest_storage": "बाली पछिको भण्डारण"
-    }
+    },
+    "noPriceData": "आज तपाईंको राज्यमा तपाईंको बालीको कुनै मूल्य डाटा उपलब्ध छैन। कृपया भोलि पुनः प्रयास गर्नुहोस्।"
   },
   "govtSchemes": {
     "title": "सरकारी कृषि योजनाहरू र अनुदान",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "प्रत्यक्ष तापक्रम, आर्द्रता, वर्षाको स्थिति र सिँचाइ समय पठाउँछ",
     "sendSmsToPhone": "फोनमा प्रत्यक्ष SMS पठाउनुहोस्",
     "registeredPhone": "दर्ता गरिएको फोन",
-    "liveApi": "प्रत्यक्ष API"
+    "liveApi": "प्रत्यक्ष API",
+    "liveWeatherSensor": "प्रत्यक्ष मौसम सेन्सर",
+    "locationLabel": "खेत / बालीको स्थान"
   },
   "smsDemo": {
     "title": "Fast2SMS किसान चेतावनी डेमो",
@@ -530,7 +539,8 @@
     "sampleAlerts": "भर्खरका कृषि सल्लाह र मौसम चेतावनीहरू",
     "delivered": "पुर्‍याइयो",
     "today": "आज",
-    "subscribeButton": "सदस्यता लिनुहोस्"
+    "subscribeButton": "सदस्यता लिनुहोस्",
+    "sendTestSms": "परीक्षण एसएमएस पठाउनुहोस्"
   },
   "profile": {
     "title": "किसान प्रोफाइल",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API सर्भर कन्फिगरेसन",
     "serverEndpointSubtitle": "मोबाइल / स्थानीय परीक्षणको लागि सर्भर सेट गर्नुहोस्",
     "saveEndpoint": "बचत गर्नुहोस्",
-    "resetDefault": "पूर्वनिर्धारितमा रिसेट गर्नुहोस्"
+    "resetDefault": "पूर्वनिर्धारितमा रिसेट गर्नुहोस्",
+    "hardwarePairTitle": "हार्डवेयर जोड्नुहोस्"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "लागू हुँदैन",
     "district": "जिल्ला",
     "state": "राज्य",
-    "category": "वर्ग"
+    "category": "वर्ग",
+    "dismiss": "रद्द गर्नुहोस्",
+    "close": "बन्द गर्नुहोस्"
   },
   "iot": {
     "quote": "उपयुक्त बाली सिफारिस गर्न र समयमै खेतीपाती सम्बन्धी जानकारी दिन ऐतिहासिक सेन्सर डेटा प्रयोग गर्दछ",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "उत्पादन क्लाउड API स्थिति र निदान"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "मोबाइल नम्बर प्रविष्ट गर्नुहोस् (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "आज",
     "preventiveActions": "AI सिफारिस गरिएका रोकथाम उपायहरू",
     "connectionError": "पूर्वानुमान सेवासँग सम्पर्क हुन सकेन।"
+  },
+  "urgency": {
+    "title": "कार्यको तत्कालिकता",
+    "scoreLabel": "तत्कालिकता स्कोर",
+    "levelLow": "कम तत्कालिकता",
+    "levelModerate": "मध्यम तत्कालिकता",
+    "levelHigh": "उच्च तत्कालिकता",
+    "levelCritical": "गम्भीर तत्कालिकता",
+    "takeActionNow": "आगामी केही घण्टाभित्र कदम चाल्नुहोस्।",
+    "takeActionSoon": "चाँडै कदम चाल्नुहोस्।",
+    "takeImmediateAction": "तत्काल कदम चाल्नुहोस्।",
+    "monitorClosely": "स्थिति नजिकबाट निगरानी गर्नुहोस्।",
+    "rainApproaching": "~{{hours}} घण्टामा पानी पर्ने सम्भावना छ",
+    "rainImminent": "पानी परिरहेको छ / पर्न लागेको छ",
+    "highHumidity": "बालीमा उच्च आर्द्रता ({{hum}}%)",
+    "daysDelayed": "{{days}} दिन अघि पत्ता लागेको",
+    "breakdown": "तत्कालिकताका कारकहरू",
+    "progressionFactor": "रोगको विस्तार",
+    "weatherFactor": "आगामी वर्षा / मौसम",
+    "sensorFactor": "IoT आर्द्रता सेन्सर",
+    "delayFactor": "पत्ता लागेपछिको समय"
+  },
+  "feedback": {
+    "title": "के यो उपचार तपाईंको खेतमा प्रभावकारी भयो?",
+    "worked": "उपचार प्रभावकारी भयो",
+    "notWorked": "काम गरेन"
   }
 }

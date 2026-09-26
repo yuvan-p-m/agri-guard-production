@@ -108,7 +108,12 @@
     "symptomTextCurl": "Curled and crinkled leaf margins with stunted growth.",
     "symptomTextRot": "Fruit rot and premature fruit dropping.",
     "alertUploadRealPhoto": "Please upload or capture a real leaf photo to run AI crop detection. Sample images cannot be processed by the model.",
-    "ttsNotSupported": "Text-to-speech is not supported on this browser."
+    "ttsNotSupported": "Text-to-speech is not supported on this browser.",
+    "alertUploadRealPhotoTitle": "Photo Required",
+    "alertUploadPhotoTitle": "Photo Required",
+    "alertInvalidLeafTitle": "Leaf Detection Alert",
+    "alertWarningTitle": "Detection Warning",
+    "alertConnectionErrorTitle": "Connection Error"
   },
   "earlyDetection": {
     "diseaseDetected": "Disease Detected",
@@ -261,7 +266,8 @@
     "dryConditions": "Dry conditions",
     "readyToMonitor": "Ready to monitor disease progression?",
     "readyToMonitorDesc": "Upload a crop leaf photo in Crop Diagnosis to evaluate disease risk against your live micro-climate.",
-    "goToDiagnosis": "Go to Diagnosis"
+    "goToDiagnosis": "Go to Diagnosis",
+    "acres": "Acres"
   },
   "marketplace": {
     "title": "Marketplace & Mandi Price Trends",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "Pre-Harvest Window",
       "sowing_season": "Sowing Season",
       "post_harvest_storage": "Post-Harvest Storage"
-    }
+    },
+    "noPriceData": "No price data available for your crop in your state today. Try again tomorrow."
   },
   "govtSchemes": {
     "title": "Government Agricultural Schemes & Subsidies",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "Sends live temperature, humidity, rain status & irrigation time to",
     "sendSmsToPhone": "Send Live SMS to Phone",
     "registeredPhone": "registered phone",
-    "liveApi": "Live API"
+    "liveApi": "Live API",
+    "liveWeatherSensor": "Live Weather Sensor",
+    "locationLabel": "Farm / Field Location"
   },
   "smsDemo": {
     "title": "Fast2SMS Farmer Alert Demonstration",
@@ -530,7 +539,8 @@
     "sampleAlerts": "Recent Field Advisories & Weather Warnings",
     "delivered": "Delivered",
     "today": "Today",
-    "subscribeButton": "Subscribe"
+    "subscribeButton": "Subscribe",
+    "sendTestSms": "Send Test SMS"
   },
   "profile": {
     "title": "Farmer Profile & Farm Settings",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API Server Endpoint Configuration",
     "serverEndpointSubtitle": "Configure Backend Host for Mobile / Local Testing",
     "saveEndpoint": "Save Endpoint",
-    "resetDefault": "Reset to Default"
+    "resetDefault": "Reset to Default",
+    "hardwarePairTitle": "Pair Hardware"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "N/A",
     "district": "District",
     "state": "State",
-    "category": "Category"
+    "category": "Category",
+    "dismiss": "Dismiss",
+    "close": "Close"
   },
   "iot": {
     "quote": "Leverages historical sensor data to recommend suitable crops and deliver timely farming insights",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "Production cloud API status & diagnostics"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "Enter mobile number (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -898,5 +913,10 @@
     "today": "Today",
     "preventiveActions": "AI Recommended Preventive Actions",
     "connectionError": "Unable to connect to outbreak foresight service."
+  },
+  "feedback": {
+    "title": "Did this treatment work in your field?",
+    "worked": "Treatment Worked",
+    "notWorked": "Did Not Work"
   }
 }

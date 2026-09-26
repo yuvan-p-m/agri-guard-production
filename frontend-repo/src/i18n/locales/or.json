@@ -108,7 +108,12 @@
     "symptomTextCurl": "ପତ୍ରର ଧାର କୁଞ୍ଚିତ ହୋଇ ବୃଦ୍ଧି ବାଧାପ୍ରାପ୍ତ ହୋଇଛି।",
     "symptomTextRot": "ଫଳ ପଚିଯାଇ ଅସମୟରେ ଝଡ଼ି ପଡ଼ୁଛି।",
     "alertUploadRealPhoto": "AI ଯାଞ୍ଚ ପାଇଁ ଅସଲି ପତ୍ର ଫଟୋ ଅପଲୋଡ୍ କରନ୍ତୁ।",
-    "ttsNotSupported": "ଏହି ବ୍ରାଉଜରରେ ଟେକ୍ସଟ୍-ଟୁ-ସ୍ପିଚ୍ ସମର୍ଥିତ ନୁହେଁ।"
+    "ttsNotSupported": "ଏହି ବ୍ରାଉଜରରେ ଟେକ୍ସଟ୍-ଟୁ-ସ୍ପିଚ୍ ସମର୍ଥିତ ନୁହେଁ।",
+    "alertUploadRealPhotoTitle": "ଫଟୋ ଆବଶ୍ୟକ",
+    "alertUploadPhotoTitle": "ଫଟୋ ଆବଶ୍ୟକ",
+    "alertInvalidLeafTitle": "ପତ୍ର ଚିହ୍ନଟ ସତର୍କତା",
+    "alertWarningTitle": "ଚିହ୍ନଟ ସତର୍କତା",
+    "alertConnectionErrorTitle": "ସଂଯୋଗ ତ୍ରୁଟି"
   },
   "earlyDetection": {
     "diseaseDetected": "ରୋଗ ଚିହ୍ନଟ ହୋଇଛି",
@@ -261,7 +266,8 @@
     "dryConditions": "ଶୁଷ୍କ ପରିସ୍ଥିତି",
     "readyToMonitor": "ରୋଗ ସଂକ୍ରମଣ ଉପରେ ନଜର ରଖିବାକୁ ପ୍ରସ୍ତୁତ କି?",
     "readyToMonitorDesc": "ପାଣିପାଗ ଅନୁଯାୟୀ ରୋଗ ବିପଦର ମୂଲ୍ୟାଙ୍କନ କରିବା ପାଇଁ ଫସଲ ନିଦାନରେ ପତ୍ରର ଫଟୋ ଅପଲୋଡ କରନ୍ତୁ।",
-    "goToDiagnosis": "ନିଦାନକୁ ଯାଆନ୍ତୁ"
+    "goToDiagnosis": "ନିଦାନକୁ ଯାଆନ୍ତୁ",
+    "acres": "ଏକର"
   },
   "marketplace": {
     "title": "ବଜାର ଓ ମଣ୍ଡି ଦର",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "ଅମଳ ପୂର୍ବ ପର୍ଯ୍ୟାୟ",
       "sowing_season": "ବୁଣିବା ଋତୁ",
       "post_harvest_storage": "ଅମଳ ପରବର୍ତ୍ତୀ ସଂରକ୍ଷଣ"
-    }
+    },
+    "noPriceData": "ଆଜି ଆପଣଙ୍କ ରାଜ୍ୟରେ ଆପଣଙ୍କ ଫସଲ ପାଇଁ କୌଣସି ମୂଲ୍ୟ ତଥ୍ୟ ଉପଲବ୍ଧ ନାହିଁ। ଦୟାକରି ଆସନ୍ତାକାଲି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।"
   },
   "govtSchemes": {
     "title": "ସରକାରୀ କୃଷି ଯୋଜନା ଓ ସବସିଡି",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "ଲାଇଭ୍ ତାପମାତ୍ରା, ଆର୍ଦ୍ରତା, ବର୍ଷା ସ୍ଥିତି ଏବଂ ଜଳସେଚନ ସମୟ ପଠାଏ",
     "sendSmsToPhone": "ଫୋନକୁ ଲାଇଭ୍ SMS ପଠାନ୍ତୁ",
     "registeredPhone": "ପଞ୍ଜୀକୃତ ଫୋନ୍",
-    "liveApi": "ଲାଇଭ୍ API"
+    "liveApi": "ଲାଇଭ୍ API",
+    "liveWeatherSensor": "ଲାଇଭ୍ ପାଣିପାଗ ସେନ୍ସର",
+    "locationLabel": "କ୍ଷେତର ଅବସ୍ଥିତି"
   },
   "smsDemo": {
     "title": "Fast2SMS କୃଷକ ଆଲର୍ଟ ଡେମୋ",
@@ -530,7 +539,8 @@
     "sampleAlerts": "ସାମ୍ପ୍ରତିକ କୃଷି ପରାମର୍ଶ ଏବଂ ପାଣିପାଗ ଚେତାବନୀ",
     "delivered": "ବିତରିତ",
     "today": "ଆଜି",
-    "subscribeButton": "ସବସ୍କ୍ରାଇବ୍ କରନ୍ତୁ"
+    "subscribeButton": "ସବସ୍କ୍ରାଇବ୍ କରନ୍ତୁ",
+    "sendTestSms": "ଟେଷ୍ଟ SMS ପଠାନ୍ତୁ"
   },
   "profile": {
     "title": "କୃଷକ ପ୍ରୋଫାଇଲ",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API ସର୍ଭର କନଫିଗରେସନ",
     "serverEndpointSubtitle": "ମୋବାଇଲ / ସ୍ଥାନୀୟ ପରୀକ୍ଷଣ ପାଇଁ ସର୍ଭର ସେଟ କରନ୍ତୁ",
     "saveEndpoint": "ସଂରକ୍ଷଣ କରନ୍ତୁ",
-    "resetDefault": "ଡିଫଲ୍ଟକୁ ଫେରାନ୍ତୁ"
+    "resetDefault": "ଡିଫଲ୍ଟକୁ ଫେରାନ୍ତୁ",
+    "hardwarePairTitle": "ହାର୍ଡୱେର୍ ସଂଯୋଗ କରନ୍ତୁ"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "ପ୍ରଯୁଜ୍ୟ ନୁହେଁ",
     "district": "ଜିଲ୍ଲା",
     "state": "ରାଜ୍ୟ",
-    "category": "ବର୍ଗ"
+    "category": "ବର୍ଗ",
+    "dismiss": "ଖାରଜ କରନ୍ତୁ",
+    "close": "ବନ୍ଦ କରନ୍ତୁ"
   },
   "iot": {
     "quote": "ଉପଯୁକ୍ତ ଫସଲ ସୁପାରିଶ କରିବା ଏବଂ ଠିକ୍ ସମୟରେ କୃଷି ପରାମର୍ଶ ପ୍ରଦାନ କରିବା ପାଇଁ ପୂର୍ବ ସେନ୍ସର ତଥ୍ୟ ବ୍ୟବହାର କରେ",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "କ୍ଲାଉଡ୍ API ସ୍ଥିତି ଏବଂ ନିଦାନ"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "ମୋବାଇଲ୍ ନମ୍ବର ପ୍ରବେଶ କରନ୍ତୁ (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "ଆଜି",
     "preventiveActions": "AI ଦ୍ୱାରା ପରାମର୍ଶିତ ନିବାରଣ ପଦକ୍ଷେପ",
     "connectionError": "ପୂର୍ବାନୁମାନ ସେବା ସହିତ ସଂଯୋଗ ହୋଇପାରିଲା ନାହିଁ।"
+  },
+  "urgency": {
+    "title": "ପଦକ୍ଷେପର ଜରୁରୀତା",
+    "scoreLabel": "ଜରୁରୀ ସ୍କୋର",
+    "levelLow": "କମ୍ ଜରୁରୀ",
+    "levelModerate": "ମଧ୍ୟମ ଜରୁରୀ",
+    "levelHigh": "ଅଧିକ ଜରୁରୀ",
+    "levelCritical": "ଗୁରୁତର ଜରୁରୀ",
+    "takeActionNow": "ଆଗାମୀ କିଛି ଘଣ୍ଟା ମଧ୍ୟରେ ପଦକ୍ଷେପ ନିଅନ୍ତୁ।",
+    "takeActionSoon": "ଶୀଘ୍ର ପଦକ୍ଷେପ ନିଅନ୍ତୁ।",
+    "takeImmediateAction": "ତୁରନ୍ତ ପଦକ୍ଷେପ ଗ୍ରହଣ କରନ୍ତୁ।",
+    "monitorClosely": "ପରିସ୍ଥିତି ଉପରେ କଡ଼ା ନଜର ରଖନ୍ତୁ।",
+    "rainApproaching": "~{{hours}} ଘଣ୍ଟା ମଧ୍ୟରେ ବର୍ଷା ହେବାର ସମ୍ଭାବନା ଅଛି",
+    "rainImminent": "ବର୍ଷା ହେଉଛି / ହେବାକୁ ଯାଉଛି",
+    "highHumidity": "ଅଧିକ ଆର୍ଦ୍ରତା ({{hum}}%)",
+    "daysDelayed": "{{days}} ଦିନ ପୂର୍ବରୁ ଚିହ୍ନଟ ହୋଇଛି",
+    "breakdown": "ଜରୁରୀ କାରକଗୁଡ଼ିକ",
+    "progressionFactor": "ରୋଗର ବିସ୍ତାର",
+    "weatherFactor": "ଆସନ୍ନ ବର୍ଷା / ପାଣିପାଗ",
+    "sensorFactor": "IoT ଆର୍ଦ୍ରତା ସେନ୍ସର",
+    "delayFactor": "ଚିହ୍ନଟ ପରବର୍ତ୍ତୀ ସମୟ"
+  },
+  "feedback": {
+    "title": "ଏହି ଚିକିତ୍ସା ଆପଣଙ୍କ ଜମିରେ କାର୍ଯ୍ୟକ୍ଷମ ହେଲା କି?",
+    "worked": "ଚିକିତ୍ସା କାର୍ଯ୍ୟ କଲା",
+    "notWorked": "କାର୍ଯ୍ୟ କଲାନାହିଁ"
   }
 }

@@ -108,7 +108,12 @@
     "symptomTextCurl": "Gekräuselte Blattränder und Wachstumshemmung.",
     "symptomTextRot": "Fruchtfäule und vorzeitiger Fruchtfall.",
     "alertUploadRealPhoto": "Bitte verwenden Sie ein echtes Blattfoto für die KI-Diagnose.",
-    "ttsNotSupported": "Sprachausgabe wird von diesem Browser nicht unterstützt."
+    "ttsNotSupported": "Sprachausgabe wird von diesem Browser nicht unterstützt.",
+    "alertUploadRealPhotoTitle": "Foto erforderlich",
+    "alertUploadPhotoTitle": "Foto erforderlich",
+    "alertInvalidLeafTitle": "Blatterkennungs-Warnung",
+    "alertWarningTitle": "Erkennungswarnung",
+    "alertConnectionErrorTitle": "Verbindungsfehler"
   },
   "earlyDetection": {
     "diseaseDetected": "Krankheit erkannt",
@@ -261,7 +266,8 @@
     "dryConditions": "Trockene Bedingungen",
     "readyToMonitor": "Bereit zur Überwachung des Krankheitsverlaufs?",
     "readyToMonitorDesc": "Laden Sie ein Blattfoto in der Pflanzendiagnose hoch, um das Krankheitsrisiko anhand Ihres Mikroklimas zu bewerten.",
-    "goToDiagnosis": "Zur Diagnose"
+    "goToDiagnosis": "Zur Diagnose",
+    "acres": "Morgen / Acres"
   },
   "marketplace": {
     "title": "Agrarmarkt & Erzeugerpreise",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "Vorernte-Fenster",
       "sowing_season": "Aussaatzeit",
       "post_harvest_storage": "Nachernte-Lagerung"
-    }
+    },
+    "noPriceData": "Heute keine Preisdaten für Ihre Kultur verfügbar. Bitte morgen erneut versuchen."
   },
   "govtSchemes": {
     "title": "Staatliche Agrarförderung und Subventionen",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "Sendet Live-Temperatur, Luftfeuchtigkeit, Regenstatus und Bewässerungszeit an",
     "sendSmsToPhone": "Live-SMS an Telefon senden",
     "registeredPhone": "registriertes Telefon",
-    "liveApi": "Live-API"
+    "liveApi": "Live-API",
+    "liveWeatherSensor": "Live-Wettersensor",
+    "locationLabel": "Feldstandort"
   },
   "smsDemo": {
     "title": "Fast2SMS Farmer-Alarm-Demonstration",
@@ -530,7 +539,8 @@
     "sampleAlerts": "Aktuelle Feldhinweise & Wetterwarnungen",
     "delivered": "Zugestellt",
     "today": "Heute",
-    "subscribeButton": "Abonnieren"
+    "subscribeButton": "Abonnieren",
+    "sendTestSms": "Test-SMS senden"
   },
   "profile": {
     "title": "Landwirt-Profil",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API-Server-Konfiguration",
     "serverEndpointSubtitle": "Backend-Host für mobile und lokale Tests einrichten",
     "saveEndpoint": "Speichern",
-    "resetDefault": "Auf Standard zurücksetzen"
+    "resetDefault": "Auf Standard zurücksetzen",
+    "hardwarePairTitle": "Hardware koppeln"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "N/V",
     "district": "Bezirk",
     "state": "Bundesland",
-    "category": "Kategorie"
+    "category": "Kategorie",
+    "dismiss": "Verwerfen",
+    "close": "Schließen"
   },
   "iot": {
     "quote": "Nutzt historische Sensordaten, um geeignete Pflanzen zu empfehlen und rechtzeitige landwirtschaftliche Einblicke zu liefern",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "Produktions-Cloud-API Status & Diagnose"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "Mobilnummer eingeben (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "Heute",
     "preventiveActions": "Von KI empfohlene Vorbeugungsmaßnahmen",
     "connectionError": "Verbindung zum Ausbruchs-Vorhersagedienst fehlgeschlagen."
+  },
+  "urgency": {
+    "title": "Handlungsdringlichkeit",
+    "scoreLabel": "Dringlichkeitswert",
+    "levelLow": "Geringe Dringlichkeit",
+    "levelModerate": "Mäßige Dringlichkeit",
+    "levelHigh": "Hohe Dringlichkeit",
+    "levelCritical": "Kritische Dringlichkeit",
+    "takeActionNow": "Handeln Sie innerhalb der nächsten Stunden.",
+    "takeActionSoon": "Handeln Sie bald.",
+    "takeImmediateAction": "Ergreifen Sie sofortige Maßnahmen.",
+    "monitorClosely": "Bedingungen genau überwachen.",
+    "rainApproaching": "Regen naht in ca. {{hours}} Std.",
+    "rainImminent": "Regen tritt auf / steht unmittelbar bevor",
+    "highHumidity": "Hohe Bestandsfeuchte ({{hum}}%)",
+    "daysDelayed": "Vor {{days}} Tagen erkannt",
+    "breakdown": "Dringlichkeitsfaktoren",
+    "progressionFactor": "Erregerausbreitung",
+    "weatherFactor": "Kommender Regen / Wetter",
+    "sensorFactor": "IoT-Feuchtigkeitssensor",
+    "delayFactor": "Zeit seit Erkennung"
+  },
+  "feedback": {
+    "title": "Hat diese Behandlung auf Ihrem Feld gewirkt?",
+    "worked": "Behandlung wirksam",
+    "notWorked": "Hat nicht gewirkt"
   }
 }

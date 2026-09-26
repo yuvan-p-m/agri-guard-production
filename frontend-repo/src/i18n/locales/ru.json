@@ -108,7 +108,12 @@
     "symptomTextCurl": "Скрученные края листьев и остановка роста.",
     "symptomTextRot": "Гниль плодов и преждевременное опадание.",
     "alertUploadRealPhoto": "Для диагностики ИИ требуется реальное фото листа растения.",
-    "ttsNotSupported": "Озвучивание текста не поддерживается в этом браузере."
+    "ttsNotSupported": "Озвучивание текста не поддерживается в этом браузере.",
+    "alertUploadRealPhotoTitle": "Требуется фото",
+    "alertUploadPhotoTitle": "Требуется фото",
+    "alertInvalidLeafTitle": "Предупреждение распознавания листьев",
+    "alertWarningTitle": "Предупреждение детекции",
+    "alertConnectionErrorTitle": "Ошибка соединения"
   },
   "earlyDetection": {
     "diseaseDetected": "Обнаружена болезнь",
@@ -261,7 +266,8 @@
     "dryConditions": "Сухие условия",
     "readyToMonitor": "Готовы отслеживать развитие болезней?",
     "readyToMonitorDesc": "Загрузите фото листа в раздел «Диагностика», чтобы оценить риск заболеваний с учетом микроклимата.",
-    "goToDiagnosis": "Перейти к диагностике"
+    "goToDiagnosis": "Перейти к диагностике",
+    "acres": "Акров"
   },
   "marketplace": {
     "title": "Рыночные и биржевые цены",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "Предпусковой период",
       "sowing_season": "Период посева",
       "post_harvest_storage": "Послеуборочное хранение"
-    }
+    },
+    "noPriceData": "Сегодня нет данных о ценах на вашу культуру в вашем регионе. Попробуйте завтра."
   },
   "govtSchemes": {
     "title": "Государственные субсидии и программы поддержки АПК",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "Отправляет текущую температуру, влажность, статус дождя и время полива на",
     "sendSmsToPhone": "Отправить SMS на телефон",
     "registeredPhone": "зарегистрированный телефон",
-    "liveApi": "Прямой API"
+    "liveApi": "Прямой API",
+    "liveWeatherSensor": "Датчик погоды в реальном времени",
+    "locationLabel": "Местоположение поля"
   },
   "smsDemo": {
     "title": "Демонстрация оповещений фермеров Fast2SMS",
@@ -530,7 +539,8 @@
     "sampleAlerts": "Недавние полевые рекомендации и предупреждения о погоде",
     "delivered": "Доставлено",
     "today": "Сегодня",
-    "subscribeButton": "Подписаться"
+    "subscribeButton": "Подписаться",
+    "sendTestSms": "Отправить тестовое SMS"
   },
   "profile": {
     "title": "Профиль фермера",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "Настройка конечной точки API-сервера",
     "serverEndpointSubtitle": "Настройка хоста бэкенда для мобильного и локального тестирования",
     "saveEndpoint": "Сохранить",
-    "resetDefault": "Сбросить на значение по умолчанию"
+    "resetDefault": "Сбросить на значение по умолчанию",
+    "hardwarePairTitle": "Подключить устройство"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "Н/Д",
     "district": "Район",
     "state": "Штат/Область",
-    "category": "Категория"
+    "category": "Категория",
+    "dismiss": "Закрыть",
+    "close": "Закрыть"
   },
   "iot": {
     "quote": "Использует исторические данные датчиков для рекомендации подходящих культур и своевременных агрономических советов",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "Статус и диагностика рабочего облачного API"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "Введите номер мобильного (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "Сегодня",
     "preventiveActions": "Рекомендованные ИИ профилактические меры",
     "connectionError": "Не удалось подключиться к службе прогнозирования вспышек."
+  },
+  "urgency": {
+    "title": "Срочность мер",
+    "scoreLabel": "Оценка срочности",
+    "levelLow": "Низкая срочность",
+    "levelModerate": "Умеренная срочность",
+    "levelHigh": "Высокая срочность",
+    "levelCritical": "Критическая срочность",
+    "takeActionNow": "Примите меры в ближайшие несколько часов.",
+    "takeActionSoon": "Примите меры в ближайшее время.",
+    "takeImmediateAction": "Примите немедленные меры.",
+    "monitorClosely": "Внимательно следите за условиями.",
+    "rainApproaching": "Дождь ожидается через ~{{hours}} ч.",
+    "rainImminent": "Дождь идет / ожидается немедленно",
+    "highHumidity": "Высокая влажность листвы ({{hum}}%)",
+    "daysDelayed": "Обнаружено {{days}} дн. назад",
+    "breakdown": "Факторы срочности",
+    "progressionFactor": "Развитие патогена",
+    "weatherFactor": "Грядущие осадки / погода",
+    "sensorFactor": "IoT датчик влажности",
+    "delayFactor": "Время с момента обнаружения"
+  },
+  "feedback": {
+    "title": "Помогло ли это лечение на вашем поле?",
+    "worked": "Лечение помогло",
+    "notWorked": "Не помогло"
   }
 }

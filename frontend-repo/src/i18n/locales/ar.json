@@ -108,7 +108,12 @@
     "symptomTextCurl": "حواف أوراق ملتفة ومجعدة مع توقف نمو النبات.",
     "symptomTextRot": "تعفن الثمار وتساقطها قبل النضج.",
     "alertUploadRealPhoto": "يرجى استخدام صورة حقيقية لورقة النبات لتشخيص الذكاء الاصطناعي.",
-    "ttsNotSupported": "خاصية تحويل النص إلى كلام غير مدعومة في هذا المتصفح."
+    "ttsNotSupported": "خاصية تحويل النص إلى كلام غير مدعومة في هذا المتصفح.",
+    "alertUploadRealPhotoTitle": "الصورة مطلوبة",
+    "alertUploadPhotoTitle": "الصورة مطلوبة",
+    "alertInvalidLeafTitle": "تنبيه فحص الورقة",
+    "alertWarningTitle": "تحذير الفحص",
+    "alertConnectionErrorTitle": "خطأ في الاتصال"
   },
   "earlyDetection": {
     "diseaseDetected": "تم اكتشاف المرض",
@@ -261,7 +266,8 @@
     "dryConditions": "ظروف جافة",
     "readyToMonitor": "جاهز لمراقبة تطور المرض؟",
     "readyToMonitorDesc": "ارفع صورة ورقة المحصول في قسم التشخيص لتقييم خطر المرض بناءً على مناخك المباشر.",
-    "goToDiagnosis": "الانتقال إلى التشخيص"
+    "goToDiagnosis": "الانتقال إلى التشخيص",
+    "acres": "فدان"
   },
   "marketplace": {
     "title": "أسواق المزارعين والأسعار",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "فترة ما قبل الحصاد",
       "sowing_season": "موسم البذر",
       "post_harvest_storage": "تخزين ما بعد الحصاد"
-    }
+    },
+    "noPriceData": "لا توجد بيانات أسعار لمحصولك في ولايتك اليوم. يرجى المحاولة مرة أخرى غداً."
   },
   "govtSchemes": {
     "title": "المبادرات والدعم الزراعي الحكومي",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "يرسل درجة الحرارة والرطوبة وحالة المطر ووقت الري المباشر إلى",
     "sendSmsToPhone": "إرسال رسالة نصية مباشرة إلى الهاتف",
     "registeredPhone": "الهاتف المسجل",
-    "liveApi": "واجهة برمجة مباشرة"
+    "liveApi": "واجهة برمجة مباشرة",
+    "liveWeatherSensor": "حساس الطقس المباشر",
+    "locationLabel": "موقع المزرعة / الحقل"
   },
   "smsDemo": {
     "title": "تجربة إشعارات المزارعين Fast2SMS",
@@ -530,7 +539,8 @@
     "sampleAlerts": "أحدث الإرشادات الحقلية وتنبيهات الطقس",
     "delivered": "تم التسليم",
     "today": "اليوم",
-    "subscribeButton": "اشتراك"
+    "subscribeButton": "اشتراك",
+    "sendTestSms": "إرسال رسالة نصية تجريبية"
   },
   "profile": {
     "title": "ملف المزارع",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "إعداد نقطة نهاية خادم API",
     "serverEndpointSubtitle": "تكوين مضيف الواجهة الخلفية للاختبار المحلي",
     "saveEndpoint": "حفظ",
-    "resetDefault": "إعادة التعيين إلى الافتراضي"
+    "resetDefault": "إعادة التعيين إلى الافتراضي",
+    "hardwarePairTitle": "إقران الجهاز"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "غير متاح",
     "district": "المنطقة",
     "state": "الولاية",
-    "category": "الفئة"
+    "category": "الفئة",
+    "dismiss": "تجاهل",
+    "close": "إغلاق"
   },
   "iot": {
     "quote": "يستفيد من بيانات المستشعرات التاريخية للتوصية بالمحاصيل المناسبة وتقديم رؤى زراعية في الوقت المناسب",
@@ -643,7 +656,8 @@
     "inputLabel": "عنوان URL المخصص للخادم",
     "save": "حفظ وإعادة الاتصال",
     "reset": "إعادة تعيين إلى الافتراضي",
-    "savedSuccess": "تم تحديث نقطة نهاية الخادم بنجاح!"
+    "savedSuccess": "تم تحديث نقطة نهاية الخادم بنجاح!",
+    "descProd": "حالة وتشخيص واجهة السحابة API"
   },
   "smsModal": {
     "title": "تحديث رقم الهاتف للتنبيهات النصية",
@@ -652,7 +666,8 @@
     "save": "حفظ رقم الهاتف",
     "saving": "جاري الحفظ...",
     "success": "تم تحديث رقم الهاتف بنجاح!",
-    "invalid": "يرجى إدخال رقم هاتف صالح مكون من 10 أرقام."
+    "invalid": "يرجى إدخال رقم هاتف صالح مكون من 10 أرقام.",
+    "placeholder": "أدخل رقم الهاتف (+91...)"
   },
   "smsPanel": {
     "title": "مرسل الرسائل الفورية Fast2SMS",
@@ -877,5 +892,31 @@
     "today": "اليوم",
     "preventiveActions": "الإجراءات الوقائية الموصى بها بالذكاء الاصطناعي",
     "connectionError": "تعذر الاتصال بخدمة التنبؤ بانتشار الأمراض."
+  },
+  "urgency": {
+    "title": "درجة الاستعجال",
+    "scoreLabel": "درجة الإلحاح",
+    "levelLow": "استعجال منخفض",
+    "levelModerate": "استعجال متوسط",
+    "levelHigh": "استعجال عالي",
+    "levelCritical": "استعجال حرج للغاية",
+    "takeActionNow": "اتخذ إجراءً خلال الساعات القليلة القادمة.",
+    "takeActionSoon": "اتخذ إجراءً قريباً.",
+    "takeImmediateAction": "اتخذ إجراءً فورياً.",
+    "monitorClosely": "راقب الظروف عن كثب.",
+    "rainApproaching": "أمطار متوقعة خلال ~{{hours}} ساعة",
+    "rainImminent": "أمطار تهطل حالياً أو وشيكة",
+    "highHumidity": "رطوبة عالية في المجموع الخضري ({{hum}}%)",
+    "daysDelayed": "تم الاكتشاف منذ {{days}} أيام",
+    "breakdown": "عوامل الاستعجال",
+    "progressionFactor": "تطور العامل الممرض",
+    "weatherFactor": "الأمطار القادمة / الطقس",
+    "sensorFactor": "حساس الرطوبة IoT",
+    "delayFactor": "الوقت منذ الاكتشاف"
+  },
+  "feedback": {
+    "title": "هل نجح هذا العلاج في حقلك؟",
+    "worked": "نجح العلاج",
+    "notWorked": "لم ينجح"
   }
 }

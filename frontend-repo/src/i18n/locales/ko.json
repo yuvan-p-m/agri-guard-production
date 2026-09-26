@@ -108,7 +108,12 @@
     "symptomTextCurl": "잎 가장자리가 말리고 성장이 억제되고 있습니다.",
     "symptomTextRot": "열매가 썩고 조기에 낙과합니다.",
     "alertUploadRealPhoto": "AI 작물 진단을 위해 실제 잎 사진을 업로드하세요. 샘플 이미지는 처리되지 않습니다.",
-    "ttsNotSupported": "이 브라우저에서는 음성 합성을 지원하지 않습니다."
+    "ttsNotSupported": "이 브라우저에서는 음성 합성을 지원하지 않습니다.",
+    "alertUploadRealPhotoTitle": "사진 필요",
+    "alertUploadPhotoTitle": "사진 필요",
+    "alertInvalidLeafTitle": "잎 감지 경고",
+    "alertWarningTitle": "감지 경고",
+    "alertConnectionErrorTitle": "연결 오류"
   },
   "earlyDetection": {
     "diseaseDetected": "질병 감지됨",
@@ -261,7 +266,8 @@
     "dryConditions": "건조 상태",
     "readyToMonitor": "병해 진행 상황을 모니터링할 준비가 되셨습니까?",
     "readyToMonitorDesc": "미기후 데이터에 기반한 질병 위험을 평가하려면 작물 진단 탭에서 잎 사진을 업로드하세요.",
-    "goToDiagnosis": "작물 진단으로 이동"
+    "goToDiagnosis": "작물 진단으로 이동",
+    "acres": "에이커"
   },
   "marketplace": {
     "title": "농산물 시세 및 유통 정보",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "수확 직전 시기",
       "sowing_season": "파종 시즌",
       "post_harvest_storage": "수확 후 보관"
-    }
+    },
+    "noPriceData": "오늘 해당 작물의 시세 정보가 없습니다. 내일 다시 확인하십시오."
   },
   "govtSchemes": {
     "title": "정부 농업 지원 사업 및 보조금",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "실시간 기온, 습도, 강우 상태 및 관수 시간을 다음으로 전송합니다:",
     "sendSmsToPhone": "휴대폰으로 라이브 SMS 전송",
     "registeredPhone": "등록된 전화번호",
-    "liveApi": "라이브 API"
+    "liveApi": "라이브 API",
+    "liveWeatherSensor": "실시간 날씨 센서",
+    "locationLabel": "농장 / 필드 위치"
   },
   "smsDemo": {
     "title": "Fast2SMS 농업인 알림 시연",
@@ -530,7 +539,8 @@
     "sampleAlerts": "최근 포장 영농 권고 및 기상 경보",
     "delivered": "전송 완료",
     "today": "오늘",
-    "subscribeButton": "구독하기"
+    "subscribeButton": "구독하기",
+    "sendTestSms": "테스트 SMS 전송"
   },
   "profile": {
     "title": "농업인 프로필",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API 서버 연결 구성",
     "serverEndpointSubtitle": "모바일 및 로컬 테스트를 위한 백엔드 호스트 설정",
     "saveEndpoint": "저장",
-    "resetDefault": "기본값 복원"
+    "resetDefault": "기본값 복원",
+    "hardwarePairTitle": "하드웨어 페어링"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "해당 없음",
     "district": "지역/구",
     "state": "주/도",
-    "category": "카테고리"
+    "category": "카테고리",
+    "dismiss": "닫기",
+    "close": "닫기"
   },
   "iot": {
     "quote": "센서 이력 데이터를 활용하여 적합한 작물을 추천하고 시의적절한 영농 인사이트를 제공합니다",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "프로덕션 클라우드 API 상태 및 진단"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "휴대폰 번호 입력 (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "오늘",
     "preventiveActions": "AI 권장 예방 조치",
     "connectionError": "병해 발생 예측 서비스에 연결할 수 없습니다."
+  },
+  "urgency": {
+    "title": "조치 긴급도",
+    "scoreLabel": "긴급도 점수",
+    "levelLow": "낮은 긴급도",
+    "levelModerate": "보통 긴급도",
+    "levelHigh": "높은 긴급도",
+    "levelCritical": "매우 위급한 긴급도",
+    "takeActionNow": "향후 몇 시간 이내에 조치를 취하십시오.",
+    "takeActionSoon": "곧 조치를 취하십시오.",
+    "takeImmediateAction": "즉각적인 조치를 취하십시오.",
+    "monitorClosely": "상황을 면밀히 모니터링하십시오.",
+    "rainApproaching": "~{{hours}}시간 이내 비 예보",
+    "rainImminent": "강우 중 또는 곧 강우 예상",
+    "highHumidity": "높은 엽채 습도 ({{hum}}%)",
+    "daysDelayed": "{{days}}일 전 감지됨",
+    "breakdown": "긴급도 요인",
+    "progressionFactor": "병원체 진행 상태",
+    "weatherFactor": "강우 / 기상 조건",
+    "sensorFactor": "IoT 습도 센서",
+    "delayFactor": "감지 후 경과 시간"
+  },
+  "feedback": {
+    "title": "이 방제 처방이 효과가 있었습니까?",
+    "worked": "효과 있음",
+    "notWorked": "효과 없음"
   }
 }

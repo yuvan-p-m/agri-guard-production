@@ -27,7 +27,7 @@ import {
 } from '../services/sensorService';
 import { predictiveAPI } from '../services/api';
 import { useAppTranslation } from '../i18n';
-import { localizeDiseaseName, localizePreventiveAction } from '../utils/outbreakLocalization';
+import { localizeDiseaseName, localizePreventiveAction, getLocalizedCropName } from '../utils/outbreakLocalization';
 
 export interface OutbreakForesightTabProps {
   onNavigateToDiagnosis?: () => void;
@@ -134,10 +134,11 @@ export const OutbreakForesightTab: React.FC<OutbreakForesightTabProps> = ({
     if (score <= 30) {
       return {
         bg: 'bg-emerald-500',
-        lightBg: 'bg-emerald-50 dark:bg-emerald-950/40',
-        text: 'text-emerald-900 dark:text-emerald-100',
-        badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-        border: 'border-emerald-300 dark:border-emerald-700/60',
+        lightBg: 'bg-gradient-to-br from-white via-emerald-50/80 to-emerald-100/50',
+        text: 'text-emerald-950',
+        scoreText: 'text-emerald-600',
+        badgeBg: 'bg-emerald-100 text-emerald-900 border-emerald-300 shadow-sm',
+        border: 'border-emerald-300 shadow-md shadow-emerald-900/5',
         ring: 'ring-emerald-500/20',
         label: t('outbreakForesight.lowRisk', 'LOW RISK'),
       };
@@ -145,20 +146,22 @@ export const OutbreakForesightTab: React.FC<OutbreakForesightTabProps> = ({
     if (score <= 60) {
       return {
         bg: 'bg-amber-500',
-        lightBg: 'bg-amber-50 dark:bg-amber-950/40',
-        text: 'text-amber-900 dark:text-amber-100',
-        badgeBg: 'bg-amber-100 text-amber-900 border-amber-300',
-        border: 'border-amber-300 dark:border-amber-700/60',
+        lightBg: 'bg-gradient-to-br from-white via-amber-50/80 to-amber-100/50',
+        text: 'text-amber-950',
+        scoreText: 'text-amber-600',
+        badgeBg: 'bg-amber-100 text-amber-950 border-amber-300 shadow-sm',
+        border: 'border-amber-300 shadow-md shadow-amber-900/5',
         ring: 'ring-amber-500/20',
         label: t('outbreakForesight.mediumRisk', 'MEDIUM RISK'),
       };
     }
     return {
       bg: 'bg-rose-500',
-      lightBg: 'bg-rose-50 dark:bg-rose-950/40',
-      text: 'text-rose-900 dark:text-rose-100',
-      badgeBg: 'bg-rose-100 text-rose-900 border-rose-300 animate-pulse',
-      border: 'border-rose-300 dark:border-rose-700/60',
+      lightBg: 'bg-gradient-to-br from-white via-rose-50/80 to-rose-100/50',
+      text: 'text-rose-950',
+      scoreText: 'text-rose-600',
+      badgeBg: 'bg-rose-100 text-rose-950 border-rose-300 shadow-sm animate-pulse',
+      border: 'border-rose-300 shadow-md shadow-rose-900/5',
       ring: 'ring-rose-500/20',
       label: score > 80
         ? t('outbreakForesight.criticalRisk', 'CRITICAL RISK')
@@ -251,27 +254,27 @@ export const OutbreakForesightTab: React.FC<OutbreakForesightTabProps> = ({
               const riskCfg = getRiskScoreColor(predictiveResult.overall_risk_score);
               return (
                 <div
-                  className={`rounded-3xl p-5 sm:p-6 border-2 shadow-lg transition-all ${riskCfg.lightBg} ${riskCfg.border}`}
+                  className={`rounded-3xl p-5 sm:p-7 border-2 shadow-lg transition-all ${riskCfg.lightBg} ${riskCfg.border}`}
                 >
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-black border uppercase tracking-wider ${riskCfg.badgeBg}`}
+                          className={`px-3.5 py-1 rounded-full text-xs font-black border uppercase tracking-wider ${riskCfg.badgeBg}`}
                         >
                           {riskCfg.label}
                         </span>
-                        <span className="text-xs font-bold text-slate-500">
+                        <span className="text-xs font-bold text-slate-600">
                           {t('outbreakForesight.primaryCrop', 'Primary Crop')}:{' '}
-                          <strong className="text-slate-800">{user?.primaryCrop || 'Tomato'}</strong>
+                          <strong className="text-slate-900">{getLocalizedCropName(user?.primaryCrop || 'Citrus / Vegetables', language)}</strong>
                         </span>
                       </div>
-                      <h4 className="text-base sm:text-lg font-black text-slate-900">
+                      <h4 className="text-base sm:text-xl font-black text-slate-900 tracking-tight">
                         {t('outbreakForesight.overallRisk', 'Overall Outbreak Risk Score')}
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-xl leading-relaxed">
+                      <p className="text-xs sm:text-sm text-slate-700 font-medium max-w-xl leading-relaxed">
                         {t('outbreakForesight.evaluatedAcross', 'Evaluated across')}{' '}
-                        <strong>
+                        <strong className="text-slate-900">
                           {predictiveResult.community_threats.report_count}{' '}
                           {t('outbreakForesight.nearbyOutbreaks', 'nearby outbreaks')}
                         </strong>
@@ -283,13 +286,13 @@ export const OutbreakForesightTab: React.FC<OutbreakForesightTabProps> = ({
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-2xl border border-slate-200/80 shadow-sm shrink-0">
-                      <div className="text-center">
-                        <div className="text-4xl font-black font-mono tracking-tight text-slate-900">
+                    <div className="flex items-center gap-4 bg-white p-4 sm:p-5 rounded-3xl border-2 border-slate-200/90 shadow-md shrink-0">
+                      <div className="text-center px-2">
+                        <div className={`text-4xl sm:text-5xl font-black font-mono tracking-tight ${riskCfg.scoreText}`}>
                           {predictiveResult.overall_risk_score}
-                          <span className="text-lg font-bold text-slate-500">%</span>
+                          <span className="text-xl sm:text-2xl font-bold text-slate-400 ml-0.5">%</span>
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-slate-700 mt-1 block">
                           {t('outbreakForesight.outbreakIndex', 'Outbreak Index')}
                         </span>
                       </div>
@@ -574,7 +577,13 @@ export const OutbreakForesightTab: React.FC<OutbreakForesightTabProps> = ({
                           <span
                             className={`inline-block px-2 py-0.5 rounded-md text-[9px] font-black uppercase ${dayColor.badgeBg}`}
                           >
-                            {day.risk_level}
+                            {day.risk_level === 'HIGH'
+                              ? t('outbreakForesight.highRisk', 'HIGH')
+                              : day.risk_level === 'MEDIUM'
+                              ? t('outbreakForesight.mediumRisk', 'MEDIUM')
+                              : day.risk_level === 'CRITICAL'
+                              ? t('outbreakForesight.criticalRisk', 'CRITICAL')
+                              : t('outbreakForesight.lowRisk', 'LOW')}
                           </span>
                         </div>
                       );
@@ -607,7 +616,7 @@ export const OutbreakForesightTab: React.FC<OutbreakForesightTabProps> = ({
                         <span>
                           {localizePreventiveAction(
                             action,
-                            user?.primaryCrop || 'Tomato',
+                            user?.primaryCrop || 'Citrus / Vegetables',
                             language,
                             idx
                           )}

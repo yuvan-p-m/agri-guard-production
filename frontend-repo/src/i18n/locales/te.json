@@ -108,7 +108,12 @@
     "symptomTextCurl": "ఆకుల అంచులు ముడుచుకుపోయి మొక్క పెరుగుదల మందగించింది.",
     "symptomTextRot": "కాయలు కుళ్ళిపోయి అకాలంగా రాలిపోతున్నాయి.",
     "alertUploadRealPhoto": "AI పంట గుర్తింపు కోసం అసలైన ఆకు ఫోటోను అప్‌లోడ్ చేయండి. నమూనా చిత్రాలను మోడల్ ప్రాసెస్ చేయదు.",
-    "ttsNotSupported": "ఈ బ్రౌజర్‌లో టెక్స్ట్-టు-స్పీచ్ సపోర్ట్ లేదు."
+    "ttsNotSupported": "ఈ బ్రౌజర్‌లో టెక్స్ట్-టు-స్పీచ్ సపోర్ట్ లేదు.",
+    "alertUploadRealPhotoTitle": "ఫోటో అవసరం",
+    "alertUploadPhotoTitle": "ఫోటో అవసరం",
+    "alertInvalidLeafTitle": "ఆకు గుర్తింపు హెచ్చరిక",
+    "alertWarningTitle": "గుర్తింపు హెచ్చరిక",
+    "alertConnectionErrorTitle": "కనెక్షన్ లోపం"
   },
   "earlyDetection": {
     "diseaseDetected": "వ్యాధి గుర్తించబడింది",
@@ -261,7 +266,8 @@
     "dryConditions": "పొడి పరిస్థితులు",
     "readyToMonitor": "తెగుళ్ల వ్యాప్తిని పర్యవేక్షించడానికి సిద్ధమా?",
     "readyToMonitorDesc": "మీ లైవ్ వాతావరణానికి అనుగుణంగా తెగులు తీవ్రతను అంచనా వేయడానికి పంట నిర్ధారణలో ఆకు ఫోటోను అప్‌లోడ్ చేయండి.",
-    "goToDiagnosis": "పంట నిర్ధారణకు వెళ్లండి"
+    "goToDiagnosis": "పంట నిర్ధారణకు వెళ్లండి",
+    "acres": "ఎకరాలు"
   },
   "marketplace": {
     "title": "మార్కెట్ & మండి ధరలు",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "కోతకు ముందు దశ",
       "sowing_season": "విత్తే కాలం",
       "post_harvest_storage": "కోత అనంతర నిల్వ"
-    }
+    },
+    "noPriceData": "ఈ రోజు మీ రాష్ట్రంలో మీ పంటకు సంబంధించిన ధరల సమాచారం అందుబాటులో లేదు. రేపు మళ్ళీ ప్రయత్నించండి."
   },
   "govtSchemes": {
     "title": "ప్రభుత్వ వ్యవసాయ పథకాలు & రాయితీలు",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "లైవ్ ఉష్ణోగ్రత, తేమ, వర్షం స్థితి & నీటిపారుదల సమయాన్ని పంపుతుంది",
     "sendSmsToPhone": "ఫోన్‌కు లైవ్ SMS పంపండి",
     "registeredPhone": "నమోదిత ఫోన్",
-    "liveApi": "లైవ్ API"
+    "liveApi": "లైవ్ API",
+    "liveWeatherSensor": "లైవ్ వాతావరణ సెన్సార్",
+    "locationLabel": "పొలం / క్షేత్ర స్థానం"
   },
   "smsDemo": {
     "title": "Fast2SMS రైతు హెచ్చరిక ప్రత్యక్ష ప్రదర్శన",
@@ -530,7 +539,8 @@
     "sampleAlerts": "ఇటీవలి ఫీల్డ్ సలహాలు & వాతావరణ హెచ్చరికలు",
     "delivered": "చేరింది",
     "today": "ఈ రోజు",
-    "subscribeButton": "సబ్‌స్క్రయిబ్ చేసుకోండి"
+    "subscribeButton": "సబ్‌స్క్రయిబ్ చేసుకోండి",
+    "sendTestSms": "టెస్ట్ SMS పంపండి"
   },
   "profile": {
     "title": "రైతు ప్రొఫైల్",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API సర్వర్ ఎండ్‌పాయింట్ కాన్ఫిగరేషన్",
     "serverEndpointSubtitle": "మొబైల్ / లోకల్ టెస్టింగ్ కోసం బ్యాకెండ్ హోస్ట్‌ను కాన్ఫిగర్ చేయండి",
     "saveEndpoint": "ఎండ్‌పాయింట్‌ను సేవ్ చేయండి",
-    "resetDefault": "డిఫాల్ట్‌కి రీసెట్ చేయండి"
+    "resetDefault": "డిఫాల్ట్‌కి రీసెట్ చేయండి",
+    "hardwarePairTitle": "హార్డ్‌వేర్‌ను జత చేయండి"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "లభ్యం కాదు",
     "district": "జిల్లా",
     "state": "రాష్ట్రం",
-    "category": "వర్గం"
+    "category": "వర్గం",
+    "dismiss": "రద్దు చేయి",
+    "close": "మూసివేయి"
   },
   "iot": {
     "quote": "తగిన పంటలను సిఫార్సు చేయడానికి మరియు సకాలంలో వ్యవసాయ సమాచారాన్ని అందించడానికి చారిత్రక సెన్సార్ డేటాను ఉపయోగిస్తుంది",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "ప్రొడక్షన్ క్లౌడ్ API స్థితి మరియు నిర్ధారణలు"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "మొబైల్ నంబర్ నమోదు చేయండి (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "ఈరోజు",
     "preventiveActions": "AI సిఫార్సు చేసిన నివారణ చర్యలు",
     "connectionError": "ముందస్తు అంచనా సేవతో కనెక్ట్ కాలేకపోయాము."
+  },
+  "urgency": {
+    "title": "చర్య అత్యవసరత",
+    "scoreLabel": "అత్యవసర స్కోరు",
+    "levelLow": "తక్కువ అత్యవసరం",
+    "levelModerate": "మధ్యస్థ అత్యవసరం",
+    "levelHigh": "ఎక్కువ అత్యవసరం",
+    "levelCritical": "తీవ్రమైన అత్యవసరం",
+    "takeActionNow": "రాబోయే కొన్ని గంటల్లో చర్య తీసుకోండి.",
+    "takeActionSoon": "త్వరలో చర్య తీసుకోండి.",
+    "takeImmediateAction": "వెంటనే చర్య తీసుకోండి.",
+    "monitorClosely": "పరిస్థితులను నిశితంగా పరిశీలించండి.",
+    "rainApproaching": "~{{hours}} గంటల్లో వర్షం పడే అవకాశం ఉంది",
+    "rainImminent": "వర్షం కురుస్తోంది / వెంటనే కురవబోతోంది",
+    "highHumidity": "అధిక తేమ ({{hum}}%)",
+    "daysDelayed": "{{days}} రోజుల క్రితం గుర్తించబడింది",
+    "breakdown": "అత్యవసర కారకాలు",
+    "progressionFactor": "వ్యాధికారక వ్యాప్తి",
+    "weatherFactor": "రాబోయే వర్షం / వాతావరణం",
+    "sensorFactor": "IoT పంట తేమ",
+    "delayFactor": "గుర్తించినప్పటి నుండి సమయం"
+  },
+  "feedback": {
+    "title": "ఈ చికిత్స మీ పొలంలో పనిచేసిందా?",
+    "worked": "చికిత్స పనిచేసింది",
+    "notWorked": "పనిచేయలేదు"
   }
 }

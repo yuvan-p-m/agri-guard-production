@@ -108,7 +108,12 @@
     "symptomTextCurl": "පත්‍රවල දාර රැලි වැටී ශාක වර්ධනය බාල වී ඇත.",
     "symptomTextRot": "ගෙඩි කුණු වී අකාලයේ බිම වැටේ.",
     "alertUploadRealPhoto": "AI හඳුනාගැනීම සඳහා සැබෑ පත්‍රයක ඡායාරූපයක් ලබා දෙන්න.",
-    "ttsNotSupported": "මෙම බ්‍රවුසරයේ හඬ පහසුකම ක්‍රියාත්මක නොවේ."
+    "ttsNotSupported": "මෙම බ්‍රවුසරයේ හඬ පහසුකම ක්‍රියාත්මක නොවේ.",
+    "alertUploadRealPhotoTitle": "ඡායාරූපයක් අවශ්‍යයි",
+    "alertUploadPhotoTitle": "ඡායාරූපයක් අවශ්‍යයි",
+    "alertInvalidLeafTitle": "පත්‍ර හඳුනාගැනීමේ අනතුරු ඇඟවීම",
+    "alertWarningTitle": "හඳුනාගැනීමේ අනතුරු ඇඟවීම",
+    "alertConnectionErrorTitle": "සම්බන්ධතා දෝෂයකි"
   },
   "earlyDetection": {
     "diseaseDetected": "රෝගය හඳුනා ගන්නා ලදී",
@@ -261,7 +266,8 @@
     "dryConditions": "වියළි තත්ත්වයන්",
     "readyToMonitor": "රෝග පැතිරීම නිරීක්ෂණය කිරීමට සූදානම්ද?",
     "readyToMonitorDesc": "කාලගුණයට සාපේක්ෂව රෝග අවදානම ඇගයීමට බෝග රෝග විනිශ්චය වෙත පත්‍ර ඡායාරූපයක් එක් කරන්න.",
-    "goToDiagnosis": "රෝග විනිශ්චය වෙත යන්න"
+    "goToDiagnosis": "රෝග විනිශ්චය වෙත යන්න",
+    "acres": "අක්කර"
   },
   "marketplace": {
     "title": "වෙළඳපොල මිල ගණන්",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "අස්වැන්නට පෙර කාලය",
       "sowing_season": "වැපිරීමේ කාලය",
       "post_harvest_storage": "අස්වැන්නෙන් පසු ගබඩා කිරීම"
-    }
+    },
+    "noPriceData": "අද දිනයේ ඔබගේ ප්‍රාන්තය සඳහා බෝග මිල ගණන් නොමැත. කරුණාකර හෙට නැවත උත්සාහ කරන්න."
   },
   "govtSchemes": {
     "title": "රජයේ කෘෂිකාර්මික යෝජනා ක්‍රම සහ සහනාධාර",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "සජීවී උෂ්ණත්වය, ආර්ද්‍රතාවය, වැසි තත්ත්වය සහ ජලය යෙදීමේ වේලාව යවයි",
     "sendSmsToPhone": "දුරකථනයට සජීවී SMS යවන්න",
     "registeredPhone": "ලියාපදිංචි දුරකථනය",
-    "liveApi": "සජීවී API"
+    "liveApi": "සජීවී API",
+    "liveWeatherSensor": "සජීවී කාලගුණ සංවේදකය",
+    "locationLabel": "ගොවිපල පිහිටීම"
   },
   "smsDemo": {
     "title": "Fast2SMS ගොවි අනතුරු ඇඟවීමේ ආදර්ශනය",
@@ -530,7 +539,8 @@
     "sampleAlerts": "මෑත කාලීන කෘෂිකාර්මික උපදෙස් සහ කාලගුණ අනතුරු ඇඟවීම්",
     "delivered": "බෙදාහරින ලදි",
     "today": "අද",
-    "subscribeButton": "දායක වන්න"
+    "subscribeButton": "දායක වන්න",
+    "sendTestSms": "පරීක්ෂණ SMS පණිවිඩයක් යවන්න"
   },
   "profile": {
     "title": "ගොවි පැතිකඩ",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API සේවාදායක වින්‍යාසය",
     "serverEndpointSubtitle": "ජංගම / දේශීය පරීක්ෂණ සඳහා සේවාදායකය සකසන්න",
     "saveEndpoint": "සුරකින්න",
-    "resetDefault": "පෙරනිමියට යළි සකසන්න"
+    "resetDefault": "පෙරනිමියට යළි සකසන්න",
+    "hardwarePairTitle": "දෘඩාංග සම්බන්ධ කරන්න"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "අදාළ නොවේ",
     "district": "දිස්ත්‍රික්කය",
     "state": "ප්‍රාන්තය",
-    "category": "කාණ්ඩය"
+    "category": "කාණ්ඩය",
+    "dismiss": "ඉවත් කරන්න",
+    "close": "වසන්න"
   },
   "iot": {
     "quote": "සුදුසු බෝග නිර්දේශ කිරීමට සහ කාලෝචිත ගොවිතැන් තොරතුරු ලබා දීමට ඓතිහාසික සංවේදක දත්ත භාවිතා කරයි",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "ක්ලවුඩ් API තත්ත්වය සහ රෝග විනිශ්චය"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "දුරකථන අංකය ඇතුළත් කරන්න (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "අද",
     "preventiveActions": "AI නිර්දේශිත වැළැක්වීමේ පියවර",
     "connectionError": "අනාවැකි සේවාවට සම්බන්ධ වීමට නොහැකි විය."
+  },
+  "urgency": {
+    "title": "ක්‍රියාමාර්ගයේ හදිසිභාවය",
+    "scoreLabel": "හදිසි ලකුණු ප්‍රමාණය",
+    "levelLow": "අඩු හදිසිභාවය",
+    "levelModerate": "මධ්‍යම හදිසිභාවය",
+    "levelHigh": "වැඩි හදිසිභාවය",
+    "levelCritical": "ඉතා බරපතල හදිසිභාවය",
+    "takeActionNow": "ඉදිරි පැය කිහිපය තුළ පියවර ගන්න.",
+    "takeActionSoon": "ඉක්මනින් පියවර ගන්න.",
+    "takeImmediateAction": "වහාම පියවර ගන්න.",
+    "monitorClosely": "තත්ත්වය සමීපව නිරීක්ෂණය කරන්න.",
+    "rainApproaching": "පැය ~{{hours}} කින් වැසි ඇති විය හැක",
+    "rainImminent": "වැසි පවතී / ළඟදීම වැසි ඇති වේ",
+    "highHumidity": "ඉහළ ආර්ද්‍රතාවය ({{hum}}%)",
+    "daysDelayed": "දින {{days}} කට පෙර හඳුනා ගන්නා ලදී",
+    "breakdown": "හදිසි සාධක",
+    "progressionFactor": "රෝග කාරක පැතිරීම",
+    "weatherFactor": "වැසි / කාලගුණය",
+    "sensorFactor": "IoT ආර්ද්‍රතා සංවේදකය",
+    "delayFactor": "හඳුනාගැනීමෙන් පසු ගතවූ කාලය"
+  },
+  "feedback": {
+    "title": "මෙම ප්‍රතිකාරය ඔබගේ වගාවට සාර්ථක වූවාද?",
+    "worked": "ප්‍රතිකාරය සාර්ථක විය",
+    "notWorked": "සාර්ථක නොවීය"
   }
 }

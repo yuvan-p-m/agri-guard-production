@@ -108,7 +108,12 @@
     "symptomTextCurl": "葉の縁が縮れ、作物の生育が抑制されています。",
     "symptomTextRot": "果実が腐敗し、早期落果が発生しています。",
     "alertUploadRealPhoto": "AI診断には実際の作物の葉の写真が必要です。サンプル画像は処理できません。",
-    "ttsNotSupported": "このブラウザは音声読み上げに対応していません。"
+    "ttsNotSupported": "このブラウザは音声読み上げに対応していません。",
+    "alertUploadRealPhotoTitle": "写真が必要です",
+    "alertUploadPhotoTitle": "写真が必要です",
+    "alertInvalidLeafTitle": "葉の検出警告",
+    "alertWarningTitle": "診断警告",
+    "alertConnectionErrorTitle": "接続エラー"
   },
   "earlyDetection": {
     "diseaseDetected": "病気を検知",
@@ -261,7 +266,8 @@
     "dryConditions": "乾燥状態",
     "readyToMonitor": "病害の進行状況を監視しますか？",
     "readyToMonitorDesc": "作物の葉の写真を診断にアップロードして、微気象データに基づいた病害リスクを評価します。",
-    "goToDiagnosis": "病害診断へ進む"
+    "goToDiagnosis": "病害診断へ進む",
+    "acres": "エーカー"
   },
   "marketplace": {
     "title": "農産物市況と取引価格",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "収穫前ウィンドウ",
       "sowing_season": "播種期",
       "post_harvest_storage": "収穫後保管"
-    }
+    },
+    "noPriceData": "本日の該当作物・地域の市場価格データはありません。明日再度ご確認ください。"
   },
   "govtSchemes": {
     "title": "農業補助金・支援制度カタログ",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "現在の気温、湿度、降雨状況、最適な灌水時間を以下に送信します:",
     "sendSmsToPhone": "電話にライブSMSを送信",
     "registeredPhone": "登録された電話番号",
-    "liveApi": "リアルタイムAPI"
+    "liveApi": "リアルタイムAPI",
+    "liveWeatherSensor": "ライブ気象センサー",
+    "locationLabel": "圃場の位置"
   },
   "smsDemo": {
     "title": "Fast2SMS 農業従事者向け警報デモ",
@@ -530,7 +539,8 @@
     "sampleAlerts": "最新の圃場アドバイザリーと気象警報",
     "delivered": "配信済み",
     "today": "本日",
-    "subscribeButton": "登録する"
+    "subscribeButton": "登録する",
+    "sendTestSms": "テストSMSを送信"
   },
   "profile": {
     "title": "農業者プロフィール",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "APIサーバー接続設定",
     "serverEndpointSubtitle": "モバイル・ローカルテスト用のバックエンドホスト設定",
     "saveEndpoint": "保存",
-    "resetDefault": "初期設定に戻す"
+    "resetDefault": "初期設定に戻す",
+    "hardwarePairTitle": "ハードウェアをペアリング"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "該当なし",
     "district": "地区",
     "state": "州/県",
-    "category": "カテゴリー"
+    "category": "カテゴリー",
+    "dismiss": "閉じる",
+    "close": "閉じる"
   },
   "iot": {
     "quote": "蓄積されたセンサーデータを活用して適切な作物を提案し、タイムリーな営農情報を提供します",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "本番クラウドAPIステータスと診断"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "携帯番号を入力 (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "今日",
     "preventiveActions": "AI推奨の予防対策",
     "connectionError": "病害発生予測サービスに接続できません。"
+  },
+  "urgency": {
+    "title": "対応緊急度",
+    "scoreLabel": "緊急度スコア",
+    "levelLow": "低緊急度",
+    "levelModerate": "中緊急度",
+    "levelHigh": "高緊急度",
+    "levelCritical": "非常に危険な緊急度",
+    "takeActionNow": "数時間以内に対策を実施してください。",
+    "takeActionSoon": "早急に対策を実施してください。",
+    "takeImmediateAction": "直ちに対策を実施してください。",
+    "monitorClosely": "状況を注意深く監視してください。",
+    "rainApproaching": "約{{hours}}時間後に雨の予報",
+    "rainImminent": "降雨中または間もなく降雨",
+    "highHumidity": "高湿度環境 ({{hum}}%)",
+    "daysDelayed": "{{days}}日前に検出",
+    "breakdown": "緊急度評価要因",
+    "progressionFactor": "病原体の進行状況",
+    "weatherFactor": "降雨予測・気象状況",
+    "sensorFactor": "IoTキャノピー湿度",
+    "delayFactor": "検出からの経過時間"
+  },
+  "feedback": {
+    "title": "この処置は圃場で効果がありましたか？",
+    "worked": "効果があった",
+    "notWorked": "効果がなかった"
   }
 }

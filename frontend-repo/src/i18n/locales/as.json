@@ -108,7 +108,12 @@
     "symptomTextCurl": "পাতৰ দাঁতি কোঁচ খাই গৈছে আৰু বৃদ্ধি বাধাগ্ৰস্ত হৈছে।",
     "symptomTextRot": "ফলবোৰ পচি গৈ অকালতে সৰি পৰিছে।",
     "alertUploadRealPhoto": "AI পৰীক্ষাৰ বাবে প্ৰকৃত পাতৰ ফটো দিয়ক।",
-    "ttsNotSupported": "এই ব্ৰাউজাৰত টেক্সট-টু-স্পিচ সমৰ্থিত নহয়।"
+    "ttsNotSupported": "এই ব্ৰাউজাৰত টেক্সট-টু-স্পিচ সমৰ্থিত নহয়।",
+    "alertUploadRealPhotoTitle": "ফটোৰ প্ৰয়োজন",
+    "alertUploadPhotoTitle": "ফটোৰ প্ৰয়োজন",
+    "alertInvalidLeafTitle": "পাত চিনাক্তকৰণ সতৰ্কবাৰ্তা",
+    "alertWarningTitle": "চিনাক্তকৰণ সতৰ্কবাৰ্তা",
+    "alertConnectionErrorTitle": "সংযোগৰ ত্ৰুটি"
   },
   "earlyDetection": {
     "diseaseDetected": "ৰোগ চিনাক্ত হৈছে",
@@ -261,7 +266,8 @@
     "dryConditions": "শুকান অৱস্থা",
     "readyToMonitor": "ৰোগ সংক্ৰমণ নিৰীক্ষণ কৰিবলৈ সাজুনে?",
     "readyToMonitorDesc": "বতৰৰ অনুকূলতাত ৰোগৰ সম্ভাৱনা জানিবলৈ শস্য নিদানত পাতৰ ফটো আপলোড কৰক।",
-    "goToDiagnosis": "নিদানলৈ যাওক"
+    "goToDiagnosis": "নিদানলৈ যাওক",
+    "acres": "একৰ"
   },
   "marketplace": {
     "title": "বজাৰ আৰু মাণ্ডি দৰ",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "চপোৱাৰ পূৰ্বৰ সময়",
       "sowing_season": "সিঁচনৰ বতৰ",
       "post_harvest_storage": "চপোৱাৰ পিছৰ সংৰক্ষণ"
-    }
+    },
+    "noPriceData": "আজি আপোনাৰ ৰাজ্যত আপোনাৰ শস্যৰ কোনো মূল্যৰ তথ্য উপলব্ধ নহয়। অনুগ্ৰহ কৰি কাইলৈ পুনৰ চেষ্টা কৰক।"
   },
   "govtSchemes": {
     "title": "চৰকাৰী কৃষি আঁচনি আৰু ৰাজসাহায্য",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "লাইভ উত্তাপ, আৰ্দ্ৰতা, বৰষুণৰ স্থিতি আৰু জলসিঞ্চনৰ সময় প্ৰেৰণ কৰে",
     "sendSmsToPhone": "ফোনলৈ লাইভ SMS প্ৰেৰণ কৰক",
     "registeredPhone": "পঞ্জীভুক্ত ফোন",
-    "liveApi": "লাইভ API"
+    "liveApi": "লাইভ API",
+    "liveWeatherSensor": "লাইভ বতৰ সংবেদক",
+    "locationLabel": "পথাৰৰ অৱস্থান"
   },
   "smsDemo": {
     "title": "Fast2SMS কৃষক সতৰ্কতা ডেমো",
@@ -530,7 +539,8 @@
     "sampleAlerts": "শেহতীয়া কৃষি পৰামৰ্শ আৰু বতৰৰ সতৰ্কবাণী",
     "delivered": "বিতৰণ কৰা হ'ল",
     "today": "আজি",
-    "subscribeButton": "চাবস্ক্ৰাইব কৰক"
+    "subscribeButton": "চাবস্ক্ৰাইব কৰক",
+    "sendTestSms": "পৰীক্ষামূলক SMS প্ৰেৰণ কৰক"
   },
   "profile": {
     "title": "কৃষক প্ৰফাইল",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API চাৰ্ভাৰ সংৰূপ",
     "serverEndpointSubtitle": "ম'বাইল / স্থানীয় পৰীক্ষণৰ বাবে চাৰ্ভাৰ সংহতি কৰক",
     "saveEndpoint": "সংৰক্ষণ কৰক",
-    "resetDefault": "পূৰ্বনিৰ্ধাৰিতলৈ সলনি কৰক"
+    "resetDefault": "পূৰ্বনিৰ্ধাৰিতলৈ সলনি কৰক",
+    "hardwarePairTitle": "হাৰ্ডৱেৰ সংযোগ কৰক"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "প্ৰযোজ্য নহয়",
     "district": "জিলা",
     "state": "ৰাজ্য",
-    "category": "শ্ৰেণী"
+    "category": "শ্ৰেণী",
+    "dismiss": "বাতিল কৰক",
+    "close": "বন্ধ কৰক"
   },
   "iot": {
     "quote": "উপযুক্ত শস্যৰ পৰামৰ্শ দিবলৈ আৰু সময়োপযোগী কৃষি অন্তৰ্দৃষ্টি প্ৰদান কৰিবলৈ ঐতিহাসিক চেন্সৰ তথ্য ব্যৱহাৰ কৰে",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "ক্লাউড API স্থিতি আৰু নিদান"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "মোবাইল নম্বৰ প্ৰবিষ্ট কৰক (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "আজি",
     "preventiveActions": "AI দ্বাৰা পৰামৰ্শিত প্ৰতিৰোধমূলক ব্যৱস্থা",
     "connectionError": "পূৰ্বানুমান সেৱাৰ সৈতে সংযোগ কৰিব পৰা নগ'ল।"
+  },
+  "urgency": {
+    "title": "পদক্ষেপৰ জৰুৰীতা",
+    "scoreLabel": "জৰুৰী স্কোৰ",
+    "levelLow": "কম জৰুৰী",
+    "levelModerate": "মধ্যম জৰুৰী",
+    "levelHigh": "উচ্চ জৰুৰী",
+    "levelCritical": "গুৰুতৰ জৰুৰী",
+    "takeActionNow": "অহা কেইঘণ্টামানৰ ভিতৰত ব্যৱস্থা গ্ৰহণ কৰক।",
+    "takeActionSoon": "শীঘ্ৰে ব্যৱস্থা লওক।",
+    "takeImmediateAction": "ততালিকে ব্যৱস্থা গ্ৰহণ কৰক।",
+    "monitorClosely": "পৰিস্থিতিৰ ওপৰত তীক্ষ্ণ নজৰ ৰাখক।",
+    "rainApproaching": "~{{hours}} ঘণ্টাত বৰষুণ হোৱাৰ সম্ভাৱনা আছে",
+    "rainImminent": "বৰষুণ হৈ আছে / হবলৈ ওলাইছে",
+    "highHumidity": "উচ্চ আৰ্দ্ৰতা ({{hum}}%)",
+    "daysDelayed": "{{days}} দিন পূৰ্বে চিনাক্ত কৰা হৈছে",
+    "breakdown": "জৰুৰী উপাদানসমূহ",
+    "progressionFactor": "ৰোগৰ বিস্তাৰ",
+    "weatherFactor": "বৰষুণ / বতৰৰ পৰিৱৰ্তন",
+    "sensorFactor": "IoT আৰ্দ্ৰতা সংবেদক",
+    "delayFactor": "চিনাক্তৰ পিছৰ সময়"
+  },
+  "feedback": {
+    "title": "এই চিকিৎসায়ে আপোনাৰ পথাৰত কাম কৰিলেনে?",
+    "worked": "চিকিৎসায়ে কাম কৰিলে",
+    "notWorked": "কাম নকৰিলে"
   }
 }

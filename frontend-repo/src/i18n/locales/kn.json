@@ -108,7 +108,12 @@
     "symptomTextCurl": "ಎಲೆಯ ಅಂಚುಗಳು ಮುದುಡಿಕೊಂಡಿದ್ದು ಬೆಳವಣಿಗೆ ಕುಂಠಿತಗೊಂಡಿದೆ.",
     "symptomTextRot": "ಕಾಯಿಗಳು ಕೊಳೆಯುತ್ತಿದ್ದು ಅಕಾಲಿಕವಾಗಿ ಉದುರುತ್ತಿವೆ.",
     "alertUploadRealPhoto": "AI ಬೆಳೆ ಪತ್ತೆಗೆ ನೈಜ ಎಲೆಯ ಫೋಟೋವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ. ಮಾದರಿ ಚಿತ್ರಗಳನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
-    "ttsNotSupported": "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಪಠ್ಯದಿಂದ ಧ್ವನಿ ಬೆಂಬಲಿತವಾಗಿಲ್ಲ."
+    "ttsNotSupported": "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಪಠ್ಯದಿಂದ ಧ್ವನಿ ಬೆಂಬಲಿತವಾಗಿಲ್ಲ.",
+    "alertUploadRealPhotoTitle": "ಫೋಟೋ ಅಗತ್ಯವಿದೆ",
+    "alertUploadPhotoTitle": "ಫೋಟೋ ಅಗತ್ಯವಿದೆ",
+    "alertInvalidLeafTitle": "ಎಲೆ ಪತ್ತೆ ಎಚ್ಚರಿಕೆ",
+    "alertWarningTitle": "ಪತ್ತೆ ಎಚ್ಚರಿಕೆ",
+    "alertConnectionErrorTitle": "ಸಂಪರ್ಕ ದೋಷ"
   },
   "earlyDetection": {
     "diseaseDetected": "ರೋಗ ಪತ್ತೆಯಾಗಿದೆ",
@@ -261,7 +266,8 @@
     "dryConditions": "ಒಣ ಹವೆ",
     "readyToMonitor": "ರೋಗದ ತೀವ್ರತೆ ಮೇಲ್ವಿಚಾರಣೆಗೆ ಸಿದ್ಧವೇ?",
     "readyToMonitorDesc": "ಲೈವ್ ವಾತಾವರಣದ ಆಧಾರದ ಮೇಲೆ ರೋಗದ ಅಪಾಯ ತಿಳಿಯಲು ಬೆಳೆ ರೋಗನಿರ್ಣಯದಲ್ಲಿ ಎಲೆಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.",
-    "goToDiagnosis": "ರೋಗನಿರ್ಣಯಕ್ಕೆ ಹೋಗಿ"
+    "goToDiagnosis": "ರೋಗನಿರ್ಣಯಕ್ಕೆ ಹೋಗಿ",
+    "acres": "ಎಕರೆ"
   },
   "marketplace": {
     "title": "ಮಾರುಕಟ್ಟೆ ಮತ್ತು ಮಂಡಿ ಬೆಲೆಗಳು",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "ಕೊಯ್ಲಿನ ಮುನ್ನೋಟ",
       "sowing_season": "ಬಿತ್ತನೆ ಋತು",
       "post_harvest_storage": "ಕೊಯ್ಲಿನ ನಂತರದ ದಾಸ್ತಾನು"
-    }
+    },
+    "noPriceData": "ಇಂದು ನಿಮ್ಮ ರಾಜ್ಯದಲ್ಲಿ ನಿಮ್ಮ ಬೆಳೆಗೆ ಬೆಲೆ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ. ದಯವಿಟ್ಟು ನಾಳೆ ಪ್ರಯತ್ನಿಸಿ."
   },
   "govtSchemes": {
     "title": "ಸರ್ಕಾರಿ ಕೃಷಿ ಯೋಜನೆಗಳು ಮತ್ತು ಸಬ್ಸಿಡಿಗಳು",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "ಲೈವ್ ತಾಪಮಾನ, ತೇವಾಂಶ, ಮಳೆ ಸ್ಥಿತಿ ಮತ್ತು ನೀರಾವರಿ ಸಮಯವನ್ನು ಕಳುಹಿಸುತ್ತದೆ",
     "sendSmsToPhone": "ಫೋನ್‌ಗೆ ಲೈವ್ SMS ಕಳುಹಿಸಿ",
     "registeredPhone": "ನೋಂದಾಯಿತ ಫೋನ್",
-    "liveApi": "ಲೈವ್ API"
+    "liveApi": "ಲೈವ್ API",
+    "liveWeatherSensor": "ಲೈವ್ ಹವಾಮಾನ ಸಂವೇದಕ",
+    "locationLabel": "ತೋಟ / ಜಮೀನಿನ ಸ್ಥಳ"
   },
   "smsDemo": {
     "title": "Fast2SMS ರೈತ ಎಚ್ಚರಿಕೆ ಪ್ರದರ್ಶನ",
@@ -530,7 +539,8 @@
     "sampleAlerts": "ಇತ್ತೀಚಿನ ಕೃಷಿ ಸಲಹೆಗಳು ಮತ್ತು ಹವಾಮಾನ ಎಚ್ಚರಿಕೆಗಳು",
     "delivered": "ತಲುಪಿದೆ",
     "today": "ಇಂದು",
-    "subscribeButton": "ಚಂದಾದಾರರಾಗಿ"
+    "subscribeButton": "ಚಂದಾದಾರರಾಗಿ",
+    "sendTestSms": "ಪರೀಕ್ಷಾ SMS ಕಳುಹಿಸಿ"
   },
   "profile": {
     "title": "ರೈತರ ಪ್ರೊಫೈಲ್",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API ಸರ್ವರ್ ಕಾನ್ಫಿಗರೇಶನ್",
     "serverEndpointSubtitle": "ಮೊಬೈಲ್ / ಸ್ಥಳೀಯ ಪರೀಕ್ಷೆಗಾಗಿ ಬ್ಯಾಕೆಂಡ್ ಹೋಸ್ಟ್ ಕಾನ್ಫಿಗರ್ ಮಾಡಿ",
     "saveEndpoint": "ಉಳಿಸಿ",
-    "resetDefault": "ಡೀಫಾಲ್ಟ್‌ಗೆ ಮರುಹೊಂದಿಸಿ"
+    "resetDefault": "ಡೀಫಾಲ್ಟ್‌ಗೆ ಮರುಹೊಂದಿಸಿ",
+    "hardwarePairTitle": "ಹಾರ್ಡ್‌ವೇರ್ ಜೋಡಿಸಿ"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "ಅನ್ವಯಿಸುವುದಿಲ್ಲ",
     "district": "ಜಿಲ್ಲೆ",
     "state": "ರಾಜ್ಯ",
-    "category": "ವರ್ಗ"
+    "category": "ವರ್ಗ",
+    "dismiss": "ತಿರಸ್ಕರಿಸಿ",
+    "close": "ಮುಚ್ಚಿ"
   },
   "iot": {
     "quote": "ಸೂಕ್ತವಾದ ಬೆಳೆಗಳನ್ನು ಶಿಫಾರಸು ಮಾಡಲು ಮತ್ತು ಸಕಾಲಿಕ ಕೃಷಿ ಒಳನೋಟಗಳನ್ನು ನೀಡಲು ಐತಿಹಾಸಿಕ ಸಂವೇದಕ ಡೇಟಾವನ್ನು ಬಳಸಿಕೊಳ್ಳುತ್ತದೆ",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "ಕ್ಲೌಡ್ API ಸ್ಥಿತಿ ಮತ್ತು ಡಯಾಗ್ನಾಸ್ಟಿಕ್ಸ್"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "ಇಂದು",
     "preventiveActions": "AI ಶಿಫಾರಸು ಮಾಡಿದ ಮುನ್ನೆಚ್ಚರಿಕೆ ಕ್ರಮಗಳು",
     "connectionError": "ಮುನ್ಸೂಚನೆ ಸೇವೆಗೆ ಸಂಪರ್ಕಿಸಲು ಸಾಧ್ಯವಾಗುತ್ತಿಲ್ಲ."
+  },
+  "urgency": {
+    "title": "ಕ್ರಮದ ತುರ್ತು",
+    "scoreLabel": "ತುರ್ತು ಸ್ಕೋರ್",
+    "levelLow": "ಕಡಿಮೆ ತುರ್ತು",
+    "levelModerate": "ಮಧ್ಯಮ ತುರ್ತು",
+    "levelHigh": "ಹೆಚ್ಚಿನ ತುರ್ತು",
+    "levelCritical": "ಗಂಭೀರ ತುರ್ತು",
+    "takeActionNow": "ಮುಂದಿನ ಕೆಲವು ಗಂಟೆಗಳಲ್ಲಿ ಕ್ರಮ ಕೈಗೊಳ್ಳಿ.",
+    "takeActionSoon": "ಶೀಘ್ರದಲ್ಲೇ ಕ್ರಮ ಕೈಗೊಳ್ಳಿ.",
+    "takeImmediateAction": "ತಕ್ಷಣದ ಕ್ರಮ ಕೈಗೊಳ್ಳಿ.",
+    "monitorClosely": "ಪರಿಸ್ಥಿತಿಯನ್ನು ಸೂಕ್ಷ್ಮವಾಗಿ ಗಮನಿಸಿ.",
+    "rainApproaching": "~{{hours}} ಗಂಟೆಗಳಲ್ಲಿ ಮಳೆ ಬರುವ ಸಾಧ್ಯತೆ ಇದೆ",
+    "rainImminent": "ಮಳೆ ಬರುತ್ತಿದೆ / ಬರಲಿದೆ",
+    "highHumidity": "ಹೆಚ್ಚಿನ ಬೆಳೆ ತೇವಾಂಶ ({{hum}}%)",
+    "daysDelayed": "{{days}} ದಿನಗಳ ಹಿಂದೆ ಪತ್ತೆಯಾಗಿದೆ",
+    "breakdown": "ತುರ್ತು ಅಂಶಗಳು",
+    "progressionFactor": "ರೋಗಕಾರಕ ಹರಡುವಿಕೆ",
+    "weatherFactor": "ಬರುವ ಮಳೆ / ಹವಾಮಾನ",
+    "sensorFactor": "IoT ಬೆಳೆ ತೇವಾಂಶ",
+    "delayFactor": "ಪತ್ತೆಯಾದ ನಂತರದ ಸಮಯ"
+  },
+  "feedback": {
+    "title": "ಈ ಚಿಕಿತ್ಸೆ ನಿಮ್ಮ ಜಮೀನಿನಲ್ಲಿ ಫಲ ನೀಡಿತೇ?",
+    "worked": "ಚಿಕಿತ್ಸೆ ಫಲ ನೀಡಿದೆ",
+    "notWorked": "ಕೆಲಸ ಮಾಡಲಿಲ್ಲ"
   }
 }

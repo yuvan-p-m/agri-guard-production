@@ -108,7 +108,12 @@
     "symptomTextCurl": "ഇലകളുടെ അരികുകൾ ചുരുളുകയും വളർച്ച മുരടിക്കുകയും ചെയ്യുന്നു.",
     "symptomTextRot": "കായ്കൾ ചീഞ്ഞ് അകാലത്തിൽ കൊഴിയുന്നു.",
     "alertUploadRealPhoto": "AI പരിശോധനയ്ക്കായി യഥാർത്ഥ ഇലയുടെ ഫോട്ടോ നൽകുക. സാമ്പിൾ ചിത്രങ്ങൾ പ്രോസസ്സ് ചെയ്യാനാകില്ല.",
-    "ttsNotSupported": "ഈ ബ്രൗസറിൽ ടെക്സ്റ്റ്-ടു-സ്പീച്ച് പിന്തുണയ്ക്കുന്നില്ല."
+    "ttsNotSupported": "ഈ ബ്രൗസറിൽ ടെക്സ്റ്റ്-ടു-സ്പീച്ച് പിന്തുണയ്ക്കുന്നില്ല.",
+    "alertUploadRealPhotoTitle": "ഫോട്ടോ ആവശ്യമാണ്",
+    "alertUploadPhotoTitle": "ഫോട്ടോ ആവശ്യമാണ്",
+    "alertInvalidLeafTitle": "ഇല കണ്ടെത്തൽ മുന്നറിയിപ്പ്",
+    "alertWarningTitle": "കണ്ടെത്തൽ മുന്നറിയിപ്പ്",
+    "alertConnectionErrorTitle": "കണക്ഷൻ പിശക്"
   },
   "earlyDetection": {
     "diseaseDetected": "രോഗം കണ്ടെത്തി",
@@ -261,7 +266,8 @@
     "dryConditions": "വരണ്ട കാലാവസ്ഥ",
     "readyToMonitor": "രോഗബാധ നിരീക്ഷിക്കാൻ തയ്യാറാണോ?",
     "readyToMonitorDesc": "ലൈവ് കാലാവസ്ഥയുമായി ബന്ധപ്പെടുത്തി രോഗസാധ്യത വിലയിരുത്താൻ രോഗനിർണ്ണയ വിഭാഗത്തിൽ ഇലയുടെ ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യുക.",
-    "goToDiagnosis": "രോഗനിർണ്ണയത്തിലേക്ക് പോകുക"
+    "goToDiagnosis": "രോഗനിർണ്ണയത്തിലേക്ക് പോകുക",
+    "acres": "ഏക്കർ"
   },
   "marketplace": {
     "title": "വിപണിയും മണ്ടി വിലയും",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "വിളവെടുപ്പിന് മുന്നോടിയായ ഘട്ടം",
       "sowing_season": "വിതയ്ക്കൽ കാലം",
       "post_harvest_storage": "വിളവെടുപ്പിനു ശേഷമുള്ള സംഭരണം"
-    }
+    },
+    "noPriceData": "ഇന്ന് നിങ്ങളുടെ സംസ്ഥാനത്ത് നിങ്ങളുടെ വിളയുടെ വിപണി നിരക്ക് ലഭ്യമല്ല. നാളെ വീണ്ടും ശ്രമിക്കുക."
   },
   "govtSchemes": {
     "title": "സർക്കാർ കാർഷിക പദ്ധതികളും സബ്‌സിഡികളും",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "തത്സമയ താപനില, ഈർപ്പം, മഴ നില, ജലസേചന സമയം എന്നിവ അയയ്ക്കുന്നു",
     "sendSmsToPhone": "ഫോണിലേക്ക് ലൈവ് SMS അയയ്ക്കുക",
     "registeredPhone": "രജിസ്റ്റർ ചെയ്ത ഫോൺ",
-    "liveApi": "ലൈവ് API"
+    "liveApi": "ലൈവ് API",
+    "liveWeatherSensor": "തത്സമയ കാലാവസ്ഥാ സെൻസർ",
+    "locationLabel": "കൃഷിസ്ഥലത്തിന്റെ സ്ഥാനം"
   },
   "smsDemo": {
     "title": "Fast2SMS കർഷക മുന്നറിയിപ്പ് ഡെമോൺസ്ട്രേഷൻ",
@@ -530,7 +539,8 @@
     "sampleAlerts": "സമീപകാല കാർഷിക നിർദ്ദേശങ്ങളും കാലാവസ്ഥാ മുന്നറിയിപ്പുകളും",
     "delivered": "ലഭിച്ചു",
     "today": "ഇന്ന്",
-    "subscribeButton": "സബ്‌സ്‌ക്രൈബ് ചെയ്യുക"
+    "subscribeButton": "സബ്‌സ്‌ക്രൈബ് ചെയ്യുക",
+    "sendTestSms": "ടെസ്റ്റ് SMS അയയ്ക്കുക"
   },
   "profile": {
     "title": "കർഷക പ്രൊഫൈൽ",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API സെർവർ കോൺഫിഗറേഷൻ",
     "serverEndpointSubtitle": "മൊബൈൽ / ലോക്കൽ പരിശോധനയ്ക്കായി സെർവർ ക്രമീകരിക്കുക",
     "saveEndpoint": "സൂക്ഷിക്കുക",
-    "resetDefault": "സ്ഥിരസ്ഥിതിയിലേക്ക് മാറ്റുക"
+    "resetDefault": "സ്ഥിരസ്ഥിതിയിലേക്ക് മാറ്റുക",
+    "hardwarePairTitle": "ഹാർഡ്‌വെയർ ബന്ധിപ്പിക്കുക"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "ബാധകമല്ല",
     "district": "ജില്ല",
     "state": "സംസ്ഥാനം",
-    "category": "വിഭാഗം"
+    "category": "വിഭാഗം",
+    "dismiss": "നിരസിക്കുക",
+    "close": "അടയ്ക്കുക"
   },
   "iot": {
     "quote": "അനുയോജ്യമായ വിളകൾ നിർദ്ദേശിക്കുന്നതിനും കൃത്യസമയത്ത് കാർഷിക വിവരങ്ങൾ നൽകുന്നതിനും ചരിത്രപരമായ സെൻസർ ഡാറ്റ പ്രയോജനപ്പെടുത്തുന്നു",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "പ്രൊഡക്ഷൻ ക്ലൗഡ് API നിലയും രോഗനിർണ്ണയവും"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "മൊബൈൽ നമ്പർ നൽകുക (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "ഇന്ന്",
     "preventiveActions": "AI നിർദ്ദേശിച്ച പ്രതിരോധ മാർഗ്ഗങ്ങൾ",
     "connectionError": "പ്രവചന സേവനവുമായി ബന്ധപ്പെടാൻ കഴിഞ്ഞില്ല."
+  },
+  "urgency": {
+    "title": "നടപടി അടിയന്തിരത",
+    "scoreLabel": "അടിയന്തിര സ്കോർ",
+    "levelLow": "കുറഞ്ഞ അടിയന്തിരത",
+    "levelModerate": "ഇടത്തരം അടിയന്തിരത",
+    "levelHigh": "ഉയർന്ന അടിയന്തിരത",
+    "levelCritical": "ഗുരുതരമായ അടിയന്തിരത",
+    "takeActionNow": "അടുത്ത ഏതാനും മണിക്കൂറുകൾക്കുള്ളിൽ നടപടിയെടുക്കുക.",
+    "takeActionSoon": "ഉടൻ നടപടിയെടുക്കുക.",
+    "takeImmediateAction": "ഉടൻതന്നെ പ്രതിരോധ നടപടികൾ സ്വീകരിക്കുക.",
+    "monitorClosely": "സാഹചര്യങ്ങൾ സൂക്ഷ്മമായി നിരീക്ഷിക്കുക.",
+    "rainApproaching": "~{{hours}} മണിക്കൂറിനുള്ളിൽ മഴ പെയ്യാൻ സാധ്യതയുണ്ട്",
+    "rainImminent": "മഴ പെയ്യുന്നു / ഉടൻ പെയ്യും",
+    "highHumidity": "വിളകളിൽ ഉയർന്ന ഈർപ്പം ({{hum}}%)",
+    "daysDelayed": "{{days}} ദിവസങ്ങൾക്ക് മുമ്പ് കണ്ടെത്തി",
+    "breakdown": "അടിയന്തിര ഘടകങ്ങൾ",
+    "progressionFactor": "രോഗാണു വ്യാപനം",
+    "weatherFactor": "മഴ / കാലാവസ്ഥ",
+    "sensorFactor": "IoT ഈർപ്പ സെൻസർ",
+    "delayFactor": "കണ്ടെത്തിയ ശേഷമുള്ള സമയം"
+  },
+  "feedback": {
+    "title": "ഈ ചികിത്സ നിങ്ങളുടെ കൃഷിയിടത്തിൽ ഫലപ്രദമായിരുന്നോ?",
+    "worked": "ചികിത്സ ഫലപ്രദമായി",
+    "notWorked": "ഫലപ്രദമായില്ല"
   }
 }

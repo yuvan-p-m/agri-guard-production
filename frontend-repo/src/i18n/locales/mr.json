@@ -108,7 +108,12 @@
     "symptomTextCurl": "पानांच्या कडा चुरगाळल्या असून पिकाची वाढ खुंटली आहे.",
     "symptomTextRot": "फळे कुजून अकाली गळून पडत आहेत.",
     "alertUploadRealPhoto": "AI निदानासाठी कृपया प्रत्यक्ष पानाच्या फोटोचा वापर करा. नमुना चित्रे चालणार नाहीत.",
-    "ttsNotSupported": "या ब्राउझरवर टेक्स्ट-टू-स्पीच उपलब्ध नाही."
+    "ttsNotSupported": "या ब्राउझरवर टेक्स्ट-टू-स्पीच उपलब्ध नाही.",
+    "alertUploadRealPhotoTitle": "फोटो आवश्यक आहे",
+    "alertUploadPhotoTitle": "फोटो आवश्यक आहे",
+    "alertInvalidLeafTitle": "पान ओळख इशारा",
+    "alertWarningTitle": "ओळख इशारा",
+    "alertConnectionErrorTitle": "कनेक्शन त्रुटी"
   },
   "earlyDetection": {
     "diseaseDetected": "रोग आढळला",
@@ -261,7 +266,8 @@
     "dryConditions": "कोरडे वातावरण",
     "readyToMonitor": "रोगाच्या प्रसारावर लक्ष ठेवण्यास तयार आहात?",
     "readyToMonitorDesc": "थेट हवामानानुसार रोग धोक्याचे मूल्यांकन करण्यासाठी पीक तपासणीमध्ये पानाचा फोटो अपलोड करा.",
-    "goToDiagnosis": "रोग तपासणीकडे जा"
+    "goToDiagnosis": "रोग तपासणीकडे जा",
+    "acres": "एकर"
   },
   "marketplace": {
     "title": "बाजार आणि मंडी भाव",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "काढणीपूर्व टप्पा",
       "sowing_season": "पेरणीचा हंगाम",
       "post_harvest_storage": "काढणीनंतरची साठवणूक"
-    }
+    },
+    "noPriceData": "आज आपल्या राज्यात आपल्या पिकासाठी बाजारभाव उपलब्ध नाहीत. कृपया उद्या पुन्हा प्रयत्न करा."
   },
   "govtSchemes": {
     "title": "सरकारी कृषी योजना आणि अनुदान",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "थेट तापमान, आर्द्रता, पावसाची स्थिती आणि सिंचनाची वेळ पाठवते",
     "sendSmsToPhone": "फोनवर थेट एसएमएस पाठवा",
     "registeredPhone": "नोंदणीकृत फोन",
-    "liveApi": "थेट API"
+    "liveApi": "थेट API",
+    "liveWeatherSensor": "थेट हवामान सेन्सर",
+    "locationLabel": "शेत / क्षेत्राचे ठिकाण"
   },
   "smsDemo": {
     "title": "Fast2SMS शेतकरी सूचना प्रात्यक्षिक",
@@ -530,7 +539,8 @@
     "sampleAlerts": "अलीकडील शेतीविषयक सल्ले आणि हवामान सूचना",
     "delivered": "पोहोचवले",
     "today": "आज",
-    "subscribeButton": "सदस्यता घ्या"
+    "subscribeButton": "सदस्यता घ्या",
+    "sendTestSms": "चाचणी एसएमएस पाठवा"
   },
   "profile": {
     "title": "शेतकरी प्रोफाइल",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API सर्व्हर कॉन्फिगरेशन",
     "serverEndpointSubtitle": "मोबाइल / स्थानिक चाचणीसाठी बॅकएंड होस्ट सेट करा",
     "saveEndpoint": "जतन करा",
-    "resetDefault": "डीफॉल्टवर रीसेट करा"
+    "resetDefault": "डीफॉल्टवर रीसेट करा",
+    "hardwarePairTitle": "हार्डवेअर जोडा"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "लागू नाही",
     "district": "जिल्हा",
     "state": "राज्य",
-    "category": "प्रवर्ग"
+    "category": "प्रवर्ग",
+    "dismiss": "रद्द करा",
+    "close": "बंद करा"
   },
   "iot": {
     "quote": "योग्य पिकांची शिफारस करण्यासाठी आणि वेळेवर शेतीविषयक माहिती देण्यासाठी ऐतिहासिक सेन्सर डेटाचा वापर करते",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "उत्पादन क्लाउड API स्थिती व निदान"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "मोबाईल नंबर प्रविष्ट करा (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "आज",
     "preventiveActions": "एआयने सुचवलेले प्रतिबंधात्मक उपाय",
     "connectionError": "अंदाज सेवेशी संपर्क होऊ शकला नाही."
+  },
+  "urgency": {
+    "title": "कारਵਾਈची तातडी",
+    "scoreLabel": "तातडी धावसंख्या",
+    "levelLow": "कमी तातडी",
+    "levelModerate": "मध्यम तातडी",
+    "levelHigh": "उच्च तातडी",
+    "levelCritical": "गंभीर तातडी",
+    "takeActionNow": "पुढील काही तासांत उपाययोजना करा.",
+    "takeActionSoon": "लवकरच उपाययोजना करा.",
+    "takeImmediateAction": "त्वरित उपाययोजना करा.",
+    "monitorClosely": "परिस्थितीचे बारकाईने निरीक्षण करा.",
+    "rainApproaching": "~{{hours}} तासांत पाऊस येण्याची शक्यता आहे",
+    "rainImminent": "पाऊस पडत आहे / सुरू होणार आहे",
+    "highHumidity": "पिकांमध्ये उच्च आर्द्रता ({{hum}}%)",
+    "daysDelayed": "{{days}} दिवसांपूर्वी आढळले",
+    "breakdown": "तातडीचे घटक",
+    "progressionFactor": "रोगजनक प्रसार",
+    "weatherFactor": "येणारा पाऊस / हवामान",
+    "sensorFactor": "IoT आर्द्रता सेन्सर",
+    "delayFactor": "शोध लागल्यापासूनचा काळ"
+  },
+  "feedback": {
+    "title": "हा उपचार तुमच्या शेतात प्रभावी ठरला का?",
+    "worked": "उपचार यशस्वी ठरला",
+    "notWorked": "उपचार चालला नाही"
   }
 }

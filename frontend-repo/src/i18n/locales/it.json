@@ -108,7 +108,12 @@
     "symptomTextCurl": "Bordi delle foglie arricciati e crescita stentata.",
     "symptomTextRot": "Marcume dei frutti e caduta prematura.",
     "alertUploadRealPhoto": "Carica una foto reale della foglia per eseguire la diagnosi IA.",
-    "ttsNotSupported": "La sintesi vocale non è supportata su questo browser."
+    "ttsNotSupported": "La sintesi vocale non è supportata su questo browser.",
+    "alertUploadRealPhotoTitle": "Foto richiesta",
+    "alertUploadPhotoTitle": "Foto richiesta",
+    "alertInvalidLeafTitle": "Avviso rilevamento foglia",
+    "alertWarningTitle": "Avviso di rilevamento",
+    "alertConnectionErrorTitle": "Errore di connessione"
   },
   "earlyDetection": {
     "diseaseDetected": "Malattia Rilevata",
@@ -261,7 +266,8 @@
     "dryConditions": "Condizioni asciutte",
     "readyToMonitor": "Pronto a monitorare la progressione delle malattie?",
     "readyToMonitorDesc": "Carica una foto della foglia nella Diagnosi per valutare il rischio fitopatologico rispetto al tuo microclima.",
-    "goToDiagnosis": "Vai alla diagnosi"
+    "goToDiagnosis": "Vai alla diagnosi",
+    "acres": "Acri"
   },
   "marketplace": {
     "title": "Mercati agricoli e prezzi",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "Finestra pre-raccolta",
       "sowing_season": "Stagione della semina",
       "post_harvest_storage": "Stoccaggio post-raccolta"
-    }
+    },
+    "noPriceData": "Nessun dato di prezzo disponibile oggi per la tua coltura. Riprova domani."
   },
   "govtSchemes": {
     "title": "Sussidi e programmi agricoli governativi",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "Invia temperatura, umidità, pioggia e orario di irrigazione in tempo reale a",
     "sendSmsToPhone": "Invia SMS in tempo reale al telefono",
     "registeredPhone": "telefono registrato",
-    "liveApi": "API in tempo reale"
+    "liveApi": "API in tempo reale",
+    "liveWeatherSensor": "Sensore meteo in tempo reale",
+    "locationLabel": "Posizione del campo"
   },
   "smsDemo": {
     "title": "Dimostrazione avvisi per agricoltori Fast2SMS",
@@ -530,7 +539,8 @@
     "sampleAlerts": "Recenti avvisi agronomici e allerte meteo",
     "delivered": "Consegnato",
     "today": "Oggi",
-    "subscribeButton": "Iscriviti"
+    "subscribeButton": "Iscriviti",
+    "sendTestSms": "Invia SMS di prova"
   },
   "profile": {
     "title": "Profilo agricoltore",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "Configurazione Endpoint Server API",
     "serverEndpointSubtitle": "Configura host backend per test mobili e locali",
     "saveEndpoint": "Salva",
-    "resetDefault": "Ripristina Predefinito"
+    "resetDefault": "Ripristina Predefinito",
+    "hardwarePairTitle": "Associa hardware"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "N/D",
     "district": "Distretto",
     "state": "Stato",
-    "category": "Categoria"
+    "category": "Categoria",
+    "dismiss": "Ignora",
+    "close": "Chiudi"
   },
   "iot": {
     "quote": "Sfrutta i dati storici dei sensori per raccomandare colture adatte e fornire approfondimenti tempestivi",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "Stato e diagnostica API cloud di produzione"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "Inserisci numero di cellulare (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "Oggi",
     "preventiveActions": "Azioni preventive consigliate dall'IA",
     "connectionError": "Impossibile connettersi al servizio di previsione focolai."
+  },
+  "urgency": {
+    "title": "Urgenza d'azione",
+    "scoreLabel": "Punteggio di urgenza",
+    "levelLow": "Bassa urgenza",
+    "levelModerate": "Urgente moderato",
+    "levelHigh": "Alta urgenza",
+    "levelCritical": "Urgenza critica",
+    "takeActionNow": "Agire entro le prossime ore.",
+    "takeActionSoon": "Agire presto.",
+    "takeImmediateAction": "Prendere provvedimenti immediati.",
+    "monitorClosely": "Monitorare attentamente le condizioni.",
+    "rainApproaching": "Pioggia prevista tra ~{{hours}} ore",
+    "rainImminent": "Pioggia in corso o imminente",
+    "highHumidity": "Elevata umidità fogliare ({{hum}}%)",
+    "daysDelayed": "Rilevato {{days}} giorni fa",
+    "breakdown": "Fattori di urgenza",
+    "progressionFactor": "Progressione patogeno",
+    "weatherFactor": "Meteo / Pioggia in arrivo",
+    "sensorFactor": "Sensore di umidità IoT",
+    "delayFactor": "Tempo dal rilevamento"
+  },
+  "feedback": {
+    "title": "Questo trattamento ha funzionato nel tuo campo?",
+    "worked": "Trattamento riuscito",
+    "notWorked": "Non ha funzionato"
   }
 }

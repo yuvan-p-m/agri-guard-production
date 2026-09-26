@@ -108,7 +108,12 @@
     "symptomTextCurl": "叶缘卷曲皱缩，植株生长停滞。",
     "symptomTextRot": "果实腐烂并过早脱落。",
     "alertUploadRealPhoto": "请上传真实的作物叶片照片以进行AI诊断，样例图片无法送模处理。",
-    "ttsNotSupported": "当前浏览器不支持语音播报功能。"
+    "ttsNotSupported": "当前浏览器不支持语音播报功能。",
+    "alertUploadRealPhotoTitle": "需要上传照片",
+    "alertUploadPhotoTitle": "需要上传照片",
+    "alertInvalidLeafTitle": "叶片检测警报",
+    "alertWarningTitle": "检测警告",
+    "alertConnectionErrorTitle": "网络连接错误"
   },
   "earlyDetection": {
     "diseaseDetected": "检测到病害",
@@ -261,7 +266,8 @@
     "dryConditions": "干燥天气",
     "readyToMonitor": "准备好监测病害发展情况了吗？",
     "readyToMonitorDesc": "在作物诊断模块中上传叶片照片，结合实时微气候评估病害侵染风险。",
-    "goToDiagnosis": "前往病害诊断"
+    "goToDiagnosis": "前往病害诊断",
+    "acres": "英亩"
   },
   "marketplace": {
     "title": "农产品市场行情与价格",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "收获前窗口期",
       "sowing_season": "播种季节",
       "post_harvest_storage": "收获后仓储"
-    }
+    },
+    "noPriceData": "今天您的地区暂无该作物的行情价格数据，请明天重试。"
   },
   "govtSchemes": {
     "title": "政府农业扶持政策与补贴",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "将实时气温、湿度、降雨状态与灌溉时间发送至",
     "sendSmsToPhone": "发送实时短信至手机",
     "registeredPhone": "已绑定的手机号",
-    "liveApi": "实时 API"
+    "liveApi": "实时 API",
+    "liveWeatherSensor": "实时气象传感器",
+    "locationLabel": "农田位置"
   },
   "smsDemo": {
     "title": "Fast2SMS 农户预警演示",
@@ -530,7 +539,8 @@
     "sampleAlerts": "近期田间指导与天气预警",
     "delivered": "已送达",
     "today": "今天",
-    "subscribeButton": "订阅"
+    "subscribeButton": "订阅",
+    "sendTestSms": "发送测试短信"
   },
   "profile": {
     "title": "农户个人资料",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "API 服务器终端节点配置",
     "serverEndpointSubtitle": "配置移动端和本地测试的后端服务地址",
     "saveEndpoint": "保存设置",
-    "resetDefault": "恢复默认值"
+    "resetDefault": "恢复默认值",
+    "hardwarePairTitle": "配对硬件设备"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "不适用",
     "district": "地区",
     "state": "省/州",
-    "category": "类别"
+    "category": "类别",
+    "dismiss": "忽略",
+    "close": "关闭"
   },
   "iot": {
     "quote": "利用历史传感器数据推荐适宜作物，并提供及时的农事洞察与指导",
@@ -643,7 +656,8 @@
     "inputLabel": "Custom Server Base URL",
     "save": "Save & Reconnect",
     "reset": "Reset to Default",
-    "savedSuccess": "Server endpoint updated successfully!"
+    "savedSuccess": "Server endpoint updated successfully!",
+    "descProd": "生产环境云端 API 状态与诊断"
   },
   "smsModal": {
     "title": "Update Phone Number for SMS Alerts",
@@ -652,7 +666,8 @@
     "save": "Save Phone Number",
     "saving": "Saving...",
     "success": "Phone number updated successfully!",
-    "invalid": "Please enter a valid 10-digit phone number."
+    "invalid": "Please enter a valid 10-digit phone number.",
+    "placeholder": "输入手机号码 (+91...)"
   },
   "smsPanel": {
     "title": "Fast2SMS Real-Time Dispatcher",
@@ -877,5 +892,31 @@
     "today": "今天",
     "preventiveActions": "AI 推荐预防措施",
     "connectionError": "无法连接到病害爆发预警服务。"
+  },
+  "urgency": {
+    "title": "防治紧迫度",
+    "scoreLabel": "紧迫度评分",
+    "levelLow": "低紧迫度",
+    "levelModerate": "中等紧迫度",
+    "levelHigh": "高紧迫度",
+    "levelCritical": "极度紧急",
+    "takeActionNow": "请在接下来的数小时内采取措施。",
+    "takeActionSoon": "请尽快采取防治措施。",
+    "takeImmediateAction": "请立即采取紧急防治措施。",
+    "monitorClosely": "密切监测田间环境与病情。",
+    "rainApproaching": "约 {{hours}} 小时内有降雨",
+    "rainImminent": "正在降雨或即将来临",
+    "highHumidity": "冠层高湿度 ({{hum}}%)",
+    "daysDelayed": "{{days}} 天前检测到",
+    "breakdown": "紧迫度影响因素",
+    "progressionFactor": "病原菌发展进度",
+    "weatherFactor": "降雨预测 / 天气状况",
+    "sensorFactor": "IoT 冠层湿度传感器",
+    "delayFactor": "确诊后已过去时间"
+  },
+  "feedback": {
+    "title": "此防治方案在您的田间是否有效？",
+    "worked": "方案有效",
+    "notWorked": "没有效果"
   }
 }

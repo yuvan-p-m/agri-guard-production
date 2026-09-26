@@ -108,7 +108,12 @@
     "symptomTextCurl": "Marges des feuilles enroulées et croissance ralentie.",
     "symptomTextRot": "Pourriture des fruits et chute prématurée.",
     "alertUploadRealPhoto": "Veuillez utiliser une vraie photo de feuille pour le diagnostic IA.",
-    "ttsNotSupported": "La synthèse vocale n'est pas prise en charge sur ce navigateur."
+    "ttsNotSupported": "La synthèse vocale n'est pas prise en charge sur ce navigateur.",
+    "alertUploadRealPhotoTitle": "Photo requise",
+    "alertUploadPhotoTitle": "Photo requise",
+    "alertInvalidLeafTitle": "Alerte détection de feuille",
+    "alertWarningTitle": "Avertissement de détection",
+    "alertConnectionErrorTitle": "Erreur de connexion"
   },
   "earlyDetection": {
     "diseaseDetected": "Maladie Détectée",
@@ -261,7 +266,8 @@
     "dryConditions": "Conditions sèches",
     "readyToMonitor": "Prêt à surveiller la progression des maladies ?",
     "readyToMonitorDesc": "Téléchargez une photo de feuille dans le Diagnostic pour évaluer le risque phytosanitaire selon votre micro-climat.",
-    "goToDiagnosis": "Aller au diagnostic"
+    "goToDiagnosis": "Aller au diagnostic",
+    "acres": "Acres"
   },
   "marketplace": {
     "title": "Marché et cours agricoles",
@@ -326,7 +332,8 @@
       "pre_harvest_window": "Période de pré-récolte",
       "sowing_season": "Saison des semis",
       "post_harvest_storage": "Stockage post-récolte"
-    }
+    },
+    "noPriceData": "Aucune donnée de prix disponible pour votre culture aujourd'hui. Réessayez demain."
   },
   "govtSchemes": {
     "title": "Aides et subventions agricoles gouvernementales",
@@ -506,7 +513,9 @@
     "smsAdvisoryDesc": "Envoie la température, l'humidité, la pluie et l'heure d'irrigation en direct à",
     "sendSmsToPhone": "Envoyer un SMS en direct au téléphone",
     "registeredPhone": "téléphone enregistré",
-    "liveApi": "API en direct"
+    "liveApi": "API en direct",
+    "liveWeatherSensor": "Capteur météo en direct",
+    "locationLabel": "Emplacement de la parcelle"
   },
   "smsDemo": {
     "title": "Démonstration des alertes agricoles Fast2SMS",
@@ -530,7 +539,8 @@
     "sampleAlerts": "Avis agricoles récents et alertes météo",
     "delivered": "Distribué",
     "today": "Aujourd'hui",
-    "subscribeButton": "S'abonner"
+    "subscribeButton": "S'abonner",
+    "sendTestSms": "Envoyer un SMS de test"
   },
   "profile": {
     "title": "Profil de l'agriculteur",
@@ -564,7 +574,8 @@
     "serverEndpointTitle": "Configuration du Point de Terminaison API",
     "serverEndpointSubtitle": "Configurer l'hôte backend pour les tests mobiles et locaux",
     "saveEndpoint": "Enregistrer",
-    "resetDefault": "Rétablir par Défaut"
+    "resetDefault": "Rétablir par Défaut",
+    "hardwarePairTitle": "Associer le matériel"
   },
   "common": {
     "loading": "Loading...",
@@ -603,7 +614,9 @@
     "na": "N/D",
     "district": "District",
     "state": "État",
-    "category": "Catégorie"
+    "category": "Catégorie",
+    "dismiss": "Ignorer",
+    "close": "Fermer"
   },
   "iot": {
     "quote": "Exploite les données historiques des capteurs pour recommander des cultures adaptées et fournir des conseils agricoles opportuns",
@@ -643,7 +656,8 @@
     "inputLabel": "URL de base personnalisée du serveur",
     "save": "Enregistrer et reconnecter",
     "reset": "Réinitialiser par défaut",
-    "savedSuccess": "Point de terminaison mis à jour avec succès !"
+    "savedSuccess": "Point de terminaison mis à jour avec succès !",
+    "descProd": "État et diagnostics de l'API cloud de production"
   },
   "smsModal": {
     "title": "Mettre à jour le numéro pour les alertes SMS",
@@ -652,7 +666,8 @@
     "save": "Enregistrer le numéro",
     "saving": "Enregistrement...",
     "success": "Numéro de téléphone mis à jour avec succès !",
-    "invalid": "Veuillez saisir un numéro de téléphone valide à 10 chiffres."
+    "invalid": "Veuillez saisir un numéro de téléphone valide à 10 chiffres.",
+    "placeholder": "Entrez le numéro de mobile (+91...)"
   },
   "smsPanel": {
     "title": "Expéditeur en temps réel Fast2SMS",
@@ -877,5 +892,31 @@
     "today": "Aujourd'hui",
     "preventiveActions": "Actions préventives recommandées par l'IA",
     "connectionError": "Impossible de se connecter au service de prévision des épidémies."
+  },
+  "urgency": {
+    "title": "Urgence d'action",
+    "scoreLabel": "Score d'urgence",
+    "levelLow": "Urgence faible",
+    "levelModerate": "Urgence modérée",
+    "levelHigh": "Urgence élevée",
+    "levelCritical": "Urgence critique",
+    "takeActionNow": "Agissez dans les prochaines heures.",
+    "takeActionSoon": "Agissez rapidement.",
+    "takeImmediateAction": "Prenez des mesures immédiates.",
+    "monitorClosely": "Surveillez attentivement les conditions.",
+    "rainApproaching": "Pluie prévue dans ~{{hours}} h",
+    "rainImminent": "Pluie en cours ou imminente",
+    "highHumidity": "Forte humidité foliaire ({{hum}}%)",
+    "daysDelayed": "Détecté il y a {{days}} jours",
+    "breakdown": "Facteurs d'urgence",
+    "progressionFactor": "Progression du pathogène",
+    "weatherFactor": "Pluie / Météo à venir",
+    "sensorFactor": "Capteur d'humidité IoT",
+    "delayFactor": "Temps depuis détection"
+  },
+  "feedback": {
+    "title": "Ce traitement a-t-il fonctionné dans votre champ ?",
+    "worked": "Traitement réussi",
+    "notWorked": "N'a pas fonctionné"
   }
 }
