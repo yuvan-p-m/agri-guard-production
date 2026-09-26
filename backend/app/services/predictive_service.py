@@ -30,6 +30,8 @@ from dotenv import load_dotenv
 BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(BACKEND_DIR / ".env")
 
+from core.config import settings
+
 logger = logging.getLogger(__name__)
 
 LANGUAGE_NAMES: Dict[str, str] = {
@@ -42,9 +44,22 @@ LANGUAGE_NAMES: Dict[str, str] = {
     "zh": "Chinese"
 }
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "") or os.getenv("GEMINI_API_KEY_1", "")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+def get_gemini_model() -> str:
+    """Returns active Gemini model name from environment or centralized settings."""
+    return (os.getenv("GEMINI_MODEL") or settings.GEMINI_MODEL or "gemini-3.5-flash").strip()
+
+def get_gemini_api_key() -> str:
+    """Returns active Gemini API key from environment or centralized settings."""
+    return (os.getenv("GEMINI_API_KEY") or os.getenv("GEMINI_API_KEY_1") or settings.GEMINI_API_KEY or "").strip()
+
+def get_gemini_generate_url(model: str = "") -> str:
+    """Constructs the Gemini REST generateContent URL without API key (safe for logging)."""
+    m = model.strip() if model else get_gemini_model()
+    return f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent"
+
+GEMINI_API_KEY = get_gemini_api_key()
+GEMINI_MODEL = get_gemini_model()
+GEMINI_API_URL = get_gemini_generate_url()
 
 
 def calculate_haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -254,7 +269,9 @@ Return ONLY a valid JSON object matching this exact schema:
 }}
 """
 
-    url = f"{GEMINI_API_URL}?key={api_key}"
+    model_name = get_gemini_model()
+    base_url = get_gemini_generate_url(model_name)
+    url = f"{base_url}?key={api_key}"
     payload = {
         "contents": [
             {
@@ -292,6 +309,20 @@ Return ONLY a valid JSON object matching this exact schema:
                     cleaned = match.group(0)
 
                 return json.loads(cleaned, strict=False)
+        else:
+            error_msg = ""
+            error_status = f"HTTP_{response.status_code}"
+            try:
+                err_body = response.json()
+                if isinstance(err_body, dict) and "error" in err_body:
+                    error_msg = err_body["error"].get("message", "")
+                    error_status = err_body["error"].get("status", error_status)
+            except Exception:
+                error_msg = response.text[:300] if response.text else "No response body"
+            logger.error(
+                f"Gemini predictive AI upstream error [Status {response.status_code} ({error_status})] "
+                f"for model '{model_name}': {error_msg}"
+            )
     except Exception as e:
         logger.error(f"Gemini predictive AI call error: {e}")
 

@@ -16,11 +16,31 @@ import base64
 import io
 from PIL import Image, ImageOps
 
+from core.config import settings
+
 logger = logging.getLogger(__name__)
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
-GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+
+def get_gemini_model() -> str:
+    """Returns the currently active Gemini model name from environment or centralized settings."""
+    return (os.getenv("GEMINI_MODEL") or settings.GEMINI_MODEL or "gemini-3.5-flash").strip()
+
+
+def get_gemini_api_key() -> str:
+    """Returns the currently active Gemini API key from environment or centralized settings."""
+    return (os.getenv("GEMINI_API_KEY") or settings.GEMINI_API_KEY or "").strip()
+
+
+def get_gemini_generate_url(model: str = "") -> str:
+    """Constructs the Gemini REST generateContent URL without API key (safe for logging)."""
+    m = model.strip() if model else get_gemini_model()
+    return f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent"
+
+
+# Backward compatibility aliases
+GEMINI_API_KEY = get_gemini_api_key()
+GEMINI_MODEL = get_gemini_model()
+GEMINI_API_URL = get_gemini_generate_url()
 
 
 class GeminiError(Exception):
@@ -53,13 +73,14 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
     Call Gemini Multimodal API with an image and text prompt, and return parsed JSON response.
     Raises explicit GeminiError on any configuration, network, upstream API, or parsing failure.
     """
-    api_key = os.getenv("GEMINI_API_KEY", GEMINI_API_KEY).strip()
+    api_key = get_gemini_api_key()
     if not api_key:
         logger.error("GEMINI_API_KEY is not configured.")
         raise GeminiConfigError("Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable.")
 
-    model_name = os.getenv("GEMINI_MODEL", GEMINI_MODEL).strip() or "gemini-2.5-flash"
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+    model_name = get_gemini_model()
+    base_url = get_gemini_generate_url(model_name)
+    url = f"{base_url}?key={api_key}"
 
     b64_data = base64.b64encode(image_bytes).decode("utf-8")
     payload = {
@@ -88,16 +109,38 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
     try:
         response = requests.post(url, json=payload, timeout=35)
     except requests.exceptions.Timeout as te:
-        logger.error(f"Gemini Multimodal API request timed out: {te}")
+        logger.error(f"Gemini Multimodal API request timed out on {base_url}: {te}")
         raise GeminiTimeoutError("AI diagnosis service timed out while analyzing image. Please try again.") from te
     except requests.exceptions.RequestException as re:
-        logger.error(f"Gemini Multimodal API network request failed: {re}")
+        logger.error(f"Gemini Multimodal API network request failed on {base_url}: {re}")
         raise GeminiAPIError(f"Failed to communicate with AI diagnosis service: {re}") from re
 
     if response.status_code != 200:
-        error_snippet = response.text[:400] if response.text else "No response body"
-        logger.error(f"Gemini Multimodal API returned HTTP {response.status_code}: {error_snippet}")
-        raise GeminiAPIError(f"AI diagnosis service returned HTTP {response.status_code}.")
+        error_msg = ""
+        error_status = f"HTTP_{response.status_code}"
+        try:
+            err_body = response.json()
+            if isinstance(err_body, dict) and "error" in err_body:
+                error_msg = err_body["error"].get("message", "")
+                error_status = err_body["error"].get("status", error_status)
+        except Exception:
+            error_msg = response.text[:400] if response.text else "No response body"
+
+        logger.error(
+            f"Gemini Multimodal API upstream error [Status: {response.status_code} ({error_status})] "
+            f"for model '{model_name}': {error_msg}"
+        )
+
+        if response.status_code == 404:
+            raise GeminiAPIError(f"AI diagnosis service model '{model_name}' was not found (HTTP 404). Please verify GEMINI_MODEL.")
+        elif response.status_code == 429:
+            raise GeminiAPIError("AI diagnosis service quota / rate limit exceeded (HTTP 429). Please try again shortly.")
+        elif response.status_code in (400, 401, 403):
+            raise GeminiAPIError(f"AI diagnosis service authentication/request error (HTTP {response.status_code}): {error_msg}")
+        elif response.status_code == 503:
+            raise GeminiAPIError("AI diagnosis service is currently experiencing high demand (HTTP 503). Please retry in a moment.")
+        else:
+            raise GeminiAPIError(f"AI diagnosis service returned HTTP {response.status_code}: {error_msg}")
 
     try:
         result = response.json()
@@ -211,7 +254,7 @@ If NOT a plant/crop leaf:
             "status": "invalid_leaf",
             "message": gemini_result.get("reasoning") or "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf.",
             "provider": "gemini",
-            "model_used": os.getenv("GEMINI_MODEL", GEMINI_MODEL).strip() or "gemini-2.5-flash",
+            "model_used": get_gemini_model(),
             "reasoning": gemini_result.get("reasoning", "")
         }
 
@@ -248,7 +291,7 @@ If NOT a plant/crop leaf:
         "symptoms": gemini_result.get("symptoms", []),
         "reasoning": gemini_result.get("reasoning", ""),
         "provider": "gemini",
-        "model_used": os.getenv("GEMINI_MODEL", GEMINI_MODEL).strip() or "gemini-2.5-flash"
+        "model_used": get_gemini_model()
     }
 
 
@@ -257,12 +300,14 @@ def _call_gemini(prompt: str) -> dict | None:
     Call Gemini API with a text prompt and return parsed JSON response.
     Returns None if the call fails or the response cannot be parsed as JSON.
     """
-    api_key = os.getenv("GEMINI_API_KEY", GEMINI_API_KEY)
+    api_key = get_gemini_api_key()
     if not api_key:
         logger.error("GEMINI_API_KEY is not set — cannot call Gemini API.")
         return None
 
-    url = f"{GEMINI_API_URL}?key={api_key}"
+    model_name = get_gemini_model()
+    base_url = get_gemini_generate_url(model_name)
+    url = f"{base_url}?key={api_key}"
     payload = {
         "contents": [
             {
@@ -281,7 +326,19 @@ def _call_gemini(prompt: str) -> dict | None:
     try:
         response = requests.post(url, json=payload, timeout=30)
         if response.status_code != 200:
-            logger.error(f"Gemini API returned status {response.status_code}: {response.text[:500]}")
+            error_msg = ""
+            error_status = f"HTTP_{response.status_code}"
+            try:
+                err_body = response.json()
+                if isinstance(err_body, dict) and "error" in err_body:
+                    error_msg = err_body["error"].get("message", "")
+                    error_status = err_body["error"].get("status", error_status)
+            except Exception:
+                error_msg = response.text[:400] if response.text else "No response body"
+            logger.error(
+                f"Gemini API text call upstream error [Status: {response.status_code} ({error_status})] "
+                f"for model '{model_name}': {error_msg}"
+            )
             return None
 
         result = response.json()

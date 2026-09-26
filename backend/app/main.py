@@ -82,8 +82,9 @@ def health_check():
 def model_status():
     """Returns status of AI diagnosis engine (Google Gemini Vision AI)"""
     import os
-    api_key_configured = bool(os.getenv("GEMINI_API_KEY", "").strip())
-    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash").strip() or "gemini-2.5-flash"
+    from core.config import settings
+    api_key_configured = bool(os.getenv("GEMINI_API_KEY", settings.GEMINI_API_KEY).strip())
+    model_name = (os.getenv("GEMINI_MODEL") or settings.GEMINI_MODEL or "gemini-3.5-flash").strip()
     return {
         "model_loaded": api_key_configured,
         "model_id": model_name,

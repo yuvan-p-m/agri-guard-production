@@ -10,6 +10,7 @@ from core.logger import get_logger
 from services.ai_localization import get_disease_display_name, get_crop_display_name
 from services.gemini_service import (
     diagnose_crop_disease,
+    get_gemini_model,
     GeminiError,
     GeminiConfigError,
     GeminiTimeoutError,
@@ -132,7 +133,7 @@ async def predict_disease(
             "status": "invalid_leaf",
             "message": prediction.get("message", "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf."),
             "provider": "gemini",
-            "model_used": prediction.get("model_used", "gemini-2.5-flash"),
+            "model_used": prediction.get("model_used", get_gemini_model()),
             "reasoning": prediction.get("reasoning", ""),
             "progression_risk": None,
             "pesticide_recommendation": None,
@@ -214,7 +215,7 @@ async def predict_disease(
         "symptoms": prediction.get("symptoms", []),
         "reasoning": prediction.get("reasoning", ""),
         "provider": "gemini",
-        "model_used": prediction.get("model_used", "gemini-2.5-flash"),
+        "model_used": prediction.get("model_used", get_gemini_model()),
         "disease_prediction": {
             "disease": disease_name,
             "localized_disease": localized_disease,
