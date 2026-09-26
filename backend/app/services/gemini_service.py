@@ -14,11 +14,17 @@ import logging
 import requests
 import base64
 import io
+import time
 from PIL import Image, ImageOps
 
 from core.config import settings
 
 logger = logging.getLogger(__name__)
+
+# Bounded retry configuration for transient 503 / Service Unavailable errors
+MAX_503_RETRIES = 2
+INITIAL_BACKOFF_SECONDS = 2.0
+BACKOFF_MULTIPLIER = 2.0
 
 
 def get_gemini_model() -> str:
@@ -71,6 +77,7 @@ class GeminiParseError(GeminiError):
 def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "image/jpeg") -> dict:
     """
     Call Gemini Multimodal API with an image and text prompt, and return parsed JSON response.
+    Includes bounded exponential backoff retries specifically for transient HTTP 503 UNAVAILABLE responses.
     Raises explicit GeminiError on any configuration, network, upstream API, or parsing failure.
     """
     api_key = get_gemini_api_key()
@@ -106,14 +113,46 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
         }
     }
 
-    try:
-        response = requests.post(url, json=payload, timeout=35)
-    except requests.exceptions.Timeout as te:
-        logger.error(f"Gemini Multimodal API request timed out on {base_url}: {te}")
-        raise GeminiTimeoutError("AI diagnosis service timed out while analyzing image. Please try again.") from te
-    except requests.exceptions.RequestException as re:
-        logger.error(f"Gemini Multimodal API network request failed on {base_url}: {re}")
-        raise GeminiAPIError(f"Failed to communicate with AI diagnosis service: {re}") from re
+    max_attempts = 1 + MAX_503_RETRIES
+    response = None
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = requests.post(url, json=payload, timeout=35)
+        except requests.exceptions.Timeout as te:
+            logger.error(f"Gemini Multimodal API request timed out on {base_url} (attempt {attempt}/{max_attempts}): {te}")
+            if attempt < max_attempts:
+                wait_time = INITIAL_BACKOFF_SECONDS * (BACKOFF_MULTIPLIER ** (attempt - 1))
+                logger.info(f"Retrying timed-out Gemini request in {wait_time:.1f}s for model '{model_name}' (attempt {attempt + 1}/{max_attempts})...")
+                time.sleep(wait_time)
+                continue
+            raise GeminiTimeoutError("AI diagnosis service timed out while analyzing image. Please try again.") from te
+        except requests.exceptions.RequestException as re:
+            logger.error(f"Gemini Multimodal API network request failed on {base_url} (attempt {attempt}/{max_attempts}): {re}")
+            raise GeminiAPIError(f"Failed to communicate with AI diagnosis service: {re}") from re
+
+        # Handle 503 / Service Unavailable with bounded exponential backoff
+        if response.status_code == 503:
+            if attempt < max_attempts:
+                wait_time = INITIAL_BACKOFF_SECONDS * (BACKOFF_MULTIPLIER ** (attempt - 1))
+                logger.warning(
+                    f"Gemini Multimodal API returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"(attempt {attempt}/{max_attempts}). Retrying in {wait_time:.1f}s..."
+                )
+                time.sleep(wait_time)
+                continue
+            else:
+                logger.error(
+                    f"Gemini Multimodal API returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"on final attempt ({attempt}/{max_attempts}). All retries exhausted."
+                )
+                raise GeminiAPIError("AI diagnosis service is currently experiencing high demand (HTTP 503). Please retry in a moment.")
+
+        # Non-503 status: do not retry (200 OK or non-retryable 4xx/5xx error)
+        break
+
+    if response is None:
+        raise GeminiAPIError("Failed to obtain response from AI diagnosis service.")
 
     if response.status_code != 200:
         error_msg = ""
@@ -323,24 +362,60 @@ def _call_gemini(prompt: str) -> dict | None:
         }
     }
 
-    try:
-        response = requests.post(url, json=payload, timeout=30)
-        if response.status_code != 200:
-            error_msg = ""
-            error_status = f"HTTP_{response.status_code}"
-            try:
-                err_body = response.json()
-                if isinstance(err_body, dict) and "error" in err_body:
-                    error_msg = err_body["error"].get("message", "")
-                    error_status = err_body["error"].get("status", error_status)
-            except Exception:
-                error_msg = response.text[:400] if response.text else "No response body"
-            logger.error(
-                f"Gemini API text call upstream error [Status: {response.status_code} ({error_status})] "
-                f"for model '{model_name}': {error_msg}"
-            )
+    max_attempts = 1 + MAX_503_RETRIES
+    response = None
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = requests.post(url, json=payload, timeout=30)
+        except requests.exceptions.Timeout as te:
+            logger.error(f"Gemini API text call request timed out on {base_url} (attempt {attempt}/{max_attempts}): {te}")
+            if attempt < max_attempts:
+                wait_time = INITIAL_BACKOFF_SECONDS * (BACKOFF_MULTIPLIER ** (attempt - 1))
+                time.sleep(wait_time)
+                continue
+            return None
+        except requests.exceptions.RequestException as re:
+            logger.error(f"Gemini API text call network request failed on {base_url} (attempt {attempt}/{max_attempts}): {re}")
             return None
 
+        if response.status_code == 503:
+            if attempt < max_attempts:
+                wait_time = INITIAL_BACKOFF_SECONDS * (BACKOFF_MULTIPLIER ** (attempt - 1))
+                logger.warning(
+                    f"Gemini API text call returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"(attempt {attempt}/{max_attempts}). Retrying in {wait_time:.1f}s..."
+                )
+                time.sleep(wait_time)
+                continue
+            else:
+                logger.error(
+                    f"Gemini API text call returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"on final attempt ({attempt}/{max_attempts}). All retries exhausted."
+                )
+
+        break
+
+    if response is None:
+        return None
+
+    if response.status_code != 200:
+        error_msg = ""
+        error_status = f"HTTP_{response.status_code}"
+        try:
+            err_body = response.json()
+            if isinstance(err_body, dict) and "error" in err_body:
+                error_msg = err_body["error"].get("message", "")
+                error_status = err_body["error"].get("status", error_status)
+        except Exception:
+            error_msg = response.text[:400] if response.text else "No response body"
+        logger.error(
+            f"Gemini API text call upstream error [Status: {response.status_code} ({error_status})] "
+            f"for model '{model_name}': {error_msg}"
+        )
+        return None
+
+    try:
         result = response.json()
         # Extract the text from Gemini's response
         candidates = result.get("candidates", [])
