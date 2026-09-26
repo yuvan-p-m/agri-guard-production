@@ -17,10 +17,32 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 from db.firestore_db import get_disease_records
 from api.weather import WeatherService
+from services.ai_localization import (
+    get_disease_display_name,
+    localize_preventive_actions,
+    get_crop_display_name,
+    SUPPORTED_LANGUAGES,
+)
+
+from pathlib import Path
+from dotenv import load_dotenv
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BACKEND_DIR / ".env")
 
 logger = logging.getLogger(__name__)
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+LANGUAGE_NAMES: Dict[str, str] = {
+    "en": "English", "ta": "Tamil", "te": "Telugu", "ml": "Malayalam",
+    "kn": "Kannada", "hi": "Hindi", "bn": "Bengali", "mr": "Marathi",
+    "gu": "Gujarati", "pa": "Punjabi", "ur": "Urdu", "or": "Odia",
+    "as": "Assamese", "ne": "Nepali", "si": "Sinhala", "ar": "Arabic",
+    "fr": "French", "es": "Spanish", "pt": "Portuguese", "de": "German",
+    "it": "Italian", "ru": "Russian", "ja": "Japanese", "ko": "Korean",
+    "zh": "Chinese"
+}
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "") or os.getenv("GEMINI_API_KEY_1", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 
@@ -174,20 +196,25 @@ def call_gemini_predictive(
     sensor_data: Dict[str, Any],
     weather_forecast: List[Dict[str, Any]],
     seasonal_level: str,
-    community_threats: Dict[str, Any]
+    community_threats: Dict[str, Any],
+    language: str = "en"
 ) -> Optional[Dict[str, Any]]:
     """
     Sends fused sensor, forecast, seasonal, and community threat data to Gemini
-    to generate predicted outbreaks and preventive action recommendations.
+    to generate predicted outbreaks and preventive action recommendations in the user's language.
     """
     api_key = os.getenv("GEMINI_API_KEY", "") or GEMINI_API_KEY
     if not api_key:
         logger.warning("GEMINI_API_KEY not configured for predictive intelligence.")
         return None
 
+    norm_lang = (language or "en").lower().strip()
+    lang_name = LANGUAGE_NAMES.get(norm_lang, "English")
+    loc_crop = get_crop_display_name(crop, norm_lang)
+
     prompt = f"""
 You are an expert agronomic pathologist and predictive disease prevention AI.
-Analyze the following live agricultural telemetry for a farm growing {crop}:
+Analyze the following live agricultural telemetry for a farm growing {loc_crop} ({crop}):
 
 1. Live Soil & Canopy Sensor Telemetry:
 {json.dumps(sensor_data, indent=2)}
@@ -204,23 +231,25 @@ Seasonal Risk Level: {seasonal_level}
 - Nearest Outbreak Distance: {community_threats.get('nearest_outbreak_km', 0.0)} km
 
 TASK:
-Predict the top 3 most likely crop disease outbreaks that could develop on {crop} within the next 1 to 5 days, and provide 5 concrete preventive actions.
+Predict the top 3 most likely crop disease outbreaks that could develop on {loc_crop} within the next 1 to 5 days, and provide 5 concrete preventive actions.
+CRITICAL REQUIREMENT:
+Generate all 5 recommended_actions and disease outbreak descriptions strictly in {lang_name} ({norm_lang}) language for the local farmer.
 
 Return ONLY a valid JSON object matching this exact schema:
 {{
   "predicted_outbreaks": [
     {{
-      "disease": "string (name of disease)",
+      "disease": "string (localized name of disease in {lang_name})",
       "probability": float (0.0 to 100.0),
       "days_until_window": integer (1 to 5)
     }}
   ],
   "recommended_actions": [
-    "string (action 1)",
-    "string (action 2)",
-    "string (action 3)",
-    "string (action 4)",
-    "string (action 5)"
+    "string (action 1 in {lang_name})",
+    "string (action 2 in {lang_name})",
+    "string (action 3 in {lang_name})",
+    "string (action 4 in {lang_name})",
+    "string (action 5 in {lang_name})"
   ]
 }}
 """
@@ -236,13 +265,13 @@ Return ONLY a valid JSON object matching this exact schema:
         ],
         "generationConfig": {
             "temperature": 0.2,
-            "maxOutputTokens": 2048,
+            "maxOutputTokens": 4096,
             "responseMimeType": "application/json"
         }
     }
 
     try:
-        response = requests.post(url, json=payload, timeout=25)
+        response = requests.post(url, json=payload, timeout=12)
         if response.status_code == 200:
             result = response.json()
             candidates = result.get("candidates", [])
@@ -256,7 +285,13 @@ Return ONLY a valid JSON object matching this exact schema:
                     if lines and lines[-1].strip() == "```":
                         lines = lines[:-1]
                     cleaned = "\n".join(lines).strip()
-                return json.loads(cleaned)
+                
+                # Extract first valid JSON block if extra text is present
+                match = re.search(r'\{.*\}', cleaned, re.DOTALL)
+                if match:
+                    cleaned = match.group(0)
+
+                return json.loads(cleaned, strict=False)
     except Exception as e:
         logger.error(f"Gemini predictive AI call error: {e}")
 
@@ -267,11 +302,13 @@ def get_fallback_predictions(
     crop: str,
     overall_score: float,
     seasonal_level: str,
-    community_threats: Dict[str, Any]
+    community_threats: Dict[str, Any],
+    language: str = "en"
 ) -> Dict[str, Any]:
     """
-    Agronomic rule-based fallback if Gemini API is unreachable or rate-limited.
+    Agronomic rule-based fallback with 25-language localization if Gemini API is unreachable.
     """
+    norm_lang = (language or "en").lower().strip()
     crop_lower = (crop or "General").lower()
     nearby = community_threats.get("diseases_reported", [])
 
@@ -296,19 +333,15 @@ def get_fallback_predictions(
     prob2 = round(min(85.0, max(30.0, overall_score * 0.78)), 1)
     prob3 = round(min(70.0, max(20.0, overall_score * 0.62)), 1)
 
+    localized_actions = localize_preventive_actions([], crop=crop, lang=norm_lang)
+
     return {
         "predicted_outbreaks": [
-            {"disease": d1, "probability": prob1, "days_until_window": 2},
-            {"disease": d2, "probability": prob2, "days_until_window": 3},
-            {"disease": d3, "probability": prob3, "days_until_window": 5}
+            {"disease": get_disease_display_name(d1, norm_lang), "probability": prob1, "days_until_window": 2},
+            {"disease": get_disease_display_name(d2, norm_lang), "probability": prob2, "days_until_window": 3},
+            {"disease": get_disease_display_name(d3, norm_lang), "probability": prob3, "days_until_window": 5}
         ],
-        "recommended_actions": [
-            f"Apply prophylactic bio-fungicide (Trichoderma viride @ 5g/L or Pseudomonas fluorescens) before spore settlement on {crop}.",
-            "Optimize canopy aeration and prune lower infected foliage to reduce local micro-climate relative humidity.",
-            "Avoid overhead sprinkler irrigation during late evening; switch to drip to minimize leaf wetness duration.",
-            "Inspect field borders adjacent to recent community disease detections for early necrotic lesions.",
-            "Maintain balanced potassium (K) nutrition to strengthen plant epidermal cell walls against fungal penetration."
-        ]
+        "recommended_actions": localized_actions
     }
 
 
@@ -317,12 +350,17 @@ def compute_predictive_outbreak_risk(
     lat: float,
     lon: float,
     crop: str,
-    sensor_data: Dict[str, Any]
+    sensor_data: Dict[str, Any],
+    language: str = "en"
 ) -> Dict[str, Any]:
     """
     Main entry point: Fuses sensor, weather, seasonal, and community data
-    into a unified predictive intelligence assessment.
+    into a unified predictive intelligence assessment localized in 25 languages.
     """
+    norm_lang = (language or "en").lower().strip()
+    if norm_lang not in SUPPORTED_LANGUAGES:
+        norm_lang = "en"
+
     # 1. Fetch live 5-day weather forecast
     weather_info = WeatherService.fetch_weather(lat=lat, lon=lon)
     forecast_list = weather_info.get("forecast") or []
@@ -369,33 +407,52 @@ def compute_predictive_outbreak_risk(
     else:
         risk_level = "CRITICAL"
 
-    # 6. Call Gemini AI or Agronomic Fallback
+    # 6. Call Gemini AI or Agronomic Fallback with Language Context
     gemini_resp = call_gemini_predictive(
         crop=crop,
         sensor_data=sensor_data,
         weather_forecast=forecast_list,
         seasonal_level=seasonal_level,
-        community_threats=community_threats
+        community_threats=community_threats,
+        language=norm_lang
     )
 
     if not gemini_resp or not gemini_resp.get("predicted_outbreaks"):
-        fallback_data = get_fallback_predictions(crop, overall_risk_score, seasonal_level, community_threats)
+        fallback_data = get_fallback_predictions(crop, overall_risk_score, seasonal_level, community_threats, language=norm_lang)
         predicted_outbreaks = fallback_data["predicted_outbreaks"]
         recommended_actions = fallback_data["recommended_actions"]
     else:
         predicted_outbreaks = gemini_resp.get("predicted_outbreaks", [])
         recommended_actions = gemini_resp.get("recommended_actions", [])
-        # Ensure numbers are formatted properly
+        
+        # Ensure numbers and localized disease names
         for p in predicted_outbreaks:
             p["probability"] = round(float(p.get("probability", 50.0)), 1)
             p["days_until_window"] = int(p.get("days_until_window", 2))
+            p["disease"] = get_disease_display_name(p.get("disease", ""), norm_lang)
 
-    # 7. Compute 5-day daily risk forecast
+        # If Gemini returned English or non-localized text when a specific language was requested, apply localized actions
+        if norm_lang != "en" and recommended_actions:
+            first_action = recommended_actions[0] if len(recommended_actions) > 0 else ""
+            if any(eng in first_action.lower() for eng in ["apply", "prophylactic", "optimize", "avoid", "inspect", "maintain"]):
+                recommended_actions = localize_preventive_actions(recommended_actions, crop=crop, lang=norm_lang)
+
+    # 7. Localize community threats disease list
+    localized_community_diseases = [
+        get_disease_display_name(d, norm_lang)
+        for d in community_threats.get("diseases_reported", [])
+    ]
+    community_threats_localized = {
+        "report_count": community_threats.get("report_count", 0),
+        "diseases_reported": localized_community_diseases,
+        "nearest_outbreak_km": community_threats.get("nearest_outbreak_km", 0.0)
+    }
+
+    # 8. Compute 5-day daily risk forecast
     five_day_forecast = []
     base_date = datetime.now()
     for i in range(5):
         day_date = (base_date + timedelta(days=i)).strftime("%Y-%m-%d")
-        # Match weather forecast item if present
         fc_item = forecast_list[i] if i < len(forecast_list) else {}
         day_hum = fc_item.get("humidity", curr_humidity)
         day_rain = fc_item.get("rainfall_mm", 0.0)
@@ -416,7 +473,7 @@ def compute_predictive_outbreak_risk(
         "soil_health_index": soil_health_index,
         "weather_risk_score": weather_risk_score,
         "seasonal_risk_level": seasonal_level,
-        "community_threats": community_threats,
+        "community_threats": community_threats_localized,
         "predicted_outbreaks": predicted_outbreaks[:3],
         "five_day_forecast": five_day_forecast,
         "recommended_actions": recommended_actions[:5]

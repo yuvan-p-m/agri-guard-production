@@ -1,6 +1,6 @@
 // API service for backend integration using native fetch
 import { Capacitor } from '@capacitor/core';
-import type { UserProfile, PredictiveRiskRequest, PredictiveRiskResponse } from '../types';
+import type { UserProfile, OutbreakForesightRequest, OutbreakForesightResponse } from '../types';
 import { getCurrentLanguage } from '../i18n';
 
 /**
@@ -196,7 +196,7 @@ async function request<T = any>(endpoint: string, options: RequestInit = {}): Pr
   for (const candidateBase of candidateUrls) {
     try {
       const controller = new AbortController();
-      const timeoutMs = isNative ? 5000 : (isProdWeb ? 30000 : 6000);
+      const timeoutMs = isNative ? 25000 : 30000;
       const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
       const response = await fetch(`${candidateBase}${cleanEndpoint}`, {
@@ -476,11 +476,13 @@ export const marketplaceAPI = {
 
 // Predictive Intelligence APIs
 export const predictiveAPI = {
-  getOutbreakRisk: (data: PredictiveRiskRequest) =>
-    request<PredictiveRiskResponse>('/predictive/outbreak-risk', {
+  getOutbreakRisk: (data: OutbreakForesightRequest) => {
+    const lang = data.language || getCurrentLanguage();
+    return request<OutbreakForesightResponse>(`/predictive/outbreak-risk?language=${encodeURIComponent(lang)}`, {
       method: 'POST',
-      body: JSON.stringify(data),
-    }),
+      body: JSON.stringify({ ...data, language: lang }),
+    });
+  },
 };
 
 export default { request };

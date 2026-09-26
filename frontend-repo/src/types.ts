@@ -246,11 +246,12 @@ export interface PredictiveSensorData {
   pH?: number;
 }
 
-export interface PredictiveRiskRequest {
+export interface OutbreakForesightRequest {
   farmer_id?: string;
   lat: number;
   lon: number;
   crop: string;
+  language?: string;
   sensor_data: PredictiveSensorData;
 }
 
@@ -272,7 +273,7 @@ export interface CommunityThreatsData {
   nearest_outbreak_km: number;
 }
 
-export interface PredictiveRiskResponse {
+export interface OutbreakForesightResponse {
   overall_risk_score: number;
   risk_level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | string;
   soil_health_index: number;

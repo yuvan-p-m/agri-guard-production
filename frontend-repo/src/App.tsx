@@ -21,6 +21,7 @@ import { DiseaseProgressionRiskCard } from './components/DiseaseProgressionRiskC
 import { TreatmentDosageCard } from './components/TreatmentDosageCard';
 import { WeatherSoilCard } from './components/WeatherSoilCard';
 import { IoTSensorsTab } from './components/IoTSensorsTab';
+import { OutbreakForesightTab } from './components/OutbreakForesightTab';
 import { CropRecommendationTab } from './components/CropRecommendationTab';
 import { MarketplaceTab } from './components/MarketplaceTab';
 import { GovtSchemesTab } from './components/GovtSchemesTab';
@@ -1060,6 +1061,24 @@ export const App: React.FC = () => {
                 }}
               />
               <IoTSensorsTab
+                hardwareState={hardwareState}
+                onPairHardware={handlePairHardware}
+                user={user}
+                weather={weather}
+                onNavigateToDiagnosis={() => {
+                  setActiveTab('diagnosis');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            </div>
+          )}
+
+          {/* ========================================================= */}
+          {/* TAB: OUTBREAK FORESIGHT (AI CROP DISEASE OUTBREAK RADAR)  */}
+          {/* ========================================================= */}
+          {activeTab === 'outbreak-foresight' && (
+            <div className="max-w-5xl mx-auto animate-fade-in space-y-6">
+              <OutbreakForesightTab
                 hardwareState={hardwareState}
                 onPairHardware={handlePairHardware}
                 user={user}

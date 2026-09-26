@@ -6,11 +6,12 @@ import {
   Sparkles, 
   Landmark,
   Store,
-  MessageSquareText
+  MessageSquareText,
+  Brain,
 } from 'lucide-react';
 import { useAppTranslation } from '../i18n';
 
-export type DashboardTab = 'diagnosis' | 'recommendations' | 'marketplace' | 'schemes' | 'fieldData' | 'smsDemo' | 'profile';
+export type DashboardTab = 'diagnosis' | 'recommendations' | 'marketplace' | 'schemes' | 'fieldData' | 'outbreak-foresight' | 'smsDemo' | 'profile';
 
 interface NavigationTabsProps {
   activeTab: DashboardTab;
@@ -59,6 +60,12 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
       label: t('nav.fieldData'),
       shortLabel: t('nav.fieldDataShort'),
       icon: <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />,
+    },
+    {
+      id: 'outbreak-foresight',
+      label: t('nav.outbreakForesight', 'Outbreak Foresight'),
+      shortLabel: t('nav.outbreakForesightShort', 'Foresight'),
+      icon: <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />,
     },
     {
       id: 'smsDemo',
@@ -183,7 +190,7 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
 
       {/* Mobile: Bottom Fixed Navigation Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-lg border-t border-slate-200 shadow-2xl py-1.5 px-0.5 sm:px-2">
-        <div className="grid grid-cols-7 gap-0.5">
+        <div className="grid grid-cols-8 gap-0.5">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (

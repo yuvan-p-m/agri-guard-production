@@ -6,6 +6,7 @@ Provides 25-language support for:
 Supported locales: en, ta, te, ml, kn, hi, bn, mr, gu, pa, ur, or, as, ne, si, ar, fr, es, pt, de, it, ru, ja, ko, zh.
 """
 
+import re
 from typing import Dict, Any, List, Tuple
 
 SUPPORTED_LANGUAGES = [
@@ -16,6 +17,63 @@ SUPPORTED_LANGUAGES = [
 
 # Multilingual localized crop names for top crops
 CROP_NAMES_25: Dict[str, Dict[str, str]] = {
+    "pepper": {
+        "en": "Bell Pepper / Capsicum", "ta": "குடைமிளகாய்", "te": "క్యాప్సికం / బెంగళూరు మిరప", "ml": "കാപ്സിക്കം",
+        "kn": "ದಪ್ಪ ಮೆಣಸಿನಕಾಯಿ (ಕ್ಯಾಪ್ಸಿಕಂ)", "hi": "शिमला मिर्च", "bn": "ক্যাপসিকাম", "mr": "ढोबळी मिरची",
+        "gu": "કેપ્સીકમ મરચાં", "pa": "ਸ਼ਿਮਲਾ ਮਿਰਚ", "ur": "شملہ مرچ", "or": "କ୍ୟାପସିକମ୍",
+        "as": "কেপচিকাম", "ne": "भेडे खुर्सानी", "si": "මාළු මිරිස්", "ar": "الفلفل الحلو (الكابسيكوم)",
+        "fr": "Poivron", "es": "Pimiento morrón", "pt": "Pimentão", "de": "Paprika",
+        "it": "Peperone", "ru": "Болгарский перец", "ja": "ピーマン / パプリカ", "ko": "피망 / 파프리카", "zh": "甜椒 / 彩椒"
+    },
+    "peach": {
+        "en": "Peach", "ta": "பீச் பழம்", "te": "పీచ్ పండు", "ml": "പീച്ച്",
+        "kn": "ಪೀಚ್ ಹಣ್ಣು", "hi": "आड़ू (Peach)", "bn": "পীচ ফল", "mr": "सप्ताळू (पीच)",
+        "gu": "પીચ ફળ", "pa": "ਆੜੂ", "ur": "آڑو", "or": "ପିଚ୍ ଫଳ",
+        "as": "পীচ ফল", "ne": "आडू", "si": "පීච්", "ar": "الخوخ (الدراق)",
+        "fr": "Pêche", "es": "Melocotón / Durazno", "pt": "Pêssego", "de": "Pfirsich",
+        "it": "Pesca", "ru": "Персик", "ja": "桃 (モモ)", "ko": "복숭아", "zh": "桃子"
+    },
+    "squash": {
+        "en": "Squash", "ta": "சீமைப் பூசணி", "te": "గుమ్మడికాయ", "ml": "സ്ക്വാഷ്",
+        "kn": "ಸೀಮೆಕುಂಬಳ", "hi": "कद्दू / स्क्वैश", "bn": "স্কোয়াশ", "mr": "भोपळा",
+        "gu": "કોળું / સ્ક્વોશ", "pa": "ਕੱਦੂ", "ur": "کدو", "or": "ବୋଇତାଳୁ",
+        "as": "স্কোৱাছ", "ne": "फर्सी", "si": "වට්ටක්කා", "ar": "الكوسا / القرع",
+        "fr": "Courge", "es": "Calabaza / Calabacín", "pt": "Abóbora", "de": "Kürbis",
+        "it": "Zucca / Zucchina", "ru": "Кабачок / Тыква", "ja": "カボチャ / ズッキーニ", "ko": "호박", "zh": "西葫芦 / 南瓜"
+    },
+    "strawberry": {
+        "en": "Strawberry", "ta": "ஸ்ட்ராபெரி", "te": "స్ట్రాబెర్రీ", "ml": "സ്ട്രോബെറി",
+        "kn": "ಸ್ಟ್ರಾಬೆರಿ", "hi": "स्ट्रॉबेरी", "bn": "স্ট্রবেরি", "mr": "स्ट्रॉबेरी",
+        "gu": "સ્ટ્રોબેરી", "pa": "ਸਟ੍ਰਾਬੇਰੀ", "ur": "اسٹرابیری", "or": "ଷ୍ଟ୍ରବେରୀ",
+        "as": "ষ্ট্ৰবেৰী", "ne": "स्ट्रबेरी", "si": "ස්ට්‍රෝබෙරි", "ar": "الفراولة",
+        "fr": "Fraise", "es": "Fresa", "pt": "Morango", "de": "Erdbeere",
+        "it": "Fragola", "ru": "Клубника", "ja": "イチゴ", "ko": "딸기", "zh": "草莓"
+    },
+    "blueberry": {
+        "en": "Blueberry", "ta": "ப்ளூபெர்ரி", "te": "బ్లూబెర్రీ", "ml": "ബ്ലൂബെറി",
+        "kn": "ಬ್ಲೂಬೆರ್ರಿ", "hi": "ब्लूबेरी", "bn": "ব্লুবেরি", "mr": "ब्लूबेरी",
+        "gu": "બ્લૂબેરી", "pa": "ਬਲੂਬੇਰੀ", "ur": "بلوبیری", "or": "ବ୍ଲୁବେରୀ",
+        "as": "ব্লুবেৰী", "ne": "ब्लुबेरी", "si": "බ්ලූබෙරි", "ar": "التوت الأزرق",
+        "fr": "Myrtille", "es": "Arándano azul", "pt": "Mirtilo", "de": "Blaubeere",
+        "it": "Mirtillo", "ru": "Черника / Голубика", "ja": "ブルーベリー", "ko": "블루베리", "zh": "蓝莓"
+    },
+    "raspberry": {
+        "en": "Raspberry", "ta": "ராஸ்பெர்ரி", "te": "రాస్ప్బెర్రీ", "ml": "റാസ്ബെറി",
+        "kn": "ರಾಸ್ಪ್ಬೆರಿ", "hi": "रास्पबेरी", "bn": "রাস্পবেরি", "mr": "रासबेरी",
+        "gu": "રાસ્પબેરી", "pa": "ਰਸਬਰੀ", "ur": "راسبیری", "or": "ରାସବେରୀ",
+        "as": "ৰাছবেৰী", "ne": "रास्पबेरी", "si": "රැස්බෙරි", "ar": "توت العليق",
+        "fr": "Framboise", "es": "Frambuesa", "pt": "Framboesa", "de": "Himbeere",
+        "it": "Lampone", "ru": "Малина", "ja": "ラズベリー", "ko": "라즈베리", "zh": "覆盆子"
+    },
+    "cherry": {
+        "en": "Cherry", "ta": "செர்ரி", "te": "చెర్రీ", "ml": "ചെറി",
+        "kn": "ಚೆರ್ರಿ ಹಣ್ಣು", "hi": "चेरी", "bn": "চেরি", "mr": "चेरी",
+        "gu": "ચેરી", "pa": "ਚੈਰੀ", "ur": "چیری", "or": "ଚେରୀ",
+        "as": "চেৰী", "ne": "चेरी", "si": "චෙරි", "ar": "الكرز",
+        "fr": "Cerise", "es": "Cereza", "pt": "Cereja", "de": "Kirsche",
+        "it": "Ciliegia", "ru": "Вишня / Черешня", "ja": "サクランボ", "ko": "체리", "zh": "樱桃"
+    },
+
     "apple": {
         "en": "Apple",
         "ta": "ஆப்பிள்",
@@ -2181,6 +2239,7 @@ def get_pathology_analysis(
     }
 
 
+
 # --- FULL 25-LANGUAGE DISEASE NAMES & LOCALIZATION ---
 DISEASE_NAMES_25: Dict[str, Dict[str, str]] = {
     "healthy": {
@@ -2192,16 +2251,16 @@ DISEASE_NAMES_25: Dict[str, Dict[str, str]] = {
         "it": "Fogliame sano", "ru": "Здоровая листва", "ja": "健全な葉", "ko": "건강한 잎", "zh": "健康叶片"
     },
     "early_blight": {
-        "en": "Early Blight", "ta": "ஆரம்பகால கருகல் நோய்", "te": "ముందస్తు తెగులు (Early Blight)", "ml": "ആദ്യകാല ബ്ലൈറ്റ്",
-        "kn": "ಮುಂಚಿನ ಕರಗು ರೋಗ", "hi": "अगेती झुलसा रोग (Early Blight)", "bn": "আগেতি ধসা রোগ", "mr": "लवकर येणारा करपा",
+        "en": "Early Blight (Alternaria solani)", "ta": "ஆரம்பகால கருகல் நோய் (Early Blight)", "te": "ముందస్తు తెగులు (Early Blight)", "ml": "ആദ്യകാല ബ്ലൈറ്റ് (Early Blight)",
+        "kn": "ಮುಂಚಿನ ಕರಗು ರೋಗ (Early Blight)", "hi": "अगेती झुलसा रोग (Early Blight)", "bn": "আগেতি ধসা রোগ", "mr": "लवकर येणारा करपा",
         "gu": "અગેતી સુકારો", "pa": "ਅਗੇਤਾ ਝੁਲਸਾ ਰੋਗ", "ur": "ارلی بلائٹ", "or": "ଆଗୁଆ ପତ୍ରପୋଡ଼ା ରୋଗ",
         "as": "আগতীয়া ব্লাইট ৰোগ", "ne": "अगेती डढुवा", "si": "මුල් අංගමාරය", "ar": "اللفحة المبكرة",
         "fr": "Brûlure alternarienne", "es": "Tizón temprano", "pt": "Pinta-preta", "de": "Dürrfleckenkrankheit",
         "it": "Alternariosi", "ru": "Ранний фитофтороз", "ja": "輪紋病 (Early Blight)", "ko": "조기 역병", "zh": "早疫病"
     },
     "late_blight": {
-        "en": "Late Blight", "ta": "பின்கால கருகல் நோய்", "te": "ఆలస్యపు తెగులు (Late Blight)", "ml": "പിൽക്കാല ബ്ലൈറ്റ്",
-        "kn": "ತಡವಾದ ಕರಗು ರೋಗ", "hi": "पछेती झुलसा रोग (Late Blight)", "bn": "নাবী ধসা রোগ", "mr": "उशिरा येणारा करपा",
+        "en": "Late Blight (Phytophthora infestans)", "ta": "பின்கால கருகல் நோய் (Late Blight)", "te": "ఆలస్యపు తెగులు (Late Blight)", "ml": "പിൽക്കാല ബ്ലൈറ്റ് (Late Blight)",
+        "kn": "ತಡವಾದ ಕರಗು ರೋಗ (Late Blight)", "hi": "पछेती झुलसा रोग (Late Blight)", "bn": "নাবী ধসা রোগ", "mr": "उशिरा येणारा करपा",
         "gu": "પાછોતરો સુકારો", "pa": "ਪਛੇਤਾ ਝੁਲਸਾ ਰੋਗ", "ur": "لیٹ بلائٹ", "or": "ପଛୁଆ ପତ୍ରପୋଡ଼ା ରୋଗ",
         "as": "পানী ব্লাইট ৰোগ", "ne": "पछेती डढुवा", "si": "පසු අංගමාරය", "ar": "اللفحة المتأخرة",
         "fr": "Mildiou de la pomme de terre", "es": "Tizón tardío", "pt": "Requeima", "de": "Kraut- und Knollenfäule",
@@ -2215,6 +2274,86 @@ DISEASE_NAMES_25: Dict[str, Dict[str, str]] = {
         "fr": "Gale bactérienne", "es": "Mancha bacteriana", "pt": "Mancha bacteriana", "de": "Bakterienfleckenkrankheit",
         "it": "Maculatura batterica", "ru": "Бактериальная пятнистость", "ja": "斑点細菌病", "ko": "세균성 점무늬병", "zh": "细菌性斑点病"
     },
+    "cedar_apple_rust": {
+        "en": "Cedar Apple Rust", "ta": "சிடார் ஆப்பிள் துரு நோய்", "te": "సీడార్ యాపిల్ తుప్పు తెగులు", "ml": "സിഡാർ ആപ്പിൾ തുരുമ്പ് രോഗം",
+        "kn": "ಸಿಡಾರ್ ಆಪಲ್ ತುಕ್ಕು ರೋಗ", "hi": "सीडर एप्पल रतुआ रोग", "bn": "সিডার আপেল মরিচা রোগ", "mr": "सिडार ॲपल तांबेरा रोग",
+        "gu": "સીડાર એપલ ગેરુ રોગ", "pa": "ਸੀਡਰ ਸੇਬ ਕੁੰਗੀ ਰੋਗ", "ur": "سیڈار سیب زنگ", "or": "ସିଡାର ଆପଲ କଳଙ୍କି ରୋଗ",
+        "as": "চিডাৰ আপেল মামৰ ৰোগ", "ne": "सिडਾਰ स्याउ सिन्दुरे रोग", "si": "සීඩාර් ඇපල් මලකඩ රෝගය", "ar": "صدأ أرز التفاح",
+        "fr": "Rouille du genévrier et du pommier", "es": "Roya del manzano y cedro", "pt": "Ferrugem do cedro-maçã", "de": "Zedern-Apfel-Rost",
+        "it": "Ruggine del melo", "ru": "Ржавчина яблони", "ja": "赤星病 (Cedar Apple Rust)", "ko": "붉은별무늬병", "zh": "苹果雪松锈病"
+    },
+    "root_rot": {
+        "en": "Root Rot / Damping-Off (Pythium / Rhizoctonia)", "ta": "வேர் அழுகல் / நாற்று அழுகல் நோய்", "te": "వేరు కుళ్ళు / నారు కుళ్ళు తెగులు", "ml": "വേരുചീയൽ / തൈചീയൽ രോഗം",
+        "kn": "ಬೇರು ಕೊಳೆತ / ಸಸಿ ಕೊಳೆತ ರೋಗ", "hi": "जड़ गलन / आद्र गलन रोग", "bn": "শিকড় পচা / চারা ধসা রোগ", "mr": "मूळ कुज / मर रोग",
+        "gu": "મૂળનો સડો / સુકારો", "pa": "ਜੜ੍ਹ ਗਲਣ ਰੋਗ", "ur": "جڑ گلن / پودا سڑن بیماری", "or": "ଚେର ପଚା / ଚାରା ପଚା ରୋଗ",
+        "as": "শিপা পচা / পুলି ପচা ৰোগ", "ne": "जरा कुहिने / डढुवा रोग", "si": "මුල් කුණුවීමේ රෝගය", "ar": "تعفن الجذور وموت البادرات",
+        "fr": "Pourriture racinaire / Fonte des semis", "es": "Podredumbre de la raíz / Marchitamiento", "pt": "Podridão radicular / Tombamento", "de": "Wurzelfäule / Umfallkrankheit",
+        "it": "Marciume radicale", "ru": "Корневая гниль / Полегание сеянцев", "ja": "根腐れ病・苗立枯病", "ko": "뿌리썩음병 / 잘록병", "zh": "根腐病 / 猝倒病"
+    },
+    "damping_off": {
+        "en": "Root Rot / Damping-Off (Pythium / Rhizoctonia)", "ta": "வேர் அழுகல் / நாற்று அழுகல் நோய்", "te": "వేరు కుళ్ళు / నారు కుళ్ళు తెగులు", "ml": "വേരുചീയൽ / തൈചീയൽ രോഗം",
+        "kn": "ಬೇರು ಕೊಳೆತ / ಸಸಿ ಕೊಳೆತ ರೋಗ", "hi": "जड़ गलन / आद्र गलन रोग", "bn": "শিকড় পচা / চারা ধসা রোগ", "mr": "मूळ कुज / मर रोग",
+        "gu": "મૂળનો સડો / સુકારો", "pa": "ਜੜ੍ਹ ਗਲਣ ਰੋਗ", "ur": "جڑ گلن / پودا سڑن بیماری", "or": "ଚେର ପଚା / ଚାରା ପଚା ରୋଗ",
+        "as": "শিপা পচা / পুলି ପচা ৰোগ", "ne": "जरा कुहिने / डढुवा रोग", "si": "මුල් කුණුවීමේ රෝගය", "ar": "تعفن الجذور وموت البادرات",
+        "fr": "Pourriture racinaire / Fonte des semis", "es": "Podredumbre de la raíz / Marchitamiento", "pt": "Podridão radicular / Tombamento", "de": "Wurzelfäule / Umfallkrankheit",
+        "it": "Marciume radicale", "ru": "Корневая гниль / Полегание сеянцев", "ja": "根腐れ病・苗立枯病", "ko": "뿌리썩음병 / 잘록병", "zh": "根腐病 / 猝倒病"
+    },
+    "black_rot": {
+        "en": "Black Rot", "ta": "கருப்பு அழுகல் நோய்", "te": "నల్ల కుళ్ళు తెగులు", "ml": "കറുത്ത ചീയൽ രോഗം",
+        "kn": "ಕಪ್ಪು ಕೊಳೆತ ರೋಗ", "hi": "काला सड़न रोग (Black Rot)", "bn": "কালো পচা রোগ", "mr": "काळा कुजवा रोग",
+        "gu": "કાળો સડો", "pa": "ਕਾਲਾ ਗਲਣ ਰੋਗ", "ur": "سیاہ سڑن بیماری", "or": "କଳା ପଚା ରୋଗ",
+        "as": "কলা পচা ৰোগ", "ne": "कालो कुहिने रोग", "si": "කළු කුණුවීම", "ar": "العفن الأسود",
+        "fr": "Pourriture noire", "es": "Podredumbre negra", "pt": "Podridão-negra", "de": "Schwarzfäule",
+        "it": "Marciume nero", "ru": "Черная гниль", "ja": "黒腐病 (Black Rot)", "ko": "검은썩음병", "zh": "黑腐病"
+    },
+    "apple_scab": {
+        "en": "Apple Scab", "ta": "ஆப்பிள் செதில் நோய்", "te": "యాపిల్ పొలుసు తెగులు", "ml": "ആപ്പിൾ സ്കാബ് രോഗം",
+        "kn": "ಸೇಬು ಹುರುಪು ರೋಗ (Scab)", "hi": "सेब स्कैब / पपड़ी रोग", "bn": "আপেল স্ক্যাব রোগ", "mr": "सफरचंद खपली रोग",
+        "gu": "સફરજન ખસ રોગ", "pa": "ਸੇਬ ਸਕੈਬ ਰੋਗ", "ur": "سیب اسکیب", "or": "ସେଓ ଖାସୁ ରୋଗ",
+        "as": "আপেল স্কেব ৰোগ", "ne": "स्याउ काले पोते रोग", "si": "ඇපල් කබොලු රෝගය", "ar": "جرب التفاح",
+        "fr": "Tavelure du pommier", "es": "Sarna del manzano", "pt": "Sarna da maçã", "de": "Apfelschorf",
+        "it": "Ticchiolatura del melo", "ru": "Парша яблони", "ja": "黒星病 (Apple Scab)", "ko": "검은별무늬병", "zh": "苹果黑星病"
+    },
+    "leaf_mold": {
+        "en": "Leaf Mold", "ta": "இலை பூஞ்சை நோய்", "te": "ఆకు బూజు తెగులు", "ml": "ഇലപ്പൂപ്പൽ രോഗം",
+        "kn": "ಎಲೆ ಬೂಷ್ಟು ರೋಗ (Leaf Mold)", "hi": "पत्ती फफूंद रोग (Leaf Mold)", "bn": "পাতা ছত্রাক রোগ", "mr": "पानांवरील बुरशी रोग",
+        "gu": "પાન પર ફૂગ રોગ", "pa": "ਪੱਤਾ ਉੱਲੀ ਰੋਗ", "ur": "پتا پھپھوندی", "or": "ପତ୍ର ଫିମ୍ପି ରୋଗ",
+        "as": "পাতৰ ভেঁকুৰ ৰোগ", "ne": "पातको ढुसी रोग", "si": "පත්‍ර පුස් රෝගය", "ar": "عفن أوراق النبات",
+        "fr": "Moisissure des feuilles", "es": "Moho foliar", "pt": "Mofo foliar", "de": "Samtfleckenkrankheit",
+        "it": "Muffa fogliare", "ru": "Бурая пятнистость листьев", "ja": "葉かび病 (Leaf Mold)", "ko": "잎곰팡이병", "zh": "叶霉病"
+    },
+    "septoria_leaf_spot": {
+        "en": "Septoria Leaf Spot", "ta": "செப்டோரியா இலைப்புள்ளி நோய்", "te": "సెప్టోరియా ఆకు మచ్చల తెగులు", "ml": "സെപ്റ്റോറിയ ഇലപ്പുള്ളി രോഗം",
+        "kn": "ಸೆಪ್ಟೋರಿಯಾ ಎಲೆ ಚುಕ್ಕೆ ರೋಗ", "hi": "सेप्टोरिया पत्ती धब्बा रोग", "bn": "সেপ্টোরিয়া পাতা দাগ রোগ", "mr": "सेप्टोरिया पानावरील ठिपके",
+        "gu": "સેપ્ટોરિયા ટપકાં રોગ", "pa": "ਸੈਪਟੋਰੀਆ ਪੱਤਾ ਧੱਬਾ ਰੋਗ", "ur": "سیپٹوریا پتا دھبہ", "or": "ସେପ୍ଟୋରିଆ ପତ୍ର ଦାଗ ରୋଗ",
+        "as": "চেপ্টোৰিয়া পাতৰ দাগ ৰোগ", "ne": "सेप्टोरिया पातको दाग", "si": "සෙප්ටෝරියා පත්‍ර ලප රෝගය", "ar": "تبقع الأوراق السبتوري",
+        "fr": "Septoriose des feuilles", "es": "Mancha foliar por Septoria", "pt": "Septoriose foliar", "de": "Septoria-Blattfleckenkrankheit",
+        "it": "Settoriosi fogliare", "ru": "Септориоз листьев", "ja": "斑点病 (Septoria)", "ko": "점무늬병 (셉토리아)", "zh": "斑枯病 / 壳针孢叶斑病"
+    },
+    "spider_mites": {
+        "en": "Spider Mites (Two-Spotted Spider Mite)", "ta": "சிவப்பு சிலந்திப் பூச்சி தாக்குதல்", "te": "ఎర్ర నల్లి / సాలీడు పురుగు తెగులు", "ml": "ചുവന്ന മണ്ഡരി കീടബാധ",
+        "kn": "ಕೆಂಪು ನುಸಿ / ಜೇಡರ ನುಸಿ ಹುಳುವಿನ ಬಾಧೆ", "hi": "लाल मकड़ी / घुन कीट प्रकोप", "bn": "লাল মাকড়সার আক্রমণ", "mr": "लाल कोळी / माइट्स प्रादुर्भाव",
+        "gu": "લાલ કથીરીનો ઉપદ્રવ", "pa": "ਲਾਲ ਮੱਕੜੀ ਕੀੜੇ ਦਾ ਹਮਲਾ", "ur": "سرخ مکڑی کے کیڑے کا حملہ", "or": "ନାଲି ବୁଢ଼ିଆଣୀ ପୋକ ଆକ୍ରମଣ",
+        "as": "ৰঙা মকৰা покৰ আক্ৰমণ", "ne": "रातो सुलसुलेको प्रकोप", "si": "රතු මයිටා උවදුර", "ar": "إصابة العنكبوت الأحمر",
+        "fr": "Tétranyque tisserand", "es": "Araña roja bimaculada", "pt": "Ácaro-rajado", "de": "Gemeine Spinnmilbe",
+        "it": "Ragnetto rosso bimaculato", "ru": "Паутинный клещ", "ja": "ハダニ類 (ナミハダニ)", "ko": "점박이응애", "zh": "二斑叶螨 / 红蜘蛛"
+    },
+    "target_spot": {
+        "en": "Target Spot", "ta": "இலக்கு இலைப்புள்ளி நோய் (Target Spot)", "te": "టార్గెట్ స్పాట్ ఆకు మచ్చ తెగులు", "ml": "ടാർഗെറ്റ് സ്പോട്ട് രോഗം",
+        "kn": "ಗುರಿ ಆಕಾರದ ಎಲೆ ಕಲೆ ರೋಗ (Target Spot)", "hi": "लक्ष्य धब्बा रोग (Target Spot)", "bn": "টার্গেট স্পট রোগ", "mr": "टार्गेट स्पॉट रोग",
+        "gu": "ટાર્ગેટ સ્પોટ રોગ", "pa": "ਟਾਰਗੇਟ ਸਪਾਟ ਰੋਗ", "ur": "ٹارگٹ سپاٹ بیماری", "or": "ଟାର୍ଗେଟ୍ ସ୍ପଟ୍ ରୋଗ",
+        "as": "টাৰ্গেট স্পট ৰোগ", "ne": "टार्गेट स्पट रोग", "si": "ඉලක්ක ලප රෝගය", "ar": "مرض البقعة المستهدفة",
+        "fr": "Maladie des taches cibles", "es": "Mancha diana", "pt": "Mancha-alvo", "de": "Target-Spot-Krankheit",
+        "it": "Maculatura a bersaglio", "ru": "Мишень-пятнистость", "ja": "標的斑病 (Target Spot)", "ko": "과녁무늬병", "zh": "靶斑病"
+    },
+    "mosaic_virus": {
+        "en": "Mosaic Virus", "ta": "மொசைக் வைரஸ் நோய்", "te": "మొజాయిక్ వైరస్ తెగులు", "ml": "മൊസൈക്ക് വൈറസ് രോഗം",
+        "kn": "ಮೊಸಾಯಿಕ್ ವೈರಸ್ ರೋಗ", "hi": "मोजेक विषाणु रोग", "bn": "মোজাইক ভাইরাস রোগ", "mr": "मोझॅक विषाणू रोग",
+        "gu": "મોઝેક વાયરસ રોગ", "pa": "ਮੋਜ਼ੇਕ ਵਿਸ਼ਾਣੂ ਰੋਗ", "ur": "موزیک وائرس", "or": "ମୋଜାଇକ୍ ଭୂତାଣୁ ରୋଗ",
+        "as": "মোজাইক ভাইৰাছ ৰোগ", "ne": "मोजेक भाइरस रोग", "si": "මොසෙයික් වෛරස් රෝගය", "ar": "فيروس الموزاييك",
+        "fr": "Virus de la mosaïque", "es": "Virus del mosaico", "pt": "Vírus do mosaico", "de": "Mosaikvirus",
+        "it": "Virus del mosaico", "ru": "Вирус мозаики", "ja": "モザイクウイルス病", "ko": "모자이크 바이러스", "zh": "花叶病毒病"
+    },
     "powdery_mildew": {
         "en": "Powdery Mildew", "ta": "சாம்பல் நோய்", "te": "బూడిద తెగులు", "ml": "പൊടിപ്പൂപ്പ് രോഗം",
         "kn": "ಬೂದಿ ರೋಗ", "hi": "चूर्णिल आसिता (पाउडरी मिल्ड्यू)", "bn": "পাউডারি মিলডিউ", "mr": "भुरी रोग",
@@ -2224,7 +2363,7 @@ DISEASE_NAMES_25: Dict[str, Dict[str, str]] = {
         "it": "Oidio", "ru": "Мучнистая роса", "ja": "うどんこ病", "ko": "흰가루병", "zh": "白粉病"
     },
     "yellow_leaf_curl": {
-        "en": "Yellow Leaf Curl Virus", "ta": "மஞ்சள் இலை சுருள் வைரஸ்", "te": "పసుపు ఆకు ముడుత వైరస్", "ml": "മഞ്ഞ ഇലച്ചുരുൾ വൈറസ്",
+        "en": "Yellow Leaf Curl Virus", "ta": "மஞ்சள் இலை சுருள் வைரஸ்", "te": "పసుపు ఆకు ముడుత వైరస్", "ml": "മഞ്ഞ இலച്ചുരുൾ വൈറസ്",
         "kn": "ಹಳದಿ ಎಲೆ ಸುರುಳಿ ವೈರಸ್", "hi": "पीली पत्ती मरोड़ विषाणु", "bn": "হলুদ পাতা কোঁকড়ানো ভাইরাস", "mr": "पिवळा पर्णगुच्छ विषाणू",
         "gu": "પીળા પાન કુકડાઈ વાયરસ", "pa": "ਪੀਲਾ ਪੱਤਾ ਮਰੋੜ ਵਿਸ਼ਾਣੂ", "ur": "پیلا پتا مروڑ وائرس", "or": "ହଳଦିଆ ପତ୍ର କୁଞ୍ଚନ ଭୂତାଣୁ",
         "as": "হালধীয়া পাত কেঁকোৰা ভাইৰাছ", "ne": "पहेंलो पात खुम्चिने भाइरस", "si": "කහ පත්‍ර කොඩවීම් වෛරසය", "ar": "فيروس تجعد أوراق الطماطم الصفراء",
@@ -2246,37 +2385,120 @@ DISEASE_NAMES_25: Dict[str, Dict[str, str]] = {
         "as": "মামৰ ৰোগ", "ne": "सिन्दुरे रोग", "si": "මලකඩ රෝගය", "ar": "مرض صدأ النبات",
         "fr": "Maladie de la rouille", "es": "Roya", "pt": "Ferrugem", "de": "Rostkrankheit",
         "it": "Ruggine", "ru": "Ржавчина растений", "ja": "さび病", "ko": "녹병", "zh": "锈病"
+    },
+    "haunglongbing": {
+        "en": "Huanglongbing (Citrus Greening)", "ta": "சிட்ரஸ் கிரீனிங் நோய் (HLB)", "te": "సిట్రస్ గ్రీనింగ్ తెగులు (HLB)", "ml": "സിട്രസ് ഗ്രീനിംഗ് രോഗം",
+        "kn": "ಸಿಟ್ರಸ್ ಹಳದಿ ಗ್ರೀನಿಂಗ್ ರೋಗ (HLB)", "hi": "सिट्रस ग्रीनिंग रोग (HLB)", "bn": "লেবুর গ্রিনিং রোগ", "mr": "सिट्रस ग्रीनिंग रोग",
+        "gu": "સિટ્રસ ગ્રીનિંગ રોગ", "pa": "ਸਿਟਰਸ ਗ੍ਰੀਨਿੰਗ ਰੋਗ", "ur": "سٹرس گریننگ بیماری", "or": "ଲେମ୍ବୁ ଗ୍ରୀନିଂ ରୋଗ",
+        "as": "টেঙা গ্ৰীনিং ৰোগ", "ne": "कागती ग्रिनिङ रोग", "si": "දෙහි කොළවීම් රෝගය", "ar": "اخضرار الحمضيات (HLB)",
+        "fr": "Huanglongbing / Greening des agrumes", "es": "Huanglongbing (Greening)", "pt": "Huanglongbing (Greening)", "de": "Citrus Greening (HLB)",
+        "it": "Inverdimento degli agrumi (HLB)", "ru": "Озеленение цитрусовых (Хуанлунбин)", "ja": "カンキツグリーニング病 (HLB)", "ko": "감귤 녹화병 (HLB)", "zh": "柑橘黄龙病"
+    },
+    "blast": {
+        "en": "Blast Disease (Magnaporthe oryzae)", "ta": "குலை நோய் (Blast)", "te": "అగ్గి తెగులు (Blast)", "ml": "കുലവാട്ടം (ബ്ലാസ്റ്റ് രോഗം)",
+        "kn": "ಬೆಂಕಿ ರೋಗ (Blast Disease)", "hi": "झोंका / ब्लास्ट रोग", "bn": "ব্লাস্ট রোগ", "mr": "करपा / ब्लास्ट रोग",
+        "gu": "ગેરુઓ / બ્લાસ્ટ રોગ", "pa": "ਬਲਾਸਟ ਰੋਗ", "ur": "جھلساؤ / بلاسٹ", "or": "ବ୍ଲାଷ୍ଟ ରୋଗ",
+        "as": "ব্লাষ্ট ৰোগ", "ne": "ब्लास्ट रोग", "si": "කොළ පාළුව (බ්ලාස්ට්)", "ar": "مرض اللفحة الفطرية (البلاست)",
+        "fr": "Pyriculariose (Blast)", "es": "Piricularia / Tizón", "pt": "Brusone", "de": "Reisbräune (Blast)",
+        "it": "Brusone", "ru": "Пирикуляриоз", "ja": "いもち病 (Blast)", "ko": "도열병", "zh": "稻瘟病"
+    },
+    "sheath_blight": {
+        "en": "Sheath Blight", "ta": "மடல் கருகல் நோய்", "te": "కాండం తొడుగు తెగులు", "ml": "പോളക്കരിച്ചിൽ രോഗം",
+        "kn": "ಕಾಂಡದ ಕವಚದ ಕರಗು ರೋಗ", "hi": "शीथ ब्लाइट रोग", "bn": "খোল পোড়া রোগ", "mr": "खोडावरील करपा (शीथ ब्लाइट)",
+        "gu": "શીથ બ્લાઇટ રોગ", "pa": "ਸ਼ੀਥ ਬਲਾਈਟ ਰੋਗ", "ur": "شیتھ بلائٹ", "or": "ପତ୍ର ଆଚ୍ଛାଦନ ପୋଡ଼ା ରୋଗ",
+        "as": "পাতৰ আৱৰণ পোৰা ৰোগ", "ne": "शीथ डढुवा रोग", "si": "කොපු අංගමාරය", "ar": "لفحة الغمد الفطرية",
+        "fr": "Brûlure des gaines", "es": "Tizón de la vaina", "pt": "Queima da bainha", "de": "Blattscheidenbrand",
+        "it": "Rizoctoniosi della guaina", "ru": "Ризоктониоз влагалищ", "ja": "紋枯病 (Sheath Blight)", "ko": "잎집무늬마름병", "zh": "纹枯病"
+    },
+    "leaf_scorch": {
+        "en": "Leaf Scorch", "ta": "இலை கருகல் நோய்", "te": "ఆకు మాడటం తెగులు", "ml": "ഇലക്കരിച്ചിൽ രോഗം",
+        "kn": "ಎಲೆ ಸುಟ್ಟ ರೋಗ (Leaf Scorch)", "hi": "पत्ती झुलसन रोग (Leaf Scorch)", "bn": "পাতা পোড়া রোগ", "mr": "पाने करपणे रोग",
+        "gu": "પાન દાઝી જવાનો રોગ", "pa": "ਪੱਤਾ ਝੁਲਸ ਰੋਗ", "ur": "پتا جھلسن بیماری", "or": "ପତ୍ର ପୋଡ଼ିବା ରୋଗ",
+        "as": "পাত পোৰা ৰোগ", "ne": "पात डढ्ने रोग", "si": "පත්‍ර පිලිස්සුම් රෝගය", "ar": "احتراق حواف الأوراق",
+        "fr": "Brûlure des feuilles", "es": "Quemadura foliar", "pt": "Queima das folhas", "de": "Blattverbrennung",
+        "it": "Bruciatura fogliare", "ru": "Ожог листьев", "ja": "葉焦病 (Leaf Scorch)", "ko": "잎마름병", "zh": "叶焦病"
+    },
+    "cercospora_leaf_spot": {
+        "en": "Cercospora Leaf Spot (Gray Leaf Spot)", "ta": "செர்கோஸ்போரா சாம்பல் இலைப்புள்ளி நோய்", "te": "సెర్కోస్పోరా బూడిద రంగు ఆకు మచ్చ తెగులు", "ml": "സെർക്കോസ്പോറ ചാരനിറ ഇലപ്പുള്ളി",
+        "kn": "ಸೆರ್ಕೋಸ್ಪೊರಾ ಬೂದು ಎಲೆ ಕಲೆ ರೋಗ", "hi": "सर्कोस्पोरा धूसर पत्ती धब्बा रोग", "bn": "সারকোস্পোরা ধূসর পাতা দাগ রোগ", "mr": "सर्कोस्पोरा करडा पानावरील ठिपके",
+        "gu": "સર્કોસ્પોરા રાખોડી ટપકાં રોગ", "pa": "ਸਰਕੋਸਪੋਰਾ ਸਲੇਟੀ ਪੱਤਾ ਧੱਬਾ ਰੋਗ", "ur": "سرکوسپورا سرمئی پتا دھبہ", "or": "ସରକୋସ୍ପୋରା ଧୂସର ପତ୍ର ଦାଗ ରୋଗ",
+        "as": "চাৰ্কোস্পোৰা ধূসৰ পাতৰ দাগ", "ne": "सर्कोस्पोरा खैरो पातको दाग", "si": "සර්කොස්පෝරා අළු පත්‍ර ලප රෝගය", "ar": "تبقع الأوراق السركسبوري",
+        "fr": "Cercosporiose / Taches grises", "es": "Mancha gris por Cercospora", "pt": "Cercosporiose", "de": "Cercospora-Blattflecken",
+        "it": "Cercosporiosi fogliare", "ru": "Церкоспороз листьев", "ja": "褐斑病・灰色斑点病", "ko": "점무늬병 (세르코스포라)", "zh": "尾孢菌灰叶斑病"
     }
 }
 
 
 def get_disease_display_name(raw_name: str, lang: str = "en") -> str:
     """Returns localized disease display name for any detected disease string in user's language."""
+    if not raw_name or not raw_name.strip():
+        return ""
+
     norm_lang = (lang or "en").lower().strip()
     if norm_lang not in SUPPORTED_LANGUAGES:
         norm_lang = "en"
 
+    # Normalize underscores and common formats
     clean_name = raw_name.replace("___", " - ").replace("_", " ").strip()
+    clean_name = re.sub(r'\s+', ' ', clean_name)
     lower_raw = clean_name.lower()
 
-    # Split crop and disease part if separated by hyphen
+    # Extract crop and disease parts if structured as 'Crop - Disease' or 'Crop___Disease'
     crop_part = ""
     dis_part = clean_name
     if " - " in clean_name:
-        parts = clean_name.split(" - ")
+        parts = clean_name.split(" - ", 1)
         crop_part = parts[0].strip()
         dis_part = parts[1].strip()
 
     loc_crop = get_crop_display_name(crop_part, norm_lang) if crop_part else ""
 
+    # Normalize search key
+    search_str = (dis_part.lower() if crop_part else lower_raw)
+    search_str = search_str.replace("(", " ").replace(")", " ").replace("/", " ").replace("-", " ")
+
     matched_dis = None
-    for k, trans in DISEASE_NAMES_25.items():
-        if k in lower_raw or k.replace("_", " ") in lower_raw or k.replace("_", "") in lower_raw:
-            matched_dis = trans.get(norm_lang, trans["en"])
+    
+    # Priority ordered key lookups
+    priority_keys = [
+        ("cedar apple rust", "cedar_apple_rust"),
+        ("root rot", "root_rot"),
+        ("damping off", "damping_off"),
+        ("black rot", "black_rot"),
+        ("apple scab", "apple_scab"),
+        ("scab", "apple_scab"),
+        ("leaf mold", "leaf_mold"),
+        ("septoria", "septoria_leaf_spot"),
+        ("spider mite", "spider_mites"),
+        ("target spot", "target_spot"),
+        ("mosaic", "mosaic_virus"),
+        ("haunglongbing", "haunglongbing"),
+        ("greening", "haunglongbing"),
+        ("blast", "blast"),
+        ("sheath blight", "sheath_blight"),
+        ("leaf scorch", "leaf_scorch"),
+        ("cercospora", "cercospora_leaf_spot"),
+        ("gray leaf spot", "cercospora_leaf_spot"),
+        ("early blight", "early_blight"),
+        ("late blight", "late_blight"),
+        ("bacterial spot", "bacterial_spot"),
+        ("bacterial", "bacterial_spot"),
+        ("powdery mildew", "powdery_mildew"),
+        ("mildew", "powdery_mildew"),
+        ("yellow leaf curl", "yellow_leaf_curl"),
+        ("citrus canker", "citrus_canker"),
+        ("canker", "citrus_canker"),
+        ("rust", "rust"),
+        ("healthy", "healthy"),
+    ]
+
+    for needle, key in priority_keys:
+        if needle in search_str:
+            matched_dis = DISEASE_NAMES_25[key].get(norm_lang, DISEASE_NAMES_25[key]["en"])
             break
 
     if "healthy" in lower_raw:
-        h_str = DISEASE_NAMES_25["healthy"].get(norm_lang, "Healthy")
+        h_str = DISEASE_NAMES_25["healthy"].get(norm_lang, "Healthy Foliage")
         return f"{loc_crop} — {h_str}" if loc_crop else h_str
 
     if matched_dis and loc_crop:
@@ -2285,6 +2507,199 @@ def get_disease_display_name(raw_name: str, lang: str = "en") -> str:
         return matched_dis
 
     return clean_name
+
+
+
+# --- FULL 25-LANGUAGE AI PREVENTIVE ACTIONS & EPIDEMIOLOGICAL MITIGATION ---
+PREVENTIVE_ACTIONS_25: Dict[str, List[str]] = {
+    "en": [
+        "Apply prophylactic bio-fungicide (Trichoderma viride @ 5g/L or Pseudomonas fluorescens) before spore settlement on {crop}.",
+        "Optimize canopy aeration and prune lower infected foliage to reduce local micro-climate relative humidity.",
+        "Avoid overhead sprinkler irrigation during late evening; switch to drip to minimize leaf wetness duration.",
+        "Inspect field borders adjacent to recent community disease detections for early necrotic lesions.",
+        "Maintain balanced potassium (K) nutrition to strengthen plant epidermal cell walls against fungal penetration."
+    ],
+    "kn": [
+        "{crop} ಮೇಲೆ ರೋಗಾಣು ಬೀಜಾಣುಗಳು ನೆಲೆಗೊಳ್ಳುವ ಮುನ್ನ ರಕ್ಷಣಾತ್ಮಕ ಜೈವಿಕ ಶಿಲೀಂಧ್ರನಾಶಕ (ಟ್ರೈಕೋಡರ್ಮಾ ವಿರಿಡೆ @ 5g/L ಅಥವಾ ಸ್ಯೂಡೋಮೊನಾಸ್ ಫ್ಲೋರೆಸೆನ್ಸ್) ಸಿಂಪಡಿಸಿ.",
+        "ಕ್ಷೇತ್ರದ ಸೂಕ್ಷ್ಮ ಹವಾಮಾನ ತೇವಾಂಶವನ್ನು ಕಡಿಮೆ ಮಾಡಲು ಕೆಳಗಿನ ಸೋಂಕಿತ ಎಲೆಗಳನ್ನು ಕತ್ತರಿಸಿ ಮತ್ತು ಗಾಳಿಯಾಡುವಿಕೆಯನ್ನು ಸುಧಾರಿಸಿ.",
+        "ಸಂಜೆ ವೇಳೆಯಲ್ಲಿ ಮೇಲಿಂದ ತುಂತುರು ನೀರಾವರಿ ನೀಡುವುದನ್ನು ತಪ್ಪಿಸಿ; ಎಲೆಗಳ ತೇವಾಂಶದ ಸಮಯ ತಗ್ಗಿಸಲು ಹನಿ ನೀರಾವರಿಗೆ ಬದಲಾಯಿಸಿ.",
+        "ಇತ್ತೀಚಿನ ಸಮುದಾಯ ರೋಗ ಪತ್ತೆಯಾದ ನೆರೆಯ ಜಮೀನಿನ ಗಡಿಗಳನ್ನು ಆರಂಭಿಕ ಕಲೆಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ.",
+        "ಶಿಲೀಂಧ್ರಗಳ ಒಳನುಗ್ಗುವಿಕೆಯನ್ನು ತಡೆಯಲು ಮತ್ತು ಗಿಡದ ಕೋಶಗಳ ಗೋಡೆಯನ್ನು ಬಲಪಡಿಸಲು ಸಮತೋಲಿತ ಪೊಟ್ಯಾಶಿಯಮ್ (K) ಪೋಷಕಾಂಶ ನೀಡಿ."
+    ],
+    "hi": [
+        "{crop} पर बीजाणु बैठने से पहले निवारक जैव-कवकनाशी (ट्राइकोडर्मा विरिडे @ 5g/L या स्यूडोमोनास फ्लोरेसेंस) का छिड़काव करें।",
+        "सूक्ष्म जलवायु की आर्द्रता कम करने के लिए निचली संक्रमित पत्तियों की छंटाई करें और वायु संचार में सुधार करें।",
+        "देर शाम को ऊपर से फव्वारा सिंचाई से बचें; पत्तियों के गीले रहने की अवधि कम करने के लिए ड्रिप सिंचाई अपनाएं।",
+        "हाल के सामुदायिक रोग प्रकोप वाले नजदीकी खेतों की सीमाओं पर शुरुआती धब्बों की निगरानी करें।",
+        "कवक के प्रवेश को रोकने और पौधों की कोशिका भित्ति को मजबूत करने के लिए संतुलित पोटेशियम (K) पोषण दें।"
+    ],
+    "ta": [
+        "{crop} பயிரில் வித்திகள் படிவதற்கு முன் தடுப்பு உயிரியல் பூஞ்சாணக்கொல்லியை (டிரைக்கோடெர்மா விரிடி @ 5g/L அல்லது சூடோமோனாஸ்) தெளிக்கவும்.",
+        "நுண்-காலநிலை ஈரப்பதத்தைக் குறைக்க கீழ்மட்ட பாதிக்கப்பட்ட இலைகளை கவாத்து செய்து காற்று சுழற்சியை மேம்படுத்தவும்.",
+        "மாலை நேரங்களில் தெளிப்பு நீர்ப்பாசனத்தைத் தவிர்க்கவும்; இலைகள் ஈரமாக இருக்கும் நேரத்தைக் குறைக்க சொட்டு நீர்ப்பாசனத்திற்கு மாறவும்.",
+        "சமீபத்தில் நோய் கண்டறியப்பட்ட அருகிலுள்ள எல்லைப் பயிர்களை ஆரம்பகால புள்ளிகளுக்காக கண்காணிக்கவும்.",
+        "பூஞ்சாணங்கள் ஊடுருவுவதைத் தடுத்து தாவர செல் சுவர்களை வலுப்படுத்த சீரான பொட்டாசியம் (K) உரமிடுங்கள்."
+    ],
+    "te": [
+        "{crop} పై బీజాంశాలు చేరకముందే నివారణ బయో-ఫంగిసైడ్ (ట్రైకోడెర్మా విరిడే @ 5g/L లేదా సూడోమోనాస్ ఫ్లోరోసెన్స్) పిచికారీ చేయండి.",
+        "క్షేత్రంలో తేమను తగ్గించడానికి క్రింది వ్యాధిగ్రస్త ఆకులను తొలగించి గాలి ప్రసరణను మెరుగుపరచండి.",
+        "సాయంత్రం వేళల్లో తుంపర సేద్యాన్ని నివారించండి; ఆకులు తడిగా ఉండే సమయాన్ని తగ్గించడానికి బిందు సేద్యం (డ్రిప్) ఉపయోగించండి.",
+        "ఇటీవల వ్యాధి సోకిన పొరుగు సరిహద్దు పొలాలను ముందస్తు మచ్చల కోసం నిశితంగా పరిశీలించండి.",
+        "శిలీంధ్రాల దాడిని తట్టుకోవడానికి మరియు మొక్కల కణ నిర్మాణాన్ని బలోపేతం చేయడానికి సమతుల్య పొటాషియం (K) అందించండి."
+    ],
+    "ml": [
+        "{crop} വിളകളിൽ രോഗാണുക്കൾ പടരുന്നതിന് മുമ്പ് ജൈവ കുമിൾനാശിനി (ട്രൈക്കോഡെർമ വിരിഡെ @ 5g/L അല്ലെങ്കിൽ സ്യൂഡോമോണസ് ഫ്ലൂറസെൻസ്) തളിക്കുക.",
+        "ഈർപ്പം കുറയ്ക്കുന്നതിനായി അടിഭാഗത്തെ രോഗബാധിത ഇലകൾ മുറിച്ചുമാറ്റി വായുസഞ്ചാരം ഉറപ്പാക്കുക.",
+        "വൈകുന്നേരങ്ങളിൽ സ്പ്രിംഗ്ലർ നന ഒഴിവാക്കുക; ഇലകളിലെ ഈർപ്പം കുറയ്ക്കാൻ തുള്ളിനന രീതിയിലേക്ക് മാറുക.",
+        "സമീപ പ്രദേശങ്ങളിൽ രോഗം റിപ്പോർട്ട് ചെയ്തതിനാൽ പാടത്തിന്റെ അതിരുകൾ പരിശോധിച്ച് ലക്ഷണങ്ങൾ കണ്ടെത്തുക.",
+        "കുമിൾ ബാധയെ പ്രതിരോധിക്കാൻ സസ്യങ്ങളുടെ കോശഭിത്തികൾ ശക്തിപ്പെടുത്തുന്നതിന് ആവശ്യമായ പൊട്ടാസ്യം (K) നൽകുക."
+    ],
+    "mr": [
+        "{crop} वर बुरशीचे बीजाणू स्थिरावण्यापूर्वी प्रतिबंधात्मक जैविक बुरशीनाशक (ट्रायकोडर्मा विरिडी @ 5g/L किंवा स्यूडोमोनास) फवारा.",
+        "सूक्ष्म हवामानातील आर्द्रता कमी करण्यासाठी खालची रोगट पाने छाटा आणि हवा खेळती ठेवा.",
+        "संध्याकाळी तुषार सिंचन टाळा; पानांचा ओलावा कमी करण्यासाठी ठिबक सिंचनाचा वापर करा.",
+        "अलीकडे रोग आढळलेल्या शेजारील शेतांच्या सीमांवर सुरुवातीच्या डागांची पाहणी करा.",
+        "बुरशीचा प्रादुर्भाव रोखण्यासाठी आणि वनस्पतींच्या पेशी मजबूत करण्यासाठी संतुलित पोटॅशियम (K) चे पोषण द्या."
+    ],
+    "bn": [
+        "{crop} ফসলে স্পোর জমার আগেই প্রতিরোধমূলক জৈব ছত্রাকনাশক (ট্রাইকোডার্মা ভিরিডি @ ৫ গ্রাম/লিটার বা সিউডোমোনাস) স্প্রে করুন।",
+        "ক্ষেতের আর্দ্রতা কমাতে নিচের সংক্রামিত পাতা ছেঁটে ফেলুন এবং বাতাস চলাচলের ব্যবস্থা করুন।",
+        "দেরি সন্ধ্যায় ফোয়ারা সেচ এড়িয়ে চলুন; পাতা ভেজা থাকার সময় কমাতে ড্রিপ সেচে চলে যান।",
+        "সম্প্রতি রোগ দেখা দেওয়া নিকটবর্তী জমির সীমানায় প্রাথমিক ক্ষতচিহ্ন পরীক্ষা করুন।",
+        "ছত্রাকের আক্রমণ প্রতিরোধ করতে এবং উদ্ভিদের কোষ প্রাচীর মজবুত করতে সুষম পটাসিয়াম (K) সরবরাহ করুন।"
+    ],
+    "gu": [
+        "{crop} પર બીજાણુઓ બેસે તે પહેલાં નિવારક જૈવિક ફૂગનાશક (ટ્રાઇકોડર્મા વિરીડી @ 5g/L અથવા સ્યુડોમોનાસ) છાંટો.",
+        "ભેજ ઘટાડવા માટે નીચેના રોગગ્રસ્ત પાંદડાં કાપી નાખો અને હવા-ઉજાસ સુધારો.",
+        "સાંજના સમયે સ્પ્રિંકલર પદ્ધતિ ટાળો; પાંદડાં ભીના રહેવાનો સમય ઘટાડવા ટપક પદ્ધતિ અપનાવો.",
+        "નજીકના ખેતરોમાં રોગ જોવા મળ્યો હોવાથી ખેતરની સરહદો પર પ્રારંભિક ડાઘાઓની તપાસ કરો.",
+        "ફૂગના પ્રવેશને રોકવા અને વનસ્પતિના કોષોને મજબૂત બનાવવા સંતુલિત પોટેશિયમ (K) પોષણ આપો."
+    ],
+    "pa": [
+        "{crop} ਉੱਤੇ ਉੱਲੀ ਦੇ ਬੀਜਾਣੂ ਜੰਮਣ ਤੋਂ ਪਹਿਲਾਂ ਰੋਕਥਾਮ ਵਾਲੀ ਜੈਵਿਕ ਉੱਲੀਨਾਸ਼ਕ (ਟ੍ਰਾਈਕੋਡਰਮਾ ਵਿਰੀਡੇ @ 5g/L ਜਾਂ ਸੂਡੋਮੋਨਾਸ) ਦਾ ਛਿੜਕਾਅ ਕਰੋ।",
+        "ਨਮੀ ਘਟਾਉਣ ਲਈ ਹੇਠਲੇ ਪ੍ਰਭਾਵਿਤ ਪੱਤੇ ਛਾਂਟੋ ਅਤੇ ਹਵਾ ਦੇ ਗੇੜ ਵਿੱਚ ਸੁਧਾਰ ਕਰੋ।",
+        "ਦੇਰ ਸ਼ਾਮ ਫੁਹਾਰਾ ਸਿੰਚਾਈ ਤੋਂ ਬਚੋ; ਪੱਤੇ ਗਿੱਲੇ ਰਹਿਣ ਦਾ ਸਮਾਂ ਘਟਾਉਣ ਲਈ ਤੁਪਕਾ ਸਿੰਚਾਈ ਅਪਣਾਓ।",
+        "ਨੇੜਲੇ ਖੇਤਾਂ ਵਿੱਚ ਰੋਗ ਫੈਲਣ ਦੇ ਮੱਦੇਨਜ਼ਰ ਖੇਤ ਦੀਆਂ ਹੱਦਾਂ 'ਤੇ ਸ਼ੁਰੂਆਤੀ ਨਿਸ਼ਾਨਾਂ ਦੀ ਜਾਂਚ ਕਰੋ।",
+        "ਉੱਲੀ ਦੇ ਹਮਲੇ ਨੂੰ ਰੋਕਣ ਅਤੇ ਪੌਦੇ ਦੇ ਸੈੱਲਾਂ ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨ ਲਈ ਸੰਤੁਲਿਤ ਪੋਟਾਸ਼ੀਅਮ (K) ਖੁਰਾਕ ਦਿਓ।"
+    ],
+    "ur": [
+        "{crop} پر جراثیم کے بیج جمنے سے پہلے حفاظتی بائیو فنگسائیڈ (ٹرائیکوڈرما وریڈی @ 5g/L یا سوڈوموناس) کا سپرے کریں۔",
+        "نمی کم کرنے کے لیے نچلے متاثرہ پتوں کو کاٹیں اور ہوا کی گردش کو بہتر بنائیں۔",
+        "دیر شام فوارہ آبپاشی سے گریز کریں؛ پتوں کے گیلے رہنے کا دورانیہ کم کرنے کے لیے ڈرپ طریقہ اپنائیں۔",
+        "قریبی کھیتوں میں بیماری کی اطلاعات کے پیش نظر کھیت کی سرحدوں پر ابتدائی دھبوں کی جانچ کریں۔",
+        "فنگس کے حملے سے بچاؤ اور پودوں کے خلیوں کی دیواروں کو مضبوط بنانے کے لیے متوازن پوٹاشیم (K) فراہم کریں۔"
+    ],
+    "or": [
+        "{crop} ଉପରେ ରୋଗାଣୁ ବସିବା ପୂର୍ବରୁ ପ୍ରତିଷେଧକ ଜୈବ କବକନାଶକ (ଟ୍ରାଇକୋଡର୍ମା ଭିରିଡି @ 5g/L କିମ୍ବା ସୁଡୋମୋନାସ୍) ସ୍ପ୍ରେ କରନ୍ତୁ।",
+        "ଆର୍ଦ୍ରତା ହ୍ରାସ କରିବା ପାଇଁ ତଳ ଭାଗର ରୋଗାକ୍ରାନ୍ତ ପତ୍ରଗୁଡ଼ିକୁ କାଟି ସଫା କରନ୍ତୁ ଏବଂ ବାୟୁ ଚଳାଚଳ ବୃଦ୍ଧି କରନ୍ତୁ।",
+        "ସନ୍ଧ୍ୟା ସମୟରେ ଉପରୁ ସ୍ପ୍ରିଙ୍କଲର ସେଚନରୁ ଦୂରେଇ ରୁହନ୍ତୁ; ପତ୍ର ଓଦା ରହିବା ସମୟ କମାଇବାକୁ ବୁନ୍ଦା ସେଚନ ବ୍ୟବହାର କରନ୍ତୁ।",
+        "ନିକଟସ୍ଥ କ୍ଷେତ୍ରରେ ରୋଗ ଚିହ୍ନଟ ହୋଇଥିବାରୁ କ୍ଷେତ ସୀମାରେ ପ୍ରାରମ୍ଭିକ କ୍ଷତ ଚିହ୍ନ ଯାଞ୍ଚ କରନ୍ତୁ।",
+        "କବକ ଆକ୍ରମଣରୁ ରକ୍ଷା ପାଇବା ଏବଂ ଗଛର କୋଷ ପ୍ରାଚୀରକୁ ମଜବୁତ କରିବା ପାଇଁ ସନ୍ତୁଳିତ ପୋଟାସିୟମ୍ (K) ପୁଷ୍ଟିସାର ପ୍ରଦାନ କରନ୍ତୁ।"
+    ],
+    "as": [
+        "{crop} শস্যত বেমাৰৰ বীজাণু বহাৰ আগতে প্ৰতিৰোধমূলক জৈৱ ভেঁকুৰনাশক (ট্ৰাইকোডাৰ্মা ভিৰিডি @ ৫ গ্ৰাম/লিটাৰ বা চিউডোমোনাছ) স্প্ৰে কৰক।",
+        "আৰ্দ্ৰতা হ্ৰাস কৰিবলৈ তলৰ আক্ৰান্ত পাতবোৰ কাটি পেলাওক আৰু বায়ু চলাচলৰ ব্যৱস্থা কৰক।",
+        "গধূলি ওপৰৰ পৰা পানী ছটিওৱাৰ পৰা বিৰত থাকক; পাত তিতি থকা সময় কমাবলৈ ড্ৰিপ পদ্ধতি ব্যৱহাৰ কৰক।",
+        "ওচৰৰ পথাৰত ৰোগ দেখা দিয়াত পথাৰৰ সীমাত প্ৰাথমিক লক্ষণসমূহ পৰীক্ষা কৰক।",
+        "ভেঁকুৰৰ আক্ৰমণ প্ৰতিৰোধ কৰিবলৈ আৰু কোষৰ দেৱাল শক্তিশালী কৰিবলৈ সুষম পটাছিয়াম (K) যোগান ধৰক।"
+    ],
+    "ne": [
+        "{crop} बालीमा ढुसीको बीजाणु फैलिनुअघि नै रोकथामका लागि जैविक विषादी (ट्राइकोडर्मा विरिडे @ ५ ग्राम/लि. वा स्युडोमोनास) छर्कनुहोस्।",
+        "ओस कम गर्न तल्लो भागका संक्रमित पातहरू काट्नुहोस् र हावाको आवतजावत सुधार गर्नुहोस्।",
+        "साँझमा स्प्रिंकलर सिँचाइ नगर्नुहोस्; पातहरू भिजेको समय घटाउन थोपा सिँचाइ अपनाउनुहोस्।",
+        "नजिकै रोग फैलिएको हुनाले खेतको सिमानामा प्रारम्भिक दागहरूको निरीक्षण गर्नुहोस्।",
+        "ढुसीको आक्रमण रोक्न र बिरुवाका कोषहरू बलियो बनाउन सन्तुलित पोटासियम (K) पोषण दिनुहोस्।"
+    ],
+    "si": [
+        "{crop} බෝගයේ බීජාණු වර්ධනයට පෙර දිලීර නාශක (ට්‍රයිකොඩර්මා විරිඩේ හෝ සියුඩොමෝනාස්) ඉසින්න.",
+        "තෙතමනය අවම කිරීම සඳහා ආසාදිත පහළ පත්‍ර කප්පාදු කර වාතාශ්‍රය වැඩි දියුණු කරන්න.",
+        "සවස් කාලයේ ඉසින වාරිමාර්ගයෙන් වළකින්න; බිංදු ජල සම්පාදනය භාවිත කරන්න.",
+        "අසල ප්‍රදේශවල රෝග වාර්තා වී ඇති බැවින් ක්ෂේත්‍ර සීමා හොඳින් පරීක්ෂා කරන්න.",
+        "දිලීර ප්‍රතිරෝධය සඳහා සමබර පොටෑසියම් (K) පෝෂණය ලබා දෙන්න."
+    ],
+    "ar": [
+        "رش مبيد فطري حيوي وقائي (تريكوديرما فيريدي @ 5 جم/لتر أو سودوموناس) قبل استقرار الأبواغ على {crop}.",
+        "قم بتقليم الأوراق السفلية المصابة لتحسين التهوية وتقليل الرطوبة النسبية في المحيط الحيوي.",
+        "تجنب الري بالرشاشات الرأسية في وقت متأخر من المساء؛ استخدم الري بالتنقيط لتقليل بلل الأوراق.",
+        "افحص حدود الحقل المجاورة للبؤر المرضية الحديثة للكشف المبكر عن أي بقع نخرية.",
+        "حافظ على تغذية متوازنة بالبوتاسيوم (K) لتقوية الجدران الخلوية ومقاومة اختراق الفطريات."
+    ],
+    "fr": [
+        "Appliquer un biofongicide prophylactique (Trichoderma viride @ 5g/L ou Pseudomonas fluorescens) avant la germination des spores sur {crop}.",
+        "Optimiser l'aération de la canopée et tailler le feuillage inférieur infecté pour réduire l'humidité relative.",
+        "Éviter l'irrigation par aspersion en fin de soirée ; privilégier le goutte-à-goutte pour limiter l'humectation des feuilles.",
+        "Inspecter les bordures de parcelles adjacentes aux foyers d'infection récents pour détecter les premières lésions.",
+        "Maintenir une nutrition potassique (K) équilibrée pour renforcer les parois cellulaires contre la pénétration fongique."
+    ],
+    "es": [
+        "Aplicar un biofungicida profiláctico (Trichoderma viride @ 5g/L o Pseudomonas fluorescens) antes del asentamiento de esporas en {crop}.",
+        "Optimizar la aireación del dosel y podar el follaje inferior infectado para reducir la humedad relativa local.",
+        "Evitar el riego por aspersión al final de la tarde; cambiar a goteo para minimizar la duración del mojado foliar.",
+        "Inspeccionar los bordes de la parcela adyacentes a detecciones comunitarias recientes en busca de lesiones necróticas.",
+        "Mantener una nutrición equilibrada con potasio (K) para fortalecer las paredes celulares contra la penetración fúngica."
+    ],
+    "pt": [
+        "Aplicar biofungicida profilático (Trichoderma viride @ 5g/L ou Pseudomonas fluorescens) antes da fixação de esporos em {crop}.",
+        "Otimizar a aeração da copa e podar a folhagem inferior infectada para reduzir a umidade relativa.",
+        "Evitar irrigação por aspersão no final da tarde; utilizar gotejamento para minimizar o molhamento foliar.",
+        "Inspecionar as bordas do talhão adjacentes a focos comunitários recentes para detectar lesões iniciais.",
+        "Manter nutrição equilibrada com potássio (K) para fortalecer as paredes celulares contra a penetração de fungos."
+    ],
+    "de": [
+        "Vor Sporenansiedlung ein prophylaktisches Bio-Fungizid (Trichoderma viride @ 5g/L oder Pseudomonas fluorescens) auf {crop} ausbringen.",
+        "Bestandslüftung optimieren und untere infizierte Blätter entfernen, um die relative Luftfeuchtigkeit zu senken.",
+        "Sprinklerbewässerung am späten Abend vermeiden; auf Tropfbewässerung umstellen, um die Blattnässedauer zu minimieren.",
+        "Feldränder in der Nähe gemeldeter Krankheitsausbrüche auf frühe nekrotische Flecken untersuchen.",
+        "Ausgewogene Kaliumdüngung (K) sicherstellen, um pflanzliche Zellwände gegen Pilzpenetration zu stärken."
+    ],
+    "it": [
+        "Applicare un bio-fungicida preventivo (Trichoderma viride @ 5g/L o Pseudomonas fluorescens) prima dell'insediamento delle spore su {crop}.",
+        "Ottimizzare l'aerazione della chioma e potare il fogliame basale infetto per ridurre l'umidità relativa.",
+        "Evitare l'irrigazione a pioggia a tarda sera; passare al goccia a goccia per ridurre la bagnatura fogliare.",
+        "Ispezionare i bordi del campo adiacenti a recenti focolai per individuare tempestivamente le lesioni necrotiche.",
+        "Mantenere un'adeguata nutrizione con potassio (K) per rinforzare le pareti cellulari contro i funghi."
+    ],
+    "ru": [
+        "Примените профилактический биофунгицид (Trichoderma viride @ 5г/л или Pseudomonas fluorescens) до прорастания спор на {crop}.",
+        "Оптимизируйте проветривание кроны и удалите нижние зараженные листья для снижения влажности.",
+        "Избегайте дождевания поздним вечером; перейдите на капельный полив для сокращения увлажнения листьев.",
+        "Осмотрите границы поля, прилегающие к недавним очагам заражения, на наличие ранних некрозов.",
+        "Обеспечьте сбалансированное калийное (K) питание для укрепления клеточных стенок против проникновения грибков."
+    ],
+    "ja": [
+        "{crop} に胞子が付着する前に、予防的な生物殺菌剤（トリコデルマ・ビリデ 5g/L またはシュードモナス）を散布してください。",
+        "群落内の通気性を確保し、下部の感染葉を剪定して微気候の相対湿度を下げてください。",
+        "夕方遅くの散水灌漑を避け、点滴灌漑に切り替えて葉の濡れ時間を最小限に抑えてください。",
+        "近隣で発生が報告された圃場境界を点検し、初期の壊死斑を早期に発見してください。",
+        "菌糸の侵入を防ぎ植物の細胞壁を強化するため、バランスの取れたカリウム（K）施肥を行ってください。"
+    ],
+    "ko": [
+        "{crop} 에 포자가 정착하기 전 예방적 생물 살균제(트리코더마 비리데 5g/L 또는 슈도모나스)를 살포하십시오.",
+        "통풍을 개선하고 하부의 감염된 잎을 제거하여 미기후 상대습도를 낮추십시오.",
+        "늦은 저녁의 스프링클러 관수를 피하고, 잎의 젖은 시간을 줄이기 위해 점적 관수로 전환하십시오.",
+        "인근 병해 발생 지역과 인접한 포장 경계면을 점검하여 초기 병반을 조기에 발견하십시오.",
+        "곰팡이 침투를 방어하고 세포벽을 강화하기 위해 균형 잡힌 칼륨(K) 영양을 공급하십시오."
+    ],
+    "zh": [
+        "在病菌孢子于 {crop} 定殖前喷施预防性生物杀菌剂（木霉菌 @ 5g/L 或荧光假单胞菌）。",
+        "优化冠层通风，修剪下部染病叶片，降低局部微环境相对湿度。",
+        "避免傍晚进行喷灌；切换为滴灌以缩短叶片湿润时间。",
+        "检查毗邻近期病害暴发区域的田块边缘，及早发现初期坏死斑。",
+        "保持充足均衡的钾肥（K）营养，增强植物细胞壁抗真菌侵入能力。"
+    ]
+}
+
+
+def localize_preventive_actions(actions: List[str], crop: str = "Crop", lang: str = "en") -> List[str]:
+    """Returns 5 localized preventive action recommendations in the requested language."""
+    norm_lang = (lang or "en").lower().strip()
+    if norm_lang not in SUPPORTED_LANGUAGES:
+        norm_lang = "en"
+    
+    loc_crop = get_crop_display_name(crop, norm_lang)
+    template_list = PREVENTIVE_ACTIONS_25.get(norm_lang, PREVENTIVE_ACTIONS_25["en"])
+    
+    return [tpl.format(crop=loc_crop) for tpl in template_list]
 
 
 # --- FULL 25-LANGUAGE PATHOLOGY FACTORS FOR DEEP EPIDEMIOLOGICAL EVIDENCE ---
