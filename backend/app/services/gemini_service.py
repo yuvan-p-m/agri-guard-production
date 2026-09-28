@@ -21,15 +21,39 @@ from core.config import settings
 
 logger = logging.getLogger(__name__)
 
-# Bounded retry configuration for transient 503 / Service Unavailable errors
-MAX_503_RETRIES = 2
+# Bounded retry configuration for transient 503 / 429 errors
+MAX_RETRIES = 2
 INITIAL_BACKOFF_SECONDS = 2.0
 BACKOFF_MULTIPLIER = 2.0
 
+# Backwards compatibility alias
+MAX_503_RETRIES = MAX_RETRIES
+
+# Fixed generic message for invalid/non-plant images
+INVALID_IMAGE_MESSAGE = "Invalid image. Please upload a clear photo of a plant leaf."
+
+
+def get_gemini_primary_model() -> str:
+    """Returns the primary Gemini model name from environment or centralized settings (default: gemini-3.5-flash)."""
+    return (
+        os.getenv("GEMINI_PRIMARY_MODEL")
+        or os.getenv("GEMINI_MODEL")
+        or getattr(settings, "GEMINI_PRIMARY_MODEL", "gemini-3.5-flash")
+        or getattr(settings, "GEMINI_MODEL", "gemini-3.5-flash")
+    ).strip()
+
+
+def get_gemini_fallback_model() -> str:
+    """Returns the fallback Gemini model name from environment or centralized settings (default: gemini-3.6-flash)."""
+    return (
+        os.getenv("GEMINI_FALLBACK_MODEL")
+        or getattr(settings, "GEMINI_FALLBACK_MODEL", "gemini-3.6-flash")
+    ).strip()
+
 
 def get_gemini_model() -> str:
-    """Returns the currently active Gemini model name from environment or centralized settings."""
-    return (os.getenv("GEMINI_MODEL") or settings.GEMINI_MODEL or "gemini-3.5-flash").strip()
+    """Returns the active primary Gemini model name (backwards compatibility)."""
+    return get_gemini_primary_model()
 
 
 def get_gemini_api_key() -> str:
@@ -39,12 +63,14 @@ def get_gemini_api_key() -> str:
 
 def get_gemini_generate_url(model: str = "") -> str:
     """Constructs the Gemini REST generateContent URL without API key (safe for logging)."""
-    m = model.strip() if model else get_gemini_model()
+    m = model.strip() if model else get_gemini_primary_model()
     return f"https://generativelanguage.googleapis.com/v1beta/models/{m}:generateContent"
 
 
 # Backward compatibility aliases
 GEMINI_API_KEY = get_gemini_api_key()
+GEMINI_PRIMARY_MODEL = get_gemini_primary_model()
+GEMINI_FALLBACK_MODEL = get_gemini_fallback_model()
 GEMINI_MODEL = get_gemini_model()
 GEMINI_API_URL = get_gemini_generate_url()
 
@@ -61,7 +87,21 @@ class GeminiConfigError(GeminiError):
 
 class GeminiAPIError(GeminiError):
     """Raised when Gemini API returns an upstream HTTP error."""
-    pass
+    def __init__(self, message: str, status_code: int = 502):
+        super().__init__(message)
+        self.status_code = status_code
+
+
+class GeminiUnavailableError(GeminiAPIError):
+    """Raised when Gemini API returns HTTP 503 UNAVAILABLE."""
+    def __init__(self, message: str = "AI diagnosis service is currently experiencing high demand (HTTP 503). Please retry in a moment."):
+        super().__init__(message, status_code=503)
+
+
+class GeminiRateLimitError(GeminiAPIError):
+    """Raised when Gemini API returns HTTP 429 RESOURCE_EXHAUSTED."""
+    def __init__(self, message: str = "AI diagnosis service quota / rate limit exceeded (HTTP 429). Please try again shortly."):
+        super().__init__(message, status_code=429)
 
 
 class GeminiTimeoutError(GeminiError):
@@ -74,10 +114,15 @@ class GeminiParseError(GeminiError):
     pass
 
 
-def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "image/jpeg") -> dict:
+def _call_gemini_multimodal(
+    prompt: str,
+    image_bytes: bytes,
+    mime_type: str = "image/jpeg",
+    model_name: str | None = None
+) -> dict:
     """
     Call Gemini Multimodal API with an image and text prompt, and return parsed JSON response.
-    Includes bounded exponential backoff retries specifically for transient HTTP 503 UNAVAILABLE responses.
+    Includes bounded exponential backoff retries specifically for transient HTTP 503 / 429 responses.
     Raises explicit GeminiError on any configuration, network, upstream API, or parsing failure.
     """
     api_key = get_gemini_api_key()
@@ -85,8 +130,8 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
         logger.error("GEMINI_API_KEY is not configured.")
         raise GeminiConfigError("Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable.")
 
-    model_name = get_gemini_model()
-    base_url = get_gemini_generate_url(model_name)
+    active_model = (model_name or get_gemini_primary_model()).strip()
+    base_url = get_gemini_generate_url(active_model)
     url = f"{base_url}?key={api_key}"
 
     b64_data = base64.b64encode(image_bytes).decode("utf-8")
@@ -113,7 +158,7 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
         }
     }
 
-    max_attempts = 1 + MAX_503_RETRIES
+    max_attempts = 1 + MAX_RETRIES
     response = None
 
     for attempt in range(1, max_attempts + 1):
@@ -123,7 +168,7 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
             logger.error(f"Gemini Multimodal API request timed out on {base_url} (attempt {attempt}/{max_attempts}): {te}")
             if attempt < max_attempts:
                 wait_time = INITIAL_BACKOFF_SECONDS * (BACKOFF_MULTIPLIER ** (attempt - 1))
-                logger.info(f"Retrying timed-out Gemini request in {wait_time:.1f}s for model '{model_name}' (attempt {attempt + 1}/{max_attempts})...")
+                logger.info(f"Retrying timed-out Gemini request in {wait_time:.1f}s for model '{active_model}' (attempt {attempt + 1}/{max_attempts})...")
                 time.sleep(wait_time)
                 continue
             raise GeminiTimeoutError("AI diagnosis service timed out while analyzing image. Please try again.") from te
@@ -131,24 +176,32 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
             logger.error(f"Gemini Multimodal API network request failed on {base_url} (attempt {attempt}/{max_attempts}): {re}")
             raise GeminiAPIError(f"Failed to communicate with AI diagnosis service: {re}") from re
 
-        # Handle 503 / Service Unavailable with bounded exponential backoff
-        if response.status_code == 503:
+        # Handle 503 / Service Unavailable and 429 / Rate Limit with bounded exponential backoff
+        if response.status_code in (503, 429):
+            status_desc = "503 UNAVAILABLE" if response.status_code == 503 else "429 RATE_LIMIT"
             if attempt < max_attempts:
                 wait_time = INITIAL_BACKOFF_SECONDS * (BACKOFF_MULTIPLIER ** (attempt - 1))
                 logger.warning(
-                    f"Gemini Multimodal API returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"Gemini Multimodal API returned HTTP {response.status_code} {status_desc} for model '{active_model}' "
                     f"(attempt {attempt}/{max_attempts}). Retrying in {wait_time:.1f}s..."
                 )
                 time.sleep(wait_time)
                 continue
             else:
                 logger.error(
-                    f"Gemini Multimodal API returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"Gemini Multimodal API returned HTTP {response.status_code} {status_desc} for model '{active_model}' "
                     f"on final attempt ({attempt}/{max_attempts}). All retries exhausted."
                 )
-                raise GeminiAPIError("AI diagnosis service is currently experiencing high demand (HTTP 503). Please retry in a moment.")
+                if response.status_code == 503:
+                    raise GeminiUnavailableError(
+                        "AI diagnosis service is currently experiencing high demand (HTTP 503). Please retry in a moment."
+                    )
+                else:
+                    raise GeminiRateLimitError(
+                        "AI diagnosis service quota / rate limit exceeded (HTTP 429). Please try again shortly."
+                    )
 
-        # Non-503 status: do not retry (200 OK or non-retryable 4xx/5xx error)
+        # Non-503 / Non-429 status: do not retry (200 OK or non-retryable 4xx/5xx error)
         break
 
     if response is None:
@@ -167,19 +220,32 @@ def _call_gemini_multimodal(prompt: str, image_bytes: bytes, mime_type: str = "i
 
         logger.error(
             f"Gemini Multimodal API upstream error [Status: {response.status_code} ({error_status})] "
-            f"for model '{model_name}': {error_msg}"
+            f"for model '{active_model}': {error_msg}"
         )
 
         if response.status_code == 404:
-            raise GeminiAPIError(f"AI diagnosis service model '{model_name}' was not found (HTTP 404). Please verify GEMINI_MODEL.")
+            raise GeminiAPIError(
+                f"AI diagnosis service model '{active_model}' was not found (HTTP 404). Please verify model configuration.",
+                status_code=404
+            )
         elif response.status_code == 429:
-            raise GeminiAPIError("AI diagnosis service quota / rate limit exceeded (HTTP 429). Please try again shortly.")
+            raise GeminiRateLimitError(
+                "AI diagnosis service quota / rate limit exceeded (HTTP 429). Please try again shortly."
+            )
         elif response.status_code in (400, 401, 403):
-            raise GeminiAPIError(f"AI diagnosis service authentication/request error (HTTP {response.status_code}): {error_msg}")
+            raise GeminiAPIError(
+                f"AI diagnosis service authentication/request error (HTTP {response.status_code}): {error_msg}",
+                status_code=response.status_code
+            )
         elif response.status_code == 503:
-            raise GeminiAPIError("AI diagnosis service is currently experiencing high demand (HTTP 503). Please retry in a moment.")
+            raise GeminiUnavailableError(
+                "AI diagnosis service is currently experiencing high demand (HTTP 503). Please retry in a moment."
+            )
         else:
-            raise GeminiAPIError(f"AI diagnosis service returned HTTP {response.status_code}: {error_msg}")
+            raise GeminiAPIError(
+                f"AI diagnosis service returned HTTP {response.status_code}: {error_msg}",
+                status_code=response.status_code
+            )
 
     try:
         result = response.json()
@@ -236,7 +302,17 @@ Examine the attached image carefully and provide a rigorous pathology diagnosis.
 
 DIAGNOSIS INSTRUCTIONS:
 1. Verify if this image depicts a plant leaf, crop foliage, stem, or plant tissue:
-   - If NOT a plant or crop (e.g. human, device, shoe, bottle, vehicle, indoor object, animal, food dish, or completely unidentifiable), set "is_plant_leaf": false.
+   - If NOT a plant or crop leaf (e.g. human, person, animal, pet, electronic device, phone, keyboard, screen, monitor, vehicle, indoor object, furniture, shoe, clothing, bottle, food dish, building, scenery, screenshot, document, or completely unidentifiable non-plant image):
+     * Set "is_plant_leaf": false.
+     * Set "crop": "None".
+     * Set "disease": "No Crop Leaf Detected".
+     * Set "disease_id": "invalid_leaf".
+     * Set "confidence": 0.0.
+     * Set "severity": "none".
+     * Set "pathogen_type": "None".
+     * Set "symptoms": [].
+     * Set "reasoning": "Invalid image. Please upload a clear photo of a plant leaf."
+     * MANDATORY PRIVACY AND CLASSIFICATION RULE: Do NOT identify, describe, classify, or mention what the unrelated object, person, animal, document, or scene is. Do NOT say what you think the image depicts. Use ONLY the exact generic text: "Invalid image. Please upload a clear photo of a plant leaf."
 2. If it IS a plant / crop:
    - Identify the crop name (e.g. Tomato, Potato, Apple, Citrus, Corn, Grape, Rice, Wheat, Pepper, Strawberry, Cotton, Soybean, Sugarcane, etc.).
    - Inspect the plant tissue for disease symptoms: fungal lesions, bacterial spots, viral mosaics, rust pustules, powdery/downy mildew, blight, chlorosis, necrosis, pest damage, or healthy tissue.
@@ -276,25 +352,54 @@ If NOT a plant/crop leaf:
   "severity": "none",
   "pathogen_type": "None",
   "symptoms": [],
-  "reasoning": "The uploaded photo does not contain recognizable crop foliage or plant leaf tissue."
+  "reasoning": "Invalid image. Please upload a clear photo of a plant leaf."
 }"""
 
-    gemini_result = _call_gemini_multimodal(prompt, image_bytes, mime_type=mime_type)
+    primary_model = get_gemini_primary_model()
+    fallback_model = get_gemini_fallback_model()
+
+    logger.info(f"Gemini primary model request: {primary_model}")
+    model_used = primary_model
+    gemini_result = None
+
+    try:
+        gemini_result = _call_gemini_multimodal(
+            prompt, image_bytes, mime_type=mime_type, model_name=primary_model
+        )
+    except GeminiAPIError as primary_err:
+        status_code = getattr(primary_err, "status_code", None)
+        if status_code not in (429, 503):
+            raise
+        logger.warning(f"Gemini primary model unavailable: {primary_model} HTTP {status_code}")
+        logger.info(f"Falling back to Gemini model: {fallback_model}")
+        try:
+            gemini_result = _call_gemini_multimodal(
+                prompt, image_bytes, mime_type=mime_type, model_name=fallback_model
+            )
+            model_used = fallback_model
+            logger.info(f"Gemini fallback model succeeded: {fallback_model}")
+        except GeminiAPIError as fallback_err:
+            fb_status = getattr(fallback_err, "status_code", None)
+            if fb_status in (429, 503):
+                logger.error(
+                    f"Gemini fallback model unavailable: {fallback_model} HTTP {fb_status}. Both primary and fallback models failed."
+                )
+            raise fallback_err
 
     if not isinstance(gemini_result, dict):
         raise GeminiParseError("AI diagnosis service returned unexpected data format.")
 
     if not gemini_result.get("is_plant_leaf", True) or gemini_result.get("disease_id") == "invalid_leaf":
-        logger.info("Gemini classified image as non-plant / invalid leaf")
+        logger.info(f"Gemini ({model_used}) classified image as non-plant / invalid leaf")
         return {
             "is_plant_leaf": False,
             "disease": "No Crop Leaf Detected",
             "confidence": 0.0,
             "status": "invalid_leaf",
-            "message": gemini_result.get("reasoning") or "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf.",
+            "message": INVALID_IMAGE_MESSAGE,
             "provider": "gemini",
-            "model_used": get_gemini_model(),
-            "reasoning": gemini_result.get("reasoning", "")
+            "model_used": model_used,
+            "reasoning": INVALID_IMAGE_MESSAGE
         }
 
     crop = str(gemini_result.get("crop", "Plant")).strip()
@@ -330,11 +435,11 @@ If NOT a plant/crop leaf:
         "symptoms": gemini_result.get("symptoms", []),
         "reasoning": gemini_result.get("reasoning", ""),
         "provider": "gemini",
-        "model_used": get_gemini_model()
+        "model_used": model_used
     }
 
 
-def _call_gemini(prompt: str) -> dict | None:
+def _call_gemini(prompt: str, model_name: str | None = None) -> dict | None:
     """
     Call Gemini API with a text prompt and return parsed JSON response.
     Returns None if the call fails or the response cannot be parsed as JSON.
@@ -344,8 +449,8 @@ def _call_gemini(prompt: str) -> dict | None:
         logger.error("GEMINI_API_KEY is not set — cannot call Gemini API.")
         return None
 
-    model_name = get_gemini_model()
-    base_url = get_gemini_generate_url(model_name)
+    active_model = (model_name or get_gemini_primary_model()).strip()
+    base_url = get_gemini_generate_url(active_model)
     url = f"{base_url}?key={api_key}"
     payload = {
         "contents": [
@@ -362,7 +467,7 @@ def _call_gemini(prompt: str) -> dict | None:
         }
     }
 
-    max_attempts = 1 + MAX_503_RETRIES
+    max_attempts = 1 + MAX_RETRIES
     response = None
 
     for attempt in range(1, max_attempts + 1):
@@ -379,18 +484,19 @@ def _call_gemini(prompt: str) -> dict | None:
             logger.error(f"Gemini API text call network request failed on {base_url} (attempt {attempt}/{max_attempts}): {re}")
             return None
 
-        if response.status_code == 503:
+        if response.status_code in (503, 429):
+            status_desc = "503 UNAVAILABLE" if response.status_code == 503 else "429 RATE_LIMIT"
             if attempt < max_attempts:
                 wait_time = INITIAL_BACKOFF_SECONDS * (BACKOFF_MULTIPLIER ** (attempt - 1))
                 logger.warning(
-                    f"Gemini API text call returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"Gemini API text call returned HTTP {response.status_code} {status_desc} for model '{active_model}' "
                     f"(attempt {attempt}/{max_attempts}). Retrying in {wait_time:.1f}s..."
                 )
                 time.sleep(wait_time)
                 continue
             else:
                 logger.error(
-                    f"Gemini API text call returned HTTP 503 UNAVAILABLE for model '{model_name}' "
+                    f"Gemini API text call returned HTTP {response.status_code} {status_desc} for model '{active_model}' "
                     f"on final attempt ({attempt}/{max_attempts}). All retries exhausted."
                 )
 
@@ -411,7 +517,7 @@ def _call_gemini(prompt: str) -> dict | None:
             error_msg = response.text[:400] if response.text else "No response body"
         logger.error(
             f"Gemini API text call upstream error [Status: {response.status_code} ({error_status})] "
-            f"for model '{model_name}': {error_msg}"
+            f"for model '{active_model}': {error_msg}"
         )
         return None
 

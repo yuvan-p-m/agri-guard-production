@@ -83,11 +83,15 @@ def model_status():
     """Returns status of AI diagnosis engine (Google Gemini Vision AI)"""
     import os
     from core.config import settings
+    from services.gemini_service import get_gemini_primary_model, get_gemini_fallback_model
     api_key_configured = bool(os.getenv("GEMINI_API_KEY", settings.GEMINI_API_KEY).strip())
-    model_name = (os.getenv("GEMINI_MODEL") or settings.GEMINI_MODEL or "gemini-3.5-flash").strip()
+    primary_model = get_gemini_primary_model()
+    fallback_model = get_gemini_fallback_model()
     return {
         "model_loaded": api_key_configured,
-        "model_id": model_name,
+        "model_id": primary_model,
+        "primary_model": primary_model,
+        "fallback_model": fallback_model,
         "status": "ready" if api_key_configured else "unconfigured",
         "provider": "gemini",
         "api_reachable": True

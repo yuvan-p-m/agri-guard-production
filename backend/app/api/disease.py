@@ -11,6 +11,9 @@ from services.ai_localization import get_disease_display_name, get_crop_display_
 from services.gemini_service import (
     diagnose_crop_disease,
     get_gemini_model,
+    get_gemini_primary_model,
+    get_gemini_fallback_model,
+    INVALID_IMAGE_MESSAGE,
     GeminiError,
     GeminiConfigError,
     GeminiTimeoutError,
@@ -126,15 +129,15 @@ async def predict_disease(
 
     # Early termination guard: If image is not a valid plant leaf
     if prediction.get("status") == "invalid_leaf" or not prediction.get("is_plant_leaf", True):
-        logger.info(f"Invalid leaf detected in predict_disease: {prediction.get('message')}")
+        logger.info(f"Invalid leaf detected in predict_disease: {INVALID_IMAGE_MESSAGE}")
         return {
-            "disease": prediction.get("disease", "No Crop Leaf Detected"),
-            "confidence": float(prediction.get("confidence", 0.0)),
+            "disease": "No Crop Leaf Detected",
+            "confidence": 0.0,
             "status": "invalid_leaf",
-            "message": prediction.get("message", "The uploaded photo does not appear to contain a valid crop leaf. Please upload a clear photo of a plant leaf."),
+            "message": INVALID_IMAGE_MESSAGE,
             "provider": "gemini",
-            "model_used": prediction.get("model_used", get_gemini_model()),
-            "reasoning": prediction.get("reasoning", ""),
+            "model_used": prediction.get("model_used", get_gemini_primary_model()),
+            "reasoning": INVALID_IMAGE_MESSAGE,
             "progression_risk": None,
             "pesticide_recommendation": None,
             "treatment": None,
@@ -215,7 +218,7 @@ async def predict_disease(
         "symptoms": prediction.get("symptoms", []),
         "reasoning": prediction.get("reasoning", ""),
         "provider": "gemini",
-        "model_used": prediction.get("model_used", get_gemini_model()),
+        "model_used": prediction.get("model_used", get_gemini_primary_model()),
         "disease_prediction": {
             "disease": disease_name,
             "localized_disease": localized_disease,

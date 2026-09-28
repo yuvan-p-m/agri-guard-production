@@ -33,9 +33,13 @@ class Settings(BaseSettings):
     SMS_PROVIDER: str = os.getenv("SMS_PROVIDER", "fast2sms")
 
     # AI Models & Gemini Vision Engine
+    DEFAULT_GEMINI_PRIMARY_MODEL: str = "gemini-3.5-flash"
+    DEFAULT_GEMINI_FALLBACK_MODEL: str = "gemini-3.6-flash"
     DEFAULT_GEMINI_MODEL: str = "gemini-3.5-flash"
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+    GEMINI_PRIMARY_MODEL: str = os.getenv("GEMINI_PRIMARY_MODEL") or os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
+    GEMINI_FALLBACK_MODEL: str = os.getenv("GEMINI_FALLBACK_MODEL", "gemini-3.6-flash")
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL") or os.getenv("GEMINI_PRIMARY_MODEL", "gemini-3.5-flash")
     CROP_MODEL_PATH: str = os.getenv("CROP_MODEL_PATH", "ai/crop_model/model.pkl")
 
     # Firebase
