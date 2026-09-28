@@ -156,13 +156,6 @@ async def startup():
     except Exception as e:
         logger.error(f"Startup warning: Crop Random Forest model failed to load: {e}")
 
-    # Start automated 4 daily SMS cron scheduler (APScheduler)
-    try:
-        from scheduler import start_scheduler
-        start_scheduler()
-        logger.info("Fast2SMS 4-times daily cron scheduler started.")
-    except Exception as e:
-        logger.warning(f"SMS scheduler startup notice: {e}")
 
 
 @app.post("/predict")

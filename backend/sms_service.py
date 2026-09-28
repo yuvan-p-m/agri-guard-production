@@ -1,6 +1,6 @@
 """
 AgriGuard SMS Service Layer — Fast2SMS Integration
-Single source of truth for all SMS dispatching across FastAPI endpoints and APScheduler jobs.
+Single source of truth for all SMS dispatching across FastAPI endpoints.
 """
 
 import os

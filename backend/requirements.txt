@@ -21,9 +21,6 @@ firebase-admin==7.5.0
 # --- HTTP Client (Weather, SMS, Gemini AI, Mandi APIs) ---
 requests==2.31.0
 
-# --- Background Task Scheduling ---
-APScheduler==3.11.3
-
 # --- Image Processing (Upload validation) ---
 Pillow==12.3.0
 
